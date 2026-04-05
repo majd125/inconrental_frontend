@@ -20,7 +20,19 @@ export default function Header() {
                         <Link className="text-sm font-medium hover:text-primary transition-colors text-white" href="/catalog">Fleet</Link>
                         <Link className="text-sm font-medium hover:text-primary transition-colors text-white" href="/transfers">Transfers</Link>
                         <Link className="text-sm font-medium hover:text-primary transition-colors text-white" href="/excursions">Excursions</Link>
-                        <Link className="text-sm font-medium hover:text-primary transition-colors text-white" href="/service-detail">Elite Club</Link>
+                        {user?.is_admin && (
+                            <div className="flex gap-4 border-l border-primary/20 pl-4">
+                                <Link className="text-sm font-bold text-primary hover:text-white transition-colors flex items-center gap-1" href="/admin/vehicles">
+                                    <span className="material-symbols-outlined text-[16px]">directions_car</span> Manage Fleet
+                                </Link>
+                                <Link className="text-sm font-bold text-red-400 hover:text-white transition-colors flex items-center gap-1" href="/admin/documents-expiry">
+                                    <span className="material-symbols-outlined text-[16px] text-red-500">warning</span> Expiring Docs
+                                </Link>
+                                <Link className="text-sm font-bold text-orange-400 hover:text-white transition-colors flex items-center gap-1" href="/admin/maintenances-upcoming">
+                                    <span className="material-symbols-outlined text-[16px] text-orange-500">build_circle</span> Upcoming Maint
+                                </Link>
+                            </div>
+                        )}
                     </nav>
                     <div className="flex items-center gap-4">
                         {user ? (

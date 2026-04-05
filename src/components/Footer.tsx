@@ -24,7 +24,6 @@ export default function Footer() {
                         <li><Link className="hover:text-primary transition-colors" href="/catalog">Our Fleet</Link></li>
                         <li><Link className="hover:text-primary transition-colors" href="/transfers">VIP Transfers</Link></li>
                         <li><Link className="hover:text-primary transition-colors" href="/excursions">Luxury Excursions</Link></li>
-                        <li><Link className="hover:text-primary transition-colors" href="/service-detail">Corporate Solutions</Link></li>
                     </ul>
                 </div>
                 <div>
