@@ -56,8 +56,15 @@ export default function MaintenancesUpcoming() {
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${authService.getToken()}`
-                    }
+                    },
+                    credentials: 'include'
                 });
+                
+                if (response.status === 401 || response.status === 403) {
+                    authService.logout();
+                    window.location.href = '/login';
+                    return;
+                }
                 
                 if (!response.ok) throw new Error('Failed to fetch maintenances');
                 
@@ -82,8 +89,15 @@ export default function MaintenancesUpcoming() {
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${authService.getToken()}`
-                }
+                },
+                credentials: 'include'
             });
+            
+            if (response.status === 401 || response.status === 403) {
+                authService.logout();
+                window.location.href = '/login';
+                return;
+            }
             
             if (!response.ok) throw new Error('Failed to fetch maintenances');
             

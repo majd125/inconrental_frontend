@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/context/AuthContext";
+import { NotificationProvider } from "@/context/NotificationContext";
 
 export default function RootLayout({
   children,
@@ -23,13 +24,15 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
       </head>
       <body className="antialiased overflow-x-hidden font-display">
-        <AuthProvider>
-          <Header />
-          <main className="pt-20">
-            {children}
-          </main>
-          <Footer />
-        </AuthProvider>
+        <NotificationProvider>
+          <AuthProvider>
+            <Header />
+            <main className="pt-20">
+              {children}
+            </main>
+            <Footer />
+          </AuthProvider>
+        </NotificationProvider>
       </body>
     </html>
   );
