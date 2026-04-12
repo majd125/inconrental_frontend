@@ -29,6 +29,9 @@ export default function AddCar() {
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+    const [templateId, setTemplateId] = useState<string | null>(null);
+    const [templateImagePath, setTemplateImagePath] = useState<string | null>(null);
+
     useEffect(() => {
         if (!authLoading && (!user || !user.is_admin)) {
             router.push('/catalog');
@@ -38,9 +41,14 @@ export default function AddCar() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
+            const tId = params.get('template_id');
             const marque = params.get('marque');
             const modele = params.get('modele');
-            if (marque || modele) {
+            
+            if (tId) {
+                setTemplateId(tId);
+                fetchTemplate(tId);
+            } else if (marque || modele) {
                 setFormData(prev => ({
                     ...prev,
                     marque: marque || prev.marque,
@@ -49,6 +57,45 @@ export default function AddCar() {
             }
         }
     }, []);
+
+    const fetchTemplate = async (id: string) => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${API_URL}/vehicules/${id}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${authService.getToken()}`
+                }
+            });
+            if (!response.ok) throw new Error('Failed to fetch template vehicle');
+            const result = await response.json();
+            const template = result.data;
+            
+            setFormData({
+                marque: template.marque,
+                modele: template.modele,
+                immatriculation: '', // Always empty for new unit
+                annee: template.annee,
+                categorie: template.categorie,
+                transmission: template.transmission,
+                carburant: template.carburant,
+                statut: 'disponible',
+                prix_base: template.prix_base.toString(),
+                description: template.description || '',
+            });
+
+            if (template.image) {
+                setTemplateImagePath(template.image);
+            }
+            if (template.image_url) {
+                setImagePreview(template.image_url);
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -78,6 +125,8 @@ export default function AddCar() {
             });
             if (image) {
                 data.append('image', image);
+            } else if (templateImagePath) {
+                data.append('image', templateImagePath);
             }
 
             const response = await fetch(`${API_URL}/vehicules`, {
@@ -98,7 +147,7 @@ export default function AddCar() {
             }
 
             setSuccess(true);
-            setTimeout(() => router.push('/catalog'), 2000);
+            setTimeout(() => router.push('/admin/vehicles'), 2000);
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
         } finally {
@@ -119,11 +168,18 @@ export default function AddCar() {
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-white tracking-tighter">Add New <span className="text-primary">Vehicle</span></h1>
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-3xl font-extrabold text-white tracking-tighter">Add New <span className="text-primary">Vehicle</span></h1>
+                            {templateId && (
+                                <span className="bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">
+                                    Template Pre-filled
+                                </span>
+                            )}
+                        </div>
                         <p className="text-slate-400 mt-2">Expand the elite collection</p>
                     </div>
-                    <Link href="/catalog" className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all font-bold text-sm">
-                        Back to Catalog
+                    <Link href="/admin/vehicles" className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all font-bold text-sm">
+                        Back to Fleet
                     </Link>
                 </div>
 

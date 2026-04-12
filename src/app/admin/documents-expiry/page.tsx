@@ -51,8 +51,16 @@ export default function DocumentsExpiry() {
         setLoading(true);
         try {
             const res = await fetch(`${API_URL}/documents/all`, {
-                headers: { 'Authorization': `Bearer ${authService.getToken()}`, 'Accept': 'application/json' }
+                headers: { 'Authorization': `Bearer ${authService.getToken()}`, 'Accept': 'application/json' },
+                credentials: 'include'
             });
+            
+            if (res.status === 401 || res.status === 403) {
+                authService.logout();
+                window.location.href = '/login';
+                return;
+            }
+            
             const data = await res.json();
             if (res.ok) setDocuments(data.data);
             else throw new Error(data.message || 'Failed to fetch documents');

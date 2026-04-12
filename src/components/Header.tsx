@@ -31,7 +31,15 @@ export default function Header() {
                                 <Link className="text-sm font-bold text-orange-400 hover:text-white transition-colors flex items-center gap-1" href="/admin/maintenances-upcoming">
                                     <span className="material-symbols-outlined text-[16px] text-orange-500">build_circle</span> Upcoming Maint
                                 </Link>
+                                <Link className="text-sm font-bold text-green-400 hover:text-white transition-colors flex items-center gap-1" href="/admin/reservations">
+                                    <span className="material-symbols-outlined text-[16px] text-green-500">list_alt</span> Reservations
+                                </Link>
                             </div>
+                        )}
+                        {user && !user.is_admin && (
+                            <Link className="text-sm font-medium hover:text-primary transition-colors text-white flex items-center gap-1" href="/reservations">
+                                <span className="material-symbols-outlined text-[18px]">calendar_month</span> My Bookings
+                            </Link>
                         )}
                     </nav>
                     <div className="flex items-center gap-4">

@@ -21,7 +21,8 @@ export default function Home() {
     lieu_arrivee: LOCATIONS[0],
     lieu_arrivee_autre: '',
     date_debut: '',
-    date_fin: ''
+    date_fin: '',
+    nb_sieges_bebe: 0
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -39,7 +40,8 @@ export default function Home() {
       pickup: finalPickup,
       return_loc: finalReturn,
       start: searchData.date_debut,
-      end: searchData.date_fin
+      end: searchData.date_fin,
+      baby_seats: searchData.nb_sieges_bebe.toString()
     }).toString();
     router.push(`/catalog?${query}`);
   };
@@ -172,6 +174,33 @@ export default function Home() {
                     onChange={(e) => setSearchData({...searchData, date_fin: e.target.value})}
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white text-[15px] font-semibold focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-50" 
                   />
+                </div>
+              </div>
+
+              {/* Baby Seats */}
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-primary uppercase tracking-[0.2em] ml-1">Baby Seats ($10/day)</label>
+                <div className="relative group">
+                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-focus-within:text-primary transition-colors">child_care</span>
+                  <div className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 flex items-center justify-between">
+                    <span className="text-white text-[15px] font-semibold">{searchData.nb_sieges_bebe} Seats</span>
+                    <div className="flex gap-2">
+                      <button 
+                        type="button"
+                        onClick={() => setSearchData({...searchData, nb_sieges_bebe: Math.max(0, searchData.nb_sieges_bebe - 1)})}
+                        className="size-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-primary transition-all"
+                      >
+                        <span className="material-symbols-outlined text-sm">remove</span>
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => setSearchData({...searchData, nb_sieges_bebe: searchData.nb_sieges_bebe + 1})}
+                        className="size-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-primary transition-all"
+                      >
+                        <span className="material-symbols-outlined text-sm">add</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

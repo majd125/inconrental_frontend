@@ -11,6 +11,7 @@ export default function AddExcursion() {
     const { user, loading: authLoading } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
     const [success, setSuccess] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -56,7 +57,11 @@ export default function AddExcursion() {
 
             const data = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
-                data.append(key, value.toString());
+                if (key === 'actif') {
+                    data.append(key, value ? '1' : '0');
+                } else {
+                    data.append(key, value.toString());
+                }
             });
             if (image) {
                 data.append('image', image);
@@ -76,10 +81,15 @@ export default function AddExcursion() {
             const result = await response.json();
 
             if (!response.ok) {
+                if (response.status === 422 && result.errors) {
+                    setFieldErrors(result.errors);
+                    console.error('Validation errors:', result.errors);
+                }
                 throw new Error(result.message || 'Failed to add excursion');
             }
 
             setSuccess(true);
+            setFieldErrors({});
             setTimeout(() => router.push('/excursions'), 2000);
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
@@ -142,6 +152,9 @@ export default function AddExcursion() {
                                     value={formData.nom}
                                     onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                                 />
+                                {fieldErrors.nom && (
+                                    <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.nom[0]}</p>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -155,6 +168,9 @@ export default function AddExcursion() {
                                         value={formData.duree}
                                         onChange={(e) => setFormData({ ...formData, duree: e.target.value })}
                                     />
+                                    {fieldErrors.duree && (
+                                        <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.duree[0]}</p>
+                                    )}
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold text-slate-400 uppercase ml-1">Price per Person ($)</label>
@@ -166,6 +182,9 @@ export default function AddExcursion() {
                                         value={formData.prix_par_personne}
                                         onChange={(e) => setFormData({ ...formData, prix_par_personne: e.target.value })}
                                     />
+                                    {fieldErrors.prix_par_personne && (
+                                        <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.prix_par_personne[0]}</p>
+                                    )}
                                 </div>
                             </div>
 
@@ -179,6 +198,9 @@ export default function AddExcursion() {
                                         value={formData.nombre_personnes_min}
                                         onChange={(e) => setFormData({ ...formData, nombre_personnes_min: e.target.value })}
                                     />
+                                    {fieldErrors.nombre_personnes_min && (
+                                        <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.nombre_personnes_min[0]}</p>
+                                    )}
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold text-slate-400 uppercase ml-1">Max People</label>
@@ -189,6 +211,9 @@ export default function AddExcursion() {
                                         value={formData.nombre_personnes_max}
                                         onChange={(e) => setFormData({ ...formData, nombre_personnes_max: e.target.value })}
                                     />
+                                    {fieldErrors.nombre_personnes_max && (
+                                        <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.nombre_personnes_max[0]}</p>
+                                    )}
                                 </div>
                             </div>
 
@@ -200,6 +225,9 @@ export default function AddExcursion() {
                                     value={formData.lieux_visites}
                                     onChange={(e) => setFormData({ ...formData, lieux_visites: e.target.value })}
                                 ></textarea>
+                                {fieldErrors.lieux_visites && (
+                                    <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.lieux_visites[0]}</p>
+                                )}
                             </div>
                         </div>
 
@@ -234,6 +262,9 @@ export default function AddExcursion() {
                                         </div>
                                     )}
                                 </div>
+                                {fieldErrors.image && (
+                                    <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.image[0]}</p>
+                                )}
                             </div>
 
                             <div className="space-y-1">
@@ -244,6 +275,9 @@ export default function AddExcursion() {
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 ></textarea>
+                                {fieldErrors.description && (
+                                    <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.description[0]}</p>
+                                )}
                             </div>
 
                             <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">

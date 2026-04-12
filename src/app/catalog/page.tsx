@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { API_URL } from '@/lib/auth';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { authService } from '@/lib/auth';
 
 interface Vehicle {
     id: number;
@@ -28,6 +29,15 @@ const PRICE_RANGES = [
     { label: '$100 – $300 / day', min: 100, max: 300 },
     { label: '$300 – $600 / day', min: 300, max: 600 },
     { label: '$600+ / day', min: 600, max: Infinity },
+];
+
+const LOCATIONS = [
+    "Aéroport international de Tunis-Carthage (TUN)",
+    "Aéroport international de Djerba-Zarzis (DJE)",
+    "Aéroport international d'Enfidha-Hammamet (NBE)",
+    "Aéroport international de Monastir Habib-Bourguiba (MIR)",
+    "Our local office in Hammamet Nabeul",
+    "Other location"
 ];
 
 const TAB_CATEGORIES = ['All', 'Economy', 'Compact', 'Sedan', 'SUV', 'Luxury', 'Sports'];
@@ -100,17 +110,120 @@ function FilterDropdown({
     );
 }
 
+import { useNotification } from '@/context/NotificationContext';
+
 // ── main page ─────────────────────────────────────────────────────────────────
 export default function Catalog() {
     const { user } = useAuth();
+    const router = useRouter();
+    const { showNotification } = useNotification();
     const searchParams = useSearchParams();
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
 
-    // ── query status ──────────────────────────────────────────────────────────
+    // ── reservation state ──────────────────────────────────────────────────────
+    const [modalStep, setModalStep] = useState<'vehicle' | 'form' | 'summary'>('vehicle');
+    const [reservationLoading, setReservationLoading] = useState(false);
+    const [reservationError, setReservationError] = useState<string | null>(null);
+    const [reservationSuccess, setReservationSuccess] = useState(false);
+
     const pickup = searchParams.get('pickup');
+    const return_loc = searchParams.get('return_loc');
+    const start = searchParams.get('start');
+    const end = searchParams.get('end');
+    const babySeats = parseInt(searchParams.get('baby_seats') || '0');
+
+    // ── local search state (for when coming directly to catalog) ─────────────
+    const [localSearchData, setLocalSearchData] = useState({
+        lieu_depart: pickup || LOCATIONS[0],
+        lieu_depart_autre: '',
+        lieu_arrivee: return_loc || pickup || LOCATIONS[0],
+        lieu_arrivee_autre: '',
+        date_debut: start || '',
+        date_fin: end || '',
+        nb_sieges_bebe: babySeats || 0
+    });
+
+    const isMissingDetails = !localSearchData.date_debut || !localSearchData.date_fin || !localSearchData.lieu_depart;
+
+    const handleActionClick = () => {
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+        
+        if (isMissingDetails) {
+            setModalStep('form');
+        } else {
+            setModalStep('summary');
+        }
+    };
+
+    const handleReservation = async () => {
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+
+        const finalPickup = localSearchData.lieu_depart === "Other location" 
+            ? localSearchData.lieu_depart_autre 
+            : localSearchData.lieu_depart;
+            
+        const finalReturn = localSearchData.lieu_arrivee === "Other location" 
+            ? localSearchData.lieu_arrivee_autre 
+            : localSearchData.lieu_arrivee;
+
+        if (!localSearchData.date_debut || !localSearchData.date_fin || !finalPickup) {
+            setReservationError("Please fill in all rental details.");
+            return;
+        }
+
+        if (!selectedVehicle) return;
+
+        setReservationLoading(true);
+        setReservationError(null);
+
+        try {
+            const response = await fetch(`${API_URL}/reservations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authService.getToken()}`
+                },
+                body: JSON.stringify({
+                    vehicule_id: selectedVehicle.id,
+                    date_debut: localSearchData.date_debut,
+                    date_fin: localSearchData.date_fin,
+                    lieu_depart: finalPickup,
+                    lieu_arrivee: finalReturn || finalPickup,
+                    nb_participants: 1,
+                    option_chauffeur: false,
+                    nb_sieges_bebe: localSearchData.nb_sieges_bebe
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to create reservation');
+            }
+
+            setReservationSuccess(true);
+            showNotification('Reservation submitted successfully!', 'success');
+            setTimeout(() => {
+                router.push('/reservations');
+            }, 2000);
+
+        } catch (err: any) {
+            setReservationError(err.message);
+            showNotification(err.message, 'error');
+        } finally {
+            setReservationLoading(false);
+        }
+    };
+
 
     // ── filter state ──────────────────────────────────────────────────────────
     const [activeTab, setActiveTab] = useState('All');
@@ -122,7 +235,17 @@ export default function Catalog() {
     useEffect(() => {
         const fetchVehicles = async () => {
             try {
-                const response = await fetch(`${API_URL}/vehicules`);
+                let url = `${API_URL}/vehicules`;
+                const queryParams = new URLSearchParams();
+                if (start) queryParams.append('start', start);
+                if (end) queryParams.append('end', end);
+                
+                const qs = queryParams.toString();
+                if (qs) {
+                    url += `?${qs}`;
+                }
+
+                const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to fetch fleet data');
                 const result = await response.json();
                 setVehicles(result.data || []);
@@ -133,16 +256,28 @@ export default function Catalog() {
             }
         };
         fetchVehicles();
-    }, []);
+    }, [start, end]);
 
     // Close modal on Escape key
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setSelectedVehicle(null);
+            if (e.key === 'Escape') {
+                setSelectedVehicle(null);
+                setModalStep('vehicle');
+            }
         };
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
     }, []);
+
+    // Close modal resets inner form
+    useEffect(() => {
+        if (!selectedVehicle) {
+            setModalStep('vehicle');
+            setReservationSuccess(false);
+            setReservationError(null);
+        }
+    }, [selectedVehicle]);
 
     // ── derived filter options from real data ─────────────────────────────────
     const categoryOptions = ['All Categories', ...unique(vehicles.map((v) => v.categorie)).sort()];
@@ -156,7 +291,21 @@ export default function Catalog() {
         if (activeTab !== 'All') {
             const tabLower = activeTab.toLowerCase();
             const catLower = v.categorie.toLowerCase();
-            if (!catLower.includes(tabLower) && !tabLower.includes(catLower)) return false;
+            
+            // Mapping English tabs to French backend categories
+            const mapping: Record<string, string> = {
+                'economy': 'economique',
+                'compact': 'compacte',
+                'sedan': 'berline',
+                'luxury': 'luxe',
+                'sports': 'sport'
+            };
+
+            const mappedCategory = mapping[tabLower] || tabLower;
+
+            if (catLower !== mappedCategory && !catLower.includes(tabLower) && !tabLower.includes(catLower)) {
+                return false;
+            }
         }
         if (categoryFilter !== 'All Categories' && v.categorie !== categoryFilter) return false;
         const price = parseFloat(v.prix_base);
@@ -205,6 +354,11 @@ export default function Catalog() {
             return acc;
         }, {} as Record<string, GroupedVehicle>)
     );
+
+    const days = Math.ceil((new Date(localSearchData.date_fin).getTime() - new Date(localSearchData.date_debut).getTime()) / (1000 * 60 * 60 * 24)) || 1;
+    const vehicleTotal = selectedVehicle ? parseFloat(selectedVehicle.prix_base) * days : 0;
+    const babySeatsTotal = localSearchData.nb_sieges_bebe * days * 10;
+    const computedTotal = (vehicleTotal + babySeatsTotal).toFixed(2);
 
     return (
         <div className="flex-1 px-6 md:px-20 py-8 max-w-7xl mx-auto w-full">
@@ -328,24 +482,239 @@ export default function Catalog() {
             {selectedVehicle && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-                    onClick={() => setSelectedVehicle(null)}
+                    onClick={() => {
+                        setSelectedVehicle(null);
+                        setModalStep('vehicle');
+                    }}
                 >
                     <div
                         className="relative w-full max-w-xl bg-white dark:bg-[#0d1b2e] rounded-2xl overflow-hidden border border-primary/20 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="relative aspect-video w-full overflow-hidden">
-                            <div className="absolute inset-0 bg-center bg-cover" style={{ backgroundImage: `url(${selectedVehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
-                            <button onClick={() => setSelectedVehicle(null)} className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-primary transition-all">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-8 text-left">
-                            <h2 className="text-slate-900 dark:text-white text-3xl font-bold mb-2">{selectedVehicle.marque} {selectedVehicle.modele}</h2>
-                            <p className="text-primary font-bold uppercase tracking-widest text-xs mb-6">{selectedVehicle.categorie}</p>
-                            <p className="text-slate-600 dark:text-slate-400 mb-8">{selectedVehicle.description || "Uncompromising performance meets luxury."}</p>
-                            <button className="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">Rent Now</button>
-                        </div>
+                        {modalStep === 'vehicle' ? (
+                            <>
+                                <div className="relative aspect-video w-full overflow-hidden">
+                                    <div className="absolute inset-0 bg-center bg-cover" style={{ backgroundImage: `url(${selectedVehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
+                                    <button onClick={() => setSelectedVehicle(null)} className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-primary transition-all">
+                                        <span className="material-symbols-outlined">close</span>
+                                    </button>
+                                </div>
+                                <div className="p-8 text-left">
+                                    <h2 className="text-slate-900 dark:text-white text-3xl font-bold mb-2">{selectedVehicle.marque} {selectedVehicle.modele}</h2>
+                                    <p className="text-primary font-bold uppercase tracking-widest text-xs mb-6">{selectedVehicle.categorie}</p>
+                                    <p className="text-slate-600 dark:text-slate-400 mb-8">{selectedVehicle.description || "Uncompromising performance meets luxury."}</p>
+                                    
+                                    <button 
+                                        onClick={handleActionClick} 
+                                        className="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                    >
+                                        {!user ? "Login to Rent" : (isMissingDetails ? "Setup Rental Details" : "Review Reservation")}
+                                    </button>
+                                </div>
+                            </>
+                        ) : modalStep === 'form' ? (
+                            <div className="p-8 text-left animate-in slide-in-from-right-8 duration-300">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h2 className="text-slate-900 dark:text-white text-2xl font-black">Rental Details</h2>
+                                    <button onClick={() => setModalStep('vehicle')} className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
+                                        <span className="material-symbols-outlined">arrow_back</span>
+                                    </button>
+                                </div>
+                                
+                                <p className="text-sm text-slate-500 mb-6">Please fill in your dates and locations to proceed with booking the <span className="font-bold text-slate-800 dark:text-slate-200">{selectedVehicle.marque} {selectedVehicle.modele}</span>.</p>
+
+                                <div className="space-y-4 mb-8">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Pick-up Location</label>
+                                        <select 
+                                            value={localSearchData.lieu_depart}
+                                            onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart: e.target.value})}
+                                            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white"
+                                        >
+                                            {LOCATIONS.map(loc => <option key={loc} value={loc} className="dark:bg-[#0d1b2e]">{loc}</option>)}
+                                        </select>
+                                        {localSearchData.lieu_depart === "Other location" && (
+                                            <input 
+                                                type="text" 
+                                                placeholder="Specify Location" 
+                                                className="w-full bg-slate-100 dark:bg-white/5 border border-primary/40 rounded-xl py-3 px-4 text-sm mt-2 outline-none text-slate-900 dark:text-white focus:ring-1 focus:ring-primary" 
+                                                value={localSearchData.lieu_depart_autre} 
+                                                onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart_autre: e.target.value})} 
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Drop-off Location</label>
+                                        <select 
+                                            value={localSearchData.lieu_arrivee}
+                                            onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee: e.target.value})}
+                                            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white"
+                                        >
+                                            {LOCATIONS.map(loc => <option key={loc} value={loc} className="dark:bg-[#0d1b2e]">{loc}</option>)}
+                                        </select>
+                                        {localSearchData.lieu_arrivee === "Other location" && (
+                                            <input 
+                                                type="text" 
+                                                placeholder="Specify Location" 
+                                                className="w-full bg-slate-100 dark:bg-white/5 border border-primary/40 rounded-xl py-3 px-4 text-sm mt-2 outline-none text-slate-900 dark:text-white focus:ring-1 focus:ring-primary" 
+                                                value={localSearchData.lieu_arrivee_autre} 
+                                                onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee_autre: e.target.value})} 
+                                            />
+                                        )}
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-black text-primary uppercase tracking-widest">Pick-up Date</label>
+                                            <input 
+                                                type="datetime-local" 
+                                                value={localSearchData.date_debut}
+                                                onChange={(e) => setLocalSearchData({...localSearchData, date_debut: e.target.value})}
+                                                className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white dark:[&::-webkit-calendar-picker-indicator]:invert" 
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-black text-primary uppercase tracking-widest">Return Date</label>
+                                            <input 
+                                                type="datetime-local" 
+                                                value={localSearchData.date_fin}
+                                                onChange={(e) => setLocalSearchData({...localSearchData, date_fin: e.target.value})}
+                                                className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white dark:[&::-webkit-calendar-picker-indicator]:invert" 
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Baby Seats (<span className="text-slate-500">$10/day</span>)</label>
+                                        <div className="flex items-center justify-between bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2">
+                                            <span className="text-slate-900 dark:text-white text-sm font-bold">{localSearchData.nb_sieges_bebe} Seats</span>
+                                            <div className="flex gap-2">
+                                                <button 
+                                                    onClick={() => setLocalSearchData({...localSearchData, nb_sieges_bebe: Math.max(0, localSearchData.nb_sieges_bebe - 1)})}
+                                                    className="size-8 rounded-lg bg-slate-200 dark:bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
+                                                >
+                                                    <span className="material-symbols-outlined text-sm">remove</span>
+                                                </button>
+                                                <button 
+                                                    onClick={() => setLocalSearchData({...localSearchData, nb_sieges_bebe: localSearchData.nb_sieges_bebe + 1})}
+                                                    className="size-8 rounded-lg bg-slate-200 dark:bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
+                                                >
+                                                    <span className="material-symbols-outlined text-sm">add</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {reservationError && (
+                                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-in slide-in-from-top-1">
+                                        <span className="material-symbols-outlined text-sm">error</span>
+                                        {reservationError}
+                                    </div>
+                                )}
+
+                                <button 
+                                    onClick={() => setModalStep('summary')}
+                                    disabled={isMissingDetails}
+                                    className="w-full py-4 bg-primary text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <span className="material-symbols-outlined text-lg">summarize</span>
+                                    Review Summary
+                                </button>
+                            </div>
+                        ) : modalStep === 'summary' ? (
+                            <div className="p-8 text-left animate-in slide-in-from-right-8 duration-300">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h2 className="text-slate-900 dark:text-white text-2xl font-black">Order Summary</h2>
+                                    <button onClick={() => setModalStep('form')} className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
+                                        <span className="material-symbols-outlined">arrow_back</span>
+                                    </button>
+                                </div>
+                                
+                                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-6 mb-8 border border-slate-100 dark:border-white/10">
+                                    <div className="flex justify-between items-center mb-6 pb-6 border-b border-slate-200 dark:border-white/10">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedVehicle.marque} {selectedVehicle.modele}</h3>
+                                            <p className="text-sm text-slate-500">{selectedVehicle.categorie} • {selectedVehicle.transmission}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-lg font-black text-primary">${selectedVehicle.prix_base}</p>
+                                            <p className="text-xs text-slate-500 uppercase tracking-widest">/ day</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4 mb-6">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-500">Pick-up</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white text-right">
+                                                {localSearchData.lieu_depart === 'Other location' ? localSearchData.lieu_depart_autre : localSearchData.lieu_depart}<br/>
+                                                <span className="text-xs text-slate-400 font-normal">{localSearchData.date_debut ? new Date(localSearchData.date_debut).toLocaleString() : ''}</span>
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-500">Return</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white text-right">
+                                                {localSearchData.lieu_arrivee === 'Other location' ? localSearchData.lieu_arrivee_autre : localSearchData.lieu_arrivee}<br/>
+                                                <span className="text-xs text-slate-400 font-normal">{localSearchData.date_fin ? new Date(localSearchData.date_fin).toLocaleString() : ''}</span>
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-500">Duration</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white">{days} day{days > 1 ? 's' : ''}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 pt-6 border-t border-slate-200 dark:border-white/10">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-600 dark:text-slate-400">Rental Cost</span>
+                                            <span className="font-bold text-slate-900 dark:text-white">${vehicleTotal.toFixed(2)}</span>
+                                        </div>
+                                        {localSearchData.nb_sieges_bebe > 0 && (
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-slate-600 dark:text-slate-400">Baby Seats ({localSearchData.nb_sieges_bebe} × $10/day)</span>
+                                                <span className="font-bold text-slate-900 dark:text-white">${babySeatsTotal.toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                        <div className="flex justify-between items-center pt-4 mt-4 border-t border-slate-200 dark:border-white/10">
+                                            <span className="text-base font-black text-slate-900 dark:text-white uppercase tracking-widest">Total</span>
+                                            <span className="text-2xl font-black text-primary">${computedTotal}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {reservationError && (
+                                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-in slide-in-from-top-1">
+                                        <span className="material-symbols-outlined text-sm">error</span>
+                                        {reservationError}
+                                    </div>
+                                )}
+
+                                {reservationSuccess ? (
+                                    <div className="w-full py-4 bg-green-500 text-white font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 animate-in fade-in zoom-in duration-300 shadow-lg shadow-green-500/20">
+                                        <span className="material-symbols-outlined">check_circle</span>
+                                        Reservation Confirmed!
+                                    </div>
+                                ) : (
+                                    <button 
+                                        onClick={handleReservation}
+                                        disabled={reservationLoading}
+                                        className="w-full py-4 bg-primary text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {reservationLoading ? (
+                                            <>
+                                                <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span>
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="material-symbols-outlined text-lg">check_circle</span>
+                                                Confirm Reservation
+                                            </>
+                                        )}
+                                    </button>
+                                )}
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             )}

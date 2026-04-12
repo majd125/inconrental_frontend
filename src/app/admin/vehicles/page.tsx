@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { API_URL, authService } from '@/lib/auth';
 
+import { useNotification } from '@/context/NotificationContext';
+
 interface Vehicle {
     id: number;
     marque: string;
@@ -20,6 +22,7 @@ interface Vehicle {
 export default function AdminVehicles() {
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
+    const { showNotification } = useNotification();
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -34,8 +37,7 @@ export default function AdminVehicles() {
             try {
                 const response = await fetch(`${API_URL}/vehicules`, {
                     headers: {
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${authService.getToken()}`
+                        'Accept': 'application/json'
                     }
                 });
                 if (!response.ok) throw new Error('Failed to fetch vehicles');
@@ -67,8 +69,9 @@ export default function AdminVehicles() {
             if (!response.ok) throw new Error('Failed to delete vehicle');
             
             setVehicles(prev => prev.filter(v => v.id !== id));
+            showNotification('Vehicle deleted successfully.', 'success');
         } catch (err: any) {
-            alert(err.message);
+            showNotification(err.message, 'error');
         }
     };
 
@@ -97,10 +100,16 @@ export default function AdminVehicles() {
             <div className="max-w-6xl mx-auto">
                 <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter">
-                            Fleet <span className="text-primary">Administration</span>
-                        </h1>
-                        <p className="text-slate-400 mt-2 text-lg">Manage your elite collection by brand and individual unit.</p>
+                        <div className="flex items-center gap-4 mb-2">
+                            <h1 className="text-4xl font-black text-white tracking-tighter">
+                                Fleet <span className="text-primary">Administration</span>
+                            </h1>
+                            <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-sm font-bold border border-primary/30 flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[18px]">directions_car</span>
+                                {vehicles.length} TOTAL UNITS
+                            </div>
+                        </div>
+                        <p className="text-slate-400 text-lg">Manage your elite collection by brand and individual unit.</p>
                     </div>
                     <div className="flex gap-4">
                         <Link 
@@ -154,7 +163,7 @@ export default function AdminVehicles() {
                                                         {groupedByBrandAndModel[brand][model].length} Unit(s)
                                                     </span>
                                                     <Link 
-                                                        href={`/admin/add-car?marque=${encodeURIComponent(brand)}&modele=${encodeURIComponent(model)}`}
+                                                        href={`/admin/add-car?marque=${encodeURIComponent(brand)}&modele=${encodeURIComponent(model)}&template_id=${groupedByBrandAndModel[brand][model][0].id}`}
                                                         className="flex items-center gap-1 text-xs font-bold text-primary hover:text-white bg-primary/10 hover:bg-primary transition-all px-4 py-1.5 rounded-full border border-primary/20"
                                                     >
                                                         <span className="material-symbols-outlined text-[16px]">add</span>
@@ -172,7 +181,11 @@ export default function AdminVehicles() {
                                                                 <span className={`material-symbols-outlined ${vehicle.statut === 'disponible' ? 'text-green-500/80' : 'text-slate-500'}`}>directions_car</span>
                                                                 <span className="text-white font-mono font-bold tracking-wider">{vehicle.immatriculation}</span>
                                                             </div>
-                                                            <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${vehicle.statut === 'disponible' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                                                            <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${
+                                                                vehicle.statut === 'disponible' ? 'bg-green-500/20 text-green-400' : 
+                                                                vehicle.statut === 'maintenance' ? 'bg-orange-500/20 text-orange-400' :
+                                                                'bg-red-500/20 text-red-400'
+                                                            }`}>
                                                                 {vehicle.statut}
                                                             </span>
                                                         </div>
