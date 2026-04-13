@@ -23,6 +23,19 @@ export default function Excursions() {
     const [excursions, setExcursions] = useState<Excursion[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    // Reservation State
+    const [selectedExcursion, setSelectedExcursion] = useState<Excursion | null>(null);
+    const [reservationData, setReservationData] = useState({
+        date: '',
+        location: '',
+        adults: 1,
+        children: 0,
+        babies: 0
+    });
+
+    const [submitting, setSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchExcursions = async () => {
@@ -40,6 +53,56 @@ export default function Excursions() {
 
         fetchExcursions();
     }, []);
+
+    const handleReservationSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedExcursion) return;
+        
+        if (!user) {
+            setError('Please login to make a reservation');
+            return;
+        }
+
+        setSubmitting(true);
+        setError(null);
+        setSuccessMessage(null);
+
+        try {
+            const token = localStorage.getItem('auth_token');
+            const response = await fetch(`${API_URL}/excursion-reservations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    excursion_id: selectedExcursion.id,
+                    date_reservation: reservationData.date,
+                    lieu_depart: reservationData.location,
+                    nb_adultes: reservationData.adults,
+                    nb_enfants: reservationData.children,
+                    nb_bebes: reservationData.babies
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to submit reservation');
+            }
+
+            setSuccessMessage('Reservation submitted successfully!');
+            setTimeout(() => {
+                setSelectedExcursion(null);
+                setSuccessMessage(null);
+            }, 3000);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <div className="flex-1">
@@ -68,47 +131,6 @@ export default function Excursions() {
                 </div>
             )}
 
-            {/* Booking Bar */}
-            <section className="px-6 lg:px-20 -mt-12 relative z-20">
-                <div className="bg-[#0a192f]/80 backdrop-blur-xl border border-primary/20 rounded-xl shadow-2xl p-6 lg:p-8">
-                    <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                                <span className="material-symbols-outlined text-base">location_on</span> Destination
-                            </label>
-                            <select className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white focus:ring-1 focus:ring-primary focus:border-primary appearance-none">
-                                <option className="bg-slate-900">Bali, Indonesia</option>
-                                <option className="bg-slate-900">Santorini, Greece</option>
-                                <option className="bg-slate-900">Amalfi Coast, Italy</option>
-                                <option className="bg-slate-900">Kyoto, Japan</option>
-                                <option className="bg-slate-900">Reykjavik, Iceland</option>
-                            </select>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                                <span className="material-symbols-outlined text-base">calendar_month</span> Preferred Date
-                            </label>
-                            <input className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white focus:ring-1 focus:ring-primary focus:border-primary" type="date" />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                                <span className="material-symbols-outlined text-base">group</span> Guests
-                            </label>
-                            <div className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white flex items-center">
-                                <button className="text-primary hover:bg-primary/10 p-1 rounded" type="button"><span className="material-symbols-outlined">remove</span></button>
-                                <span className="flex-1 text-center font-bold">2 Guests</span>
-                                <button className="text-primary hover:bg-primary/10 p-1 rounded" type="button"><span className="material-symbols-outlined">add</span></button>
-                            </div>
-                        </div>
-                        <div>
-                            <button className="w-full bg-primary hover:bg-primary/90 text-white font-black h-14 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2" type="submit">
-                                <span className="material-symbols-outlined">search_check</span>
-                                SEARCH EXCURSIONS
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
 
             {/* Destination Grid */}
             <section className="px-6 lg:px-20 py-24">
@@ -133,7 +155,20 @@ export default function Excursions() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {excursions.map((excursion) => (
-                            <div key={excursion.id} className="group relative overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-primary/20 border border-white/5 hover:border-primary/30">
+                            <div 
+                                key={excursion.id} 
+                                onClick={() => {
+                                    setSelectedExcursion(excursion);
+                                    setReservationData({
+                                        date: '',
+                                        location: '',
+                                        adults: excursion.nombre_personnes_min,
+                                        children: 0,
+                                        babies: 0
+                                    });
+                                }}
+                                className="group relative overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-primary/20 border border-white/5 hover:border-primary/30"
+                            >
                                 <img 
                                     alt={excursion.nom} 
                                     className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-110" 
@@ -189,6 +224,236 @@ export default function Excursions() {
                     <p className="mt-6 text-[10px] text-slate-600 uppercase font-black tracking-[0.2em]">We respect your privacy. Unsubscribe anytime.</p>
                 </div>
             </section>
+
+            {/* Reservation Modal / Centered */}
+            {selectedExcursion && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-[#0a101c]/80 backdrop-blur-sm transition-opacity animate-in fade-in duration-300"
+                        onClick={() => setSelectedExcursion(null)}
+                    ></div>
+
+                    {/* Centered panel */}
+                    <div className="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-2xl flex flex-col max-h-full shadow-2xl overflow-y-auto animate-in zoom-in-95 duration-300">
+                        <div className="p-6 md:p-8 flex-1 flex flex-col">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-8">
+                                <div>
+                                    <h2 className="text-2xl font-black text-white pr-4">{selectedExcursion.nom}</h2>
+                                    <p className="text-primary text-sm font-bold tracking-widest uppercase mt-1">Reserve Your Spot</p>
+                                </div>
+                                <button 
+                                    onClick={() => setSelectedExcursion(null)}
+                                    className="p-2 rounded-full bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-colors flex-shrink-0"
+                                >
+                                    <span className="material-symbols-outlined">close</span>
+                                </button>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row gap-8">
+                                {/* Left Side: Info */}
+                                <div className="flex-1">
+                                    <div className="mb-6 rounded-xl overflow-hidden aspect-video relative border border-white/10">
+                                        <img 
+                                            src={selectedExcursion.image_url || 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800'} 
+                                            alt={selectedExcursion.nom} className="object-cover w-full h-full"
+                                        />
+                                        <div className="absolute top-4 left-4 bg-[#0a101c]/80 backdrop-blur text-white px-3 py-1 rounded-md text-xs font-bold font-mono tracking-wider flex border border-white/10 gap-2 items-center">
+                                            <span className="material-symbols-outlined text-sm">schedule</span>
+                                            {selectedExcursion.duree}
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-8 lg:mb-0">
+                                        <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{selectedExcursion.description}</p>
+                                        
+                                        {selectedExcursion.lieux_visites && (
+                                            <div className="mt-4 bg-[#0a101c]/50 border border-white/5 p-4 rounded-xl flex items-start gap-3">
+                                                <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                                                    <span className="material-symbols-outlined text-xl">map</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-white font-black block text-[10px] uppercase tracking-[0.2em] mb-1">Places Visited</span>
+                                                    <span className="text-slate-400 text-sm leading-snug block">{selectedExcursion.lieux_visites}</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Right Side: Form */}
+                                <div className="flex-1 flex flex-col lg:min-w-[300px]">
+                                     <form className="space-y-6 flex-1 flex flex-col" onSubmit={handleReservationSubmit}>
+                                         {/* Status Messages */}
+                                         {error && (
+                                             <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-xs flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+                                                 <span className="material-symbols-outlined text-sm">error</span>
+                                                 {error}
+                                             </div>
+                                         )}
+                                         {successMessage && (
+                                             <div className="bg-green-500/10 border border-green-500/20 text-green-500 p-4 rounded-xl text-xs flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+                                                 <span className="material-symbols-outlined text-sm">check_circle</span>
+                                                 {successMessage}
+                                             </div>
+                                         )}
+
+                                         {/* Date */}
+                                         <div className="flex flex-col gap-2">
+                                             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                 <span className="material-symbols-outlined text-base">calendar_today</span> Starting Date
+                                             </label>
+                                             <input 
+                                                 required
+                                                 type="date" 
+                                                 className="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                                                 value={reservationData.date}
+                                                 onChange={(e) => setReservationData({ ...reservationData, date: e.target.value })}
+                                                 min={new Date().toISOString().split("T")[0]}
+                                             />
+                                         </div>
+
+                                         {/* Location */}
+                                         <div className="flex flex-col gap-2">
+                                             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                 <span className="material-symbols-outlined text-base">location_on</span> Departure & Arrival
+                                             </label>
+                                             <select 
+                                                 className="w-full bg-slate-800 border border-white/10 rounded-lg py-3 px-4 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none cursor-pointer"
+                                                 value={reservationData.location}
+                                                 onChange={(e) => setReservationData({ ...reservationData, location: e.target.value })}
+                                                 required
+                                             >
+                                                 <option value="" disabled className="bg-slate-900 text-slate-500">Select location</option>
+                                                 <option value="Tunis" className="bg-slate-900">Tunis</option>
+                                                 <option value="Nabeul/Hammamet" className="bg-slate-900">Nabeul / Hammamet</option>
+                                                 <option value="Sousse/Monastir" className="bg-slate-900">Sousse / Monastir</option>
+                                             </select>
+                                         </div>
+
+                                         {/* Guests */}
+                                         <div className="flex flex-col gap-3">
+                                             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                 <span className="material-symbols-outlined text-base">group</span> Number of Guests
+                                             </label>
+                                             <div className="flex flex-col gap-3 bg-slate-800/50 p-4 rounded-xl border border-white/5">
+                                                 {/* Adultes */}
+                                                 <div className="flex items-center justify-between">
+                                                     <div>
+                                                         <span className="text-white text-sm font-bold block">Adultes</span>
+                                                         <span className="text-[10px] text-slate-500 font-normal">Plein tarif</span>
+                                                     </div>
+                                                     <div className="flex items-center bg-slate-800 rounded-lg border border-white/10 p-1">
+                                                         <button 
+                                                             className="text-primary disabled:text-slate-600 hover:bg-white/5 disabled:hover:bg-transparent p-1 rounded transition-all size-8 flex items-center justify-center" 
+                                                             type="button"
+                                                             disabled={reservationData.adults <= 1 || (reservationData.adults + reservationData.children + reservationData.babies) <= selectedExcursion.nombre_personnes_min}
+                                                             onClick={() => setReservationData(prev => ({ ...prev, adults: prev.adults - 1 }))}
+                                                         >
+                                                             <span className="material-symbols-outlined text-sm">remove</span>
+                                                         </button>
+                                                         <span className="w-8 text-center text-sm font-bold text-white">{reservationData.adults}</span>
+                                                         <button 
+                                                             className="text-primary disabled:text-slate-600 hover:bg-white/5 disabled:hover:bg-transparent p-1 rounded transition-all size-8 flex items-center justify-center" 
+                                                             type="button"
+                                                             disabled={(reservationData.adults + reservationData.children + reservationData.babies) >= selectedExcursion.nombre_personnes_max}
+                                                             onClick={() => setReservationData(prev => ({ ...prev, adults: prev.adults + 1 }))}
+                                                         >
+                                                             <span className="material-symbols-outlined text-sm">add</span>
+                                                         </button>
+                                                     </div>
+                                                 </div>
+
+                                                 {/* Enfants */}
+                                                 <div className="flex items-center justify-between">
+                                                     <div>
+                                                         <span className="text-white text-sm font-bold block">Enfants</span>
+                                                         <span className="text-[10px] text-green-400 font-bold bg-green-400/10 px-1.5 py-0.5 rounded ml-[-2px] mt-1 inline-block">-20% sur le tarif</span>
+                                                     </div>
+                                                     <div className="flex items-center bg-slate-800 rounded-lg border border-white/10 p-1">
+                                                         <button 
+                                                             className="text-primary disabled:text-slate-600 hover:bg-white/5 disabled:hover:bg-transparent p-1 rounded transition-all size-8 flex items-center justify-center" 
+                                                             type="button"
+                                                             disabled={reservationData.children <= 0 || (reservationData.adults + reservationData.children + reservationData.babies) <= selectedExcursion.nombre_personnes_min}
+                                                             onClick={() => setReservationData(prev => ({ ...prev, children: prev.children - 1 }))}
+                                                         >
+                                                             <span className="material-symbols-outlined text-sm">remove</span>
+                                                         </button>
+                                                         <span className="w-8 text-center text-sm font-bold text-white">{reservationData.children}</span>
+                                                         <button 
+                                                             className="text-primary disabled:text-slate-600 hover:bg-white/5 disabled:hover:bg-transparent p-1 rounded transition-all size-8 flex items-center justify-center" 
+                                                             type="button"
+                                                             disabled={(reservationData.adults + reservationData.children + reservationData.babies) >= selectedExcursion.nombre_personnes_max}
+                                                             onClick={() => setReservationData(prev => ({ ...prev, children: prev.children + 1 }))}
+                                                         >
+                                                             <span className="material-symbols-outlined text-sm">add</span>
+                                                         </button>
+                                                     </div>
+                                                 </div>
+
+                                                 {/* Bébés */}
+                                                 <div className="flex items-center justify-between">
+                                                     <div>
+                                                         <span className="text-white text-sm font-bold block">Bébés</span>
+                                                         <span className="text-[10px] text-emerald-400 font-bold bg-emerald-400/10 px-1.5 py-0.5 rounded ml-[-2px] mt-1 inline-block">-50% sur le tarif</span>
+                                                     </div>
+                                                     <div className="flex items-center bg-slate-800 rounded-lg border border-white/10 p-1">
+                                                         <button 
+                                                             className="text-primary disabled:text-slate-600 hover:bg-white/5 disabled:hover:bg-transparent p-1 rounded transition-all size-8 flex items-center justify-center" 
+                                                             type="button"
+                                                             disabled={reservationData.babies <= 0 || (reservationData.adults + reservationData.children + reservationData.babies) <= selectedExcursion.nombre_personnes_min}
+                                                             onClick={() => setReservationData(prev => ({ ...prev, babies: prev.babies - 1 }))}
+                                                         >
+                                                             <span className="material-symbols-outlined text-sm">remove</span>
+                                                         </button>
+                                                         <span className="w-8 text-center text-sm font-bold text-white">{reservationData.babies}</span>
+                                                         <button 
+                                                             className="text-primary disabled:text-slate-600 hover:bg-white/5 disabled:hover:bg-transparent p-1 rounded transition-all size-8 flex items-center justify-center" 
+                                                             type="button"
+                                                             disabled={(reservationData.adults + reservationData.children + reservationData.babies) >= selectedExcursion.nombre_personnes_max}
+                                                             onClick={() => setReservationData(prev => ({ ...prev, babies: prev.babies + 1 }))}
+                                                         >
+                                                             <span className="material-symbols-outlined text-sm">add</span>
+                                                         </button>
+                                                     </div>
+                                                 </div>
+
+                                                 <div className="flex justify-between items-center text-[10px] text-slate-500 font-medium px-1 mt-2 pt-2 border-t border-white/5">
+                                                     <span>Total {reservationData.adults + reservationData.children + reservationData.babies} pers.</span>
+                                                     <span>Min: {selectedExcursion.nombre_personnes_min} | Max: {selectedExcursion.nombre_personnes_max}</span>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                         <div className="mt-auto pt-8">
+                                             <div className="flex justify-between items-end mb-4 px-1">
+                                                 <span className="text-slate-400 font-medium pb-1">Total Amount:</span>
+                                                 <div className="flex items-end gap-1">
+                                                     <span className="text-sm font-bold text-primary mb-1">$</span>
+                                                     <span className="text-4xl font-black text-white leading-none">
+                                                         {((parseFloat(selectedExcursion.prix_par_personne) * reservationData.adults) + 
+                                                           (parseFloat(selectedExcursion.prix_par_personne) * 0.8 * reservationData.children) + 
+                                                           (parseFloat(selectedExcursion.prix_par_personne) * 0.5 * reservationData.babies)).toFixed(2)}
+                                                     </span>
+                                                 </div>
+                                             </div>
+                                             <button 
+                                                 disabled={submitting}
+                                                 type="submit"
+                                                 className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black h-14 rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center justify-center gap-2"
+                                             >
+                                                 <span className="material-symbols-outlined">{submitting ? 'sync' : 'lock'}</span>
+                                                 {submitting ? 'PROCESSING...' : 'CONFIRM RESERVATION'}
+                                             </button>
+                                         </div>
+                                     </form>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

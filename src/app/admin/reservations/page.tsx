@@ -29,6 +29,48 @@ interface Reservation {
     };
 }
 
+interface ExcursionReservation {
+    id: number;
+    utilisateur_id: number;
+    excursion_id: number;
+    date_reservation: string;
+    lieu_depart: string;
+    nb_adultes: number;
+    nb_enfants: number;
+    nb_bebes: number;
+    montant_total: string;
+    statut: 'en_attente' | 'confirme' | 'annule' | 'termine';
+    utilisateur: {
+        name: string;
+        email: string;
+        telephone: string;
+    };
+    excursion: {
+        nom: string;
+    };
+}
+
+interface TransferReservation {
+    id: number;
+    user_id: number;
+    pickup_location: string;
+    destination: string;
+    pickup_datetime: string;
+    trip_type: string;
+    wait_duration: string | null;
+    return_datetime: string | null;
+    adults: number;
+    children: number;
+    babies: number;
+    quoted_price: string | null;
+    status: 'en_attente_prix' | 'en_attente_confirmation' | 'confirme' | 'annule';
+    utilisateur: {
+        name: string;
+        email: string;
+        telephone: string;
+    };
+}
+
 import { useNotification } from '@/context/NotificationContext';
 
 export default function AdminReservations() {
@@ -36,9 +78,12 @@ export default function AdminReservations() {
     const { user, loading: authLoading } = useAuth();
     const { showNotification } = useNotification();
     const [reservations, setReservations] = useState<Reservation[]>([]);
+    const [excursionReservations, setExcursionReservations] = useState<ExcursionReservation[]>([]);
+    const [transferReservations, setTransferReservations] = useState<TransferReservation[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [filter, setFilter] = useState<'all' | 'en_attente' | 'confirme' | 'annule'>('all');
+    const [activeTab, setActiveTab] = useState<'vehicles' | 'excursions' | 'transfers'>('vehicles');
 
     useEffect(() => {
         if (!authLoading && (!user || !user.is_admin)) {
@@ -46,16 +91,31 @@ export default function AdminReservations() {
             return;
         }
 
-        const fetchAllReservations = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch(`${API_URL}/admin/reservations`, {
-                    headers: {
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    }
-                });
-                if (!response.ok) throw new Error('Failed to fetch all reservations');
-                const result = await response.json();
-                setReservations(result.data || []);
+                const [vehRes, excRes, transRes] = await Promise.all([
+                    fetch(`${API_URL}/admin/reservations`, {
+                        headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                    }),
+                    fetch(`${API_URL}/admin/excursion-reservations`, {
+                        headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                    }),
+                    fetch(`${API_URL}/admin/transfer-reservations`, {
+                        headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                    })
+                ]);
+
+                if (!vehRes.ok || !excRes.ok || !transRes.ok) throw new Error('Failed to fetch reservations');
+                
+                const [vehData, excData, transData] = await Promise.all([
+                    vehRes.json(),
+                    excRes.json(),
+                    transRes.json()
+                ]);
+
+                setReservations(vehData.data || []);
+                setExcursionReservations(excData.data || []);
+                setTransferReservations(transData.data || []);
             } catch (err: any) {
                 setError(err.message);
             } finally {
@@ -63,12 +123,40 @@ export default function AdminReservations() {
             }
         };
 
-        if (user?.is_admin) fetchAllReservations();
+        if (user?.is_admin) fetchData();
     }, [user, authLoading, router]);
 
-    const updateStatus = async (id: number, newStatus: string) => {
+    const setTransferPrice = async (id: number, price: string) => {
         try {
-            const response = await fetch(`${API_URL}/reservations/${id}/status`, {
+            const response = await fetch(`${API_URL}/admin/transfer-reservations/${id}/price`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authService.getToken()}`
+                },
+                body: JSON.stringify({ quoted_price: price })
+            });
+
+            if (!response.ok) throw new Error('Failed to set price');
+
+            setTransferReservations(prev => prev.map(res => 
+                res.id === id ? { ...res, quoted_price: price, status: 'en_attente_confirmation' } : res
+            ));
+            showNotification('Price quote sent to client.', 'success');
+        } catch (err: any) {
+            showNotification(err.message, 'error');
+        }
+    };
+
+    const updateStatus = async (id: number, newStatus: string, type: 'vehicle' | 'excursion' | 'transfer' = 'vehicle') => {
+        try {
+            const endpoint = type === 'vehicle' 
+                ? `${API_URL}/reservations/${id}/status`
+                : type === 'excursion'
+                ? `${API_URL}/excursion-reservations/${id}/status`
+                : `${API_URL}/transfer-reservations/${id}/status`;
+
+            const response = await fetch(endpoint, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,20 +170,35 @@ export default function AdminReservations() {
                 throw new Error(errorData.message || 'Failed to update reservation status');
             }
 
-            setReservations(prev => prev.map(res => 
-                res.id === id ? { 
-                    ...res, 
-                    statut: newStatus as any,
-                    cancelled_by_id: newStatus === 'annule' ? user?.id : res.cancelled_by_id
-                } : res
-            ));
+            if (type === 'vehicle') {
+                setReservations(prev => prev.map(res => 
+                    res.id === id ? { 
+                        ...res, 
+                        statut: newStatus as any,
+                        cancelled_by_id: newStatus === 'annule' ? user?.id : res.cancelled_by_id
+                    } : res
+                ));
+            } else if (type === 'excursion') {
+                setExcursionReservations(prev => prev.map(res => 
+                    res.id === id ? { ...res, statut: newStatus as any } : res
+                ));
+            } else if (type === 'transfer') {
+                setTransferReservations(prev => prev.map(res => 
+                    res.id === id ? { ...res, status: newStatus as any } : res
+                ));
+            }
+
             showNotification(`Reservation status updated to ${newStatus}.`, 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         }
     };
 
-    const filteredReservations = reservations.filter(res => 
+    const filteredVehicles = reservations.filter(res => 
+        filter === 'all' ? true : res.statut === filter
+    );
+
+    const filteredExcursions = excursionReservations.filter(res => 
         filter === 'all' ? true : res.statut === filter
     );
 
@@ -110,31 +213,66 @@ export default function AdminReservations() {
     return (
         <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                     <div>
-                        <div className="flex items-center gap-4 mb-2">
+                        <div className="flex flex-wrap items-center gap-4 mb-3">
                             <h1 className="text-4xl font-black text-white tracking-tighter">
-                                Reservation <span className="text-primary italic font-black">Control</span>
+                                Agency <span className="text-primary italic font-black">Dashboard</span>
                             </h1>
-                            <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-sm font-bold border border-primary/30 flex items-center gap-2">
-                                <span className="material-symbols-outlined text-[18px]">list_alt</span>
-                                {reservations.length} TOTAL REQUESTS
+                            <div className="flex gap-2">
+                                <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-primary/30 uppercase flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-[14px]">directions_car</span>
+                                    {reservations.length} Vehicles
+                                </div>
+                                <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-primary/30 uppercase flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-[14px]">explore</span>
+                                    {excursionReservations.length} Excursions
+                                </div>
+                                <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-primary/30 uppercase flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-[14px]">local_taxi</span>
+                                    {transferReservations.length} Transfers
+                                </div>
                             </div>
                         </div>
-                        <p className="text-slate-400 text-lg">Approve or manage client rental requests.</p>
+                        <p className="text-slate-400 text-lg">Manage all client requests and reservation statuses.</p>
                     </div>
 
-                    <div className="flex gap-2 bg-slate-900/50 p-1.5 rounded-xl border border-white/5">
-                        {(['all', 'en_attente', 'confirme', 'annule'] as const).map((f) => (
-                            <button
-                                key={f}
-                                onClick={() => setFilter(f)}
-                                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all
-                                    ${filter === f ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-500 hover:text-white'}`}
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        {/* Tab Switcher */}
+                        <div className="flex p-1 bg-slate-900/80 rounded-xl border border-white/5">
+                            <button 
+                                onClick={() => setActiveTab('vehicles')}
+                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'vehicles' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
                             >
-                                {f.replace('_', ' ')}
+                                Vehicles
                             </button>
-                        ))}
+                            <button 
+                                onClick={() => setActiveTab('excursions')}
+                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'excursions' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                            >
+                                Excursions
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('transfers')}
+                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'transfers' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                            >
+                                Transfers
+                            </button>
+                        </div>
+
+                        {/* Status Filter */}
+                        <div className="flex gap-1 bg-slate-900/50 p-1 rounded-xl border border-white/5">
+                            {(['all', 'en_attente', 'confirme', 'annule'] as const).map((f) => (
+                                <button
+                                    key={f}
+                                    onClick={() => setFilter(f)}
+                                    className={`px-3 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all
+                                        ${filter === f ? 'bg-white/10 text-white border border-white/10' : 'text-slate-500 hover:text-white'}`}
+                                >
+                                    {f === 'all' ? 'All Status' : f.replace('_', ' ')}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
@@ -145,13 +283,15 @@ export default function AdminReservations() {
                     </div>
                 )}
 
-                <div className="bg-slate-900/30 border border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm">
+                <div className="bg-slate-900/30 border border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm animate-in fade-in duration-500">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="border-b border-white/10 bg-white/5">
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Client</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Vehicle</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        {activeTab === 'vehicles' ? 'Vehicle' : activeTab === 'excursions' ? 'Excursion' : 'Transfer Journey'}
+                                    </th>
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Details</th>
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Total</th>
@@ -159,96 +299,185 @@ export default function AdminReservations() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {filteredReservations.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">
-                                            No reservations found matching the filter.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    filteredReservations.map((res) => (
-                                        <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
-                                            <td className="px-6 py-6">
-                                                <div className="flex flex-col">
-                                                    <span className="text-white font-bold">{res.user.name}</span>
-                                                    <span className="text-[11px] text-slate-500">{res.user.email}</span>
-                                                    <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.user.telephone}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-6 font-medium">
-                                                <div className="flex flex-col">
-                                                    <span className="text-white">{res.vehicule.marque} {res.vehicule.modele}</span>
-                                                    <span className="text-[10px] text-slate-500 bg-white/5 px-2 py-0.5 rounded-md mt-1 border border-white/5 w-fit">{res.vehicule.immatriculation}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-6">
-                                                <div className="flex flex-col gap-1">
-                                                    <div className="flex items-center gap-2 text-xs text-white">
-                                                        <span className="material-symbols-outlined text-primary text-sm">calendar_month</span>
-                                                        {new Date(res.date_debut).toLocaleDateString()}
-                                                        <span className="text-slate-600">→</span>
-                                                        {new Date(res.date_fin).toLocaleDateString()}
+                                {activeTab === 'vehicles' ? (
+                                    filteredVehicles.length === 0 ? (
+                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">No vehicle reservations found.</td></tr>
+                                    ) : (
+                                        filteredVehicles.map((res) => (
+                                            <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
+                                                <td className="px-6 py-6">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-white font-bold">{res.user.name}</span>
+                                                        <span className="text-[11px] text-slate-500">{res.user.email}</span>
+                                                        <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.user.telephone}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
-                                                        <span className="material-symbols-outlined text-slate-600 text-[14px]">location_on</span>
-                                                        {res.lieu_depart}
+                                                </td>
+                                                <td className="px-6 py-6 font-medium">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-white">{res.vehicule.marque} {res.vehicule.modele}</span>
+                                                        <span className="text-[10px] text-slate-500 bg-white/5 px-2 py-0.5 rounded-md mt-1 border border-white/5 w-fit">{res.vehicule.immatriculation}</span>
                                                     </div>
-                                                    {res.nb_sieges_bebe > 0 && (
-                                                        <div className="flex items-center gap-2 text-[10px] text-primary font-black uppercase">
-                                                            <span className="material-symbols-outlined text-[14px]">child_care</span>
-                                                            {res.nb_sieges_bebe} Baby Seats
+                                                </td>
+                                                <td className="px-6 py-6">
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2 text-xs text-white">
+                                                            <span className="material-symbols-outlined text-primary text-sm">calendar_month</span>
+                                                            {new Date(res.date_debut).toLocaleDateString()} → {new Date(res.date_fin).toLocaleDateString()}
                                                         </div>
+                                                        <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
+                                                            <span className="material-symbols-outlined text-slate-600 text-[14px]">location_on</span>
+                                                            {res.lieu_depart}
+                                                        </div>
+                                                        {res.nb_sieges_bebe > 0 && <span className="text-[10px] text-primary font-black uppercase">{res.nb_sieges_bebe} Baby Seats</span>}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest">
+                                                    <span className={`px-3 py-1 rounded-full ${res.statut === 'en_attente' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                                                        {res.statut === 'annule' ? (res.cancelled_by_id === res.utilisateur_id ? 'Client' : 'Admin') : res.statut.replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-6 text-lg font-black text-primary">${res.montant_total}</td>
+                                                <td className="px-6 py-6 text-right">
+                                                    {res.statut === 'en_attente' ? (
+                                                        <div className="flex justify-end gap-2">
+                                                            <button onClick={() => updateStatus(res.id, 'confirme', 'vehicle')} className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">check</span></button>
+                                                            <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
+                                                        </div>
+                                                    ) : res.statut === 'confirme' ? (
+                                                        <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
+                                                    ) : <span className="text-[10px] text-slate-600 uppercase font-black">History</span>}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )
+                                ) : activeTab === 'excursions' ? (
+                                    filteredExcursions.length === 0 ? (
+                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">No excursion reservations found.</td></tr>
+                                    ) : (
+                                        filteredExcursions.map((res) => (
+                                            <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
+                                                <td className="px-6 py-6">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-white font-bold">{res.utilisateur.name}</span>
+                                                        <span className="text-[11px] text-slate-500">{res.utilisateur.email}</span>
+                                                        <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.utilisateur.telephone}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-6 font-medium">
+                                                    <span className="text-white text-base font-bold">{res.excursion.nom}</span>
+                                                </td>
+                                                <td className="px-6 py-6">
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2 text-xs text-white">
+                                                            <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
+                                                            {new Date(res.date_reservation).toLocaleDateString()}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
+                                                            <span className="material-symbols-outlined text-slate-600 text-[14px]">location_on</span>
+                                                            {res.lieu_depart}
+                                                        </div>
+                                                        <div className="flex gap-2 text-[10px] font-black text-slate-400 uppercase mt-1">
+                                                            <span>{res.nb_adultes}A</span>
+                                                            {res.nb_enfants > 0 && <span>{res.nb_enfants}C</span>}
+                                                            {res.nb_bebes > 0 && <span>{res.nb_bebes}B</span>}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest text-white">
+                                                    <span className={`px-3 py-1 rounded-full ${res.statut === 'en_attente' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                                                        {res.statut.replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-6 text-lg font-black text-primary">${res.montant_total}</td>
+                                                <td className="px-6 py-6 text-right">
+                                                    {res.statut === 'en_attente' ? (
+                                                        <div className="flex justify-end gap-2">
+                                                            <button onClick={() => updateStatus(res.id, 'confirme', 'excursion')} className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">check</span></button>
+                                                            <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
+                                                        </div>
+                                                    ) : res.statut === 'confirme' ? (
+                                                        <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
+                                                    ) : <span className="text-[10px] text-slate-600 uppercase font-black">History</span>}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )
+                                ) : (
+                                    transferReservations.length === 0 ? (
+                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">No transfer requests found.</td></tr>
+                                    ) : (
+                                        transferReservations.map((res) => (
+                                            <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
+                                                <td className="px-6 py-6">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-white font-bold">{res.utilisateur.name}</span>
+                                                        <span className="text-[11px] text-slate-500">{res.utilisateur.email}</span>
+                                                        <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.utilisateur.telephone}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-6 font-medium">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-white font-bold">{res.pickup_location}</span>
+                                                        <span className="text-primary text-[10px]">TO</span>
+                                                        <span className="text-white font-bold">{res.destination}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-6">
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2 text-xs text-white">
+                                                            <span className="material-symbols-outlined text-primary text-sm">schedule</span>
+                                                            {new Date(res.pickup_datetime).toLocaleString()}
+                                                        </div>
+                                                        <div className="flex gap-2 text-[10px] font-black text-slate-400 uppercase mt-1">
+                                                            <span>{res.adults}A, {res.children}C, {res.babies}B</span>
+                                                            <span className="bg-white/5 px-2 rounded">{res.trip_type.replace('_', ' ')}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest">
+                                                    <span className={`px-3 py-1 rounded-full ${res.status === 'en_attente_prix' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' : res.status === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'}`}>
+                                                        {res.status.replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-6">
+                                                    {res.status === 'en_attente_prix' ? (
+                                                        <div className="flex flex-col gap-2">
+                                                            <input 
+                                                                type="number" 
+                                                                placeholder="Price" 
+                                                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary w-24"
+                                                                onKeyDown={(e) => {
+                                                                    if (e.key === 'Enter') {
+                                                                        setTransferPrice(res.id, (e.target as HTMLInputElement).value);
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <span className="text-[8px] text-slate-500">Press Enter</span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-lg font-black text-primary">${res.quoted_price}</span>
                                                     )}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-6">
-                                                <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest
-                                                    ${res.statut === 'en_attente' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 
-                                                      res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 
-                                                      'bg-red-500/10 text-red-500 border border-red-500/20'}`}
-                                                >
-                                                    {res.statut === 'annule' ? (
-                                                        res.cancelled_by_id === res.utilisateur_id ? 'Annulé par client' : 'Annulé par admin'
-                                                    ) : res.statut.replace('_', ' ')}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-6">
-                                                <span className="text-lg font-black text-primary">${res.montant_total}</span>
-                                            </td>
-                                            <td className="px-6 py-6 text-right">
-                                                {res.statut === 'en_attente' ? (
+                                                </td>
+                                                <td className="px-6 py-6 text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        <button 
-                                                            onClick={() => updateStatus(res.id, 'confirme')}
-                                                            className="flex items-center justify-center p-2 bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-white rounded-lg transition-all border border-green-500/20 group/btn"
-                                                            title="Approve"
-                                                        >
-                                                            <span className="material-symbols-outlined text-lg group-hover/btn:scale-110">check</span>
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => updateStatus(res.id, 'annule')}
-                                                            className="flex items-center justify-center p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg transition-all border border-red-500/20 group/btn"
-                                                            title="Decline"
-                                                        >
-                                                            <span className="material-symbols-outlined text-lg group-hover/btn:scale-110">close</span>
-                                                        </button>
+                                                        {res.status === 'en_attente_prix' && (
+                                                            <button 
+                                                                onClick={(e) => {
+                                                                    const input = (e.currentTarget.parentElement?.parentElement?.previousElementSibling?.querySelector('input') as HTMLInputElement);
+                                                                    if (input.value) setTransferPrice(res.id, input.value);
+                                                                    else showNotification('Please enter a price first.', 'error');
+                                                                }} 
+                                                                className="p-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition-all"
+                                                            >
+                                                                <span className="material-symbols-outlined">send</span>
+                                                            </button>
+                                                        )}
+                                                        <button onClick={() => updateStatus(res.id, 'annule', 'transfer')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
                                                     </div>
-                                                ) : res.statut === 'confirme' && new Date(res.date_debut) > new Date() ? (
-                                                    <div className="flex justify-end gap-2">
-                                                        <button 
-                                                            onClick={() => updateStatus(res.id, 'annule')}
-                                                            className="flex items-center justify-center p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg transition-all border border-red-500/20 group/btn"
-                                                            title="Cancel Reservation"
-                                                        >
-                                                            <span className="material-symbols-outlined text-lg group-hover/btn:scale-110">cancel</span>
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-[10px] text-slate-600 font-bold uppercase">No Actions</span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )
                                 )}
                             </tbody>
                         </table>

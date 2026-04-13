@@ -1,4 +1,61 @@
+'use client';
+
+import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { API_URL, authService } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
+import { useNotification } from '@/context/NotificationContext';
+
 export default function Transfers() {
+    const [transferState, setTransferState] = useState({
+        pickup: '',
+        destination: '',
+        datetime: '',
+        adults: 1,
+        children: 0,
+        babies: 0,
+        tripType: 'simple', // 'simple', 'same_day', 'diff_days'
+        waitDuration: 'half', // 'half' or 'full'
+        returnDatetime: '',
+    });
+
+    const { showNotification } = useNotification();
+    const { user } = useAuth();
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!user) {
+            showNotification('You must be logged in to request a transfer.', 'error');
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const token = authService.getToken();
+            const response = await fetch(`${API_URL}/transfer-reservations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(transferState)
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Failed to send request');
+            }
+
+            showNotification('Your transfer request has been sent! An admin will review it and provide a quote soon.', 'success');
+            router.push('/reservations');
+        } catch (err: any) {
+            showNotification(err.message, 'error');
+        }
+    };
+
     return (
         <div className="flex-1">
             {/* Hero Section */}
@@ -18,47 +75,124 @@ export default function Transfers() {
                         <span className="material-symbols-outlined text-primary text-3xl">calendar_month</span>
                         <h2 className="text-2xl font-bold">Reserve Your Transfer</h2>
                     </div>
-                    <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {/* Pickup */}
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Pick-up Location</label>
-                            <div className="relative">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60">location_on</span>
-                                <input className="w-full pl-10 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" placeholder="Airport, Hotel, or Address" type="text" />
+                    <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+                        {/* Top inputs: Pickup, Dest, Date */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {/* Pickup */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Pick-up Location</label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60 text-2xl">location_on</span>
+                                    <input required value={transferState.pickup} onChange={e => setTransferState({...transferState, pickup: e.target.value})} className="w-full pl-12 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" placeholder="Airport, Hotel, or Address" type="text" />
+                                </div>
+                            </div>
+                            {/* Destination */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Destination</label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60 text-2xl">navigation</span>
+                                    <input required value={transferState.destination} onChange={e => setTransferState({...transferState, destination: e.target.value})} className="w-full pl-12 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" placeholder="Where are you going?" type="text" />
+                                </div>
+                            </div>
+                            {/* Date & Time */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Date & Time</label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60 text-2xl">event</span>
+                                    <input required value={transferState.datetime} onChange={e => setTransferState({...transferState, datetime: e.target.value})} className="w-full pl-12 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" type="datetime-local" />
+                                </div>
                             </div>
                         </div>
-                        {/* Destination */}
+
+                        {/* Trip Options */}
+                        <div className="flex flex-col gap-4 bg-white/50 dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-white/5 shadow-inner">
+                            <h3 className="text-slate-800 dark:text-white text-base font-bold mb-2">Trip Journey</h3>
+                            <div className="flex flex-wrap gap-8">
+                                <label className="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="tripType" value="simple" checked={transferState.tripType === 'simple'} onChange={(e) => setTransferState({...transferState, tripType: e.target.value})} className="text-primary focus:ring-primary h-5 w-5 border-slate-300 dark:bg-slate-900 dark:border-white/10" />
+                                    <span className="text-slate-700 dark:text-slate-300 text-base font-medium">Aller simple</span>
+                                </label>
+                                <label className="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="tripType" value="same_day" checked={transferState.tripType === 'same_day'} onChange={(e) => setTransferState({...transferState, tripType: e.target.value})} className="text-primary focus:ring-primary h-5 w-5 border-slate-300 dark:bg-slate-900 dark:border-white/10" />
+                                    <span className="text-slate-700 dark:text-slate-300 text-base font-medium">Aller et retour (Same Day)</span>
+                                </label>
+                                <label className="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="tripType" value="diff_days" checked={transferState.tripType === 'diff_days'} onChange={(e) => setTransferState({...transferState, tripType: e.target.value})} className="text-primary focus:ring-primary h-5 w-5 border-slate-300 dark:bg-slate-900 dark:border-white/10" />
+                                    <span className="text-slate-700 dark:text-slate-300 text-base font-medium">Aller et retour (Different Dates)</span>
+                                </label>
+                            </div>
+                            
+                            {/* Conditional Inputs */}
+                            {transferState.tripType === 'same_day' && (
+                                <div className="mt-4 pl-6 border-l-4 border-primary/40 flex flex-col sm:flex-row gap-6 animate-in fade-in slide-in-from-left-4">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="waitDuration" value="half" checked={transferState.waitDuration === 'half'} onChange={(e) => setTransferState({...transferState, waitDuration: e.target.value})} className="text-primary h-4 w-4" />
+                                        <span className="text-slate-600 dark:text-slate-400 text-sm">Half Day Layout (Less than 6h waiting)</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="waitDuration" value="full" checked={transferState.waitDuration === 'full'} onChange={(e) => setTransferState({...transferState, waitDuration: e.target.value})} className="text-primary h-4 w-4" />
+                                        <span className="text-slate-600 dark:text-slate-400 text-sm">Full Day Layout (More than 8h waiting)</span>
+                                    </label>
+                                </div>
+                            )}
+
+                            {transferState.tripType === 'diff_days' && (
+                                <div className="mt-4 pl-6 border-l-4 border-primary/40 flex flex-col gap-2 max-w-md animate-in fade-in slide-in-from-left-4">
+                                    <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Return Date & Time</label>
+                                    <div className="relative">
+                                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60 text-2xl">event</span>
+                                        <input required type="datetime-local" className="w-full pl-12 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" value={transferState.returnDatetime} onChange={(e) => setTransferState({...transferState, returnDatetime: e.target.value})} />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Passengers list exactly like Excursions */}
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Destination</label>
-                            <div className="relative">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60">navigation</span>
-                                <input className="w-full pl-10 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" placeholder="Where are you going?" type="text" />
+                             <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Passengers Setup</label>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white/50 dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-white/5 shadow-inner">
+                                {/* Adultes */}
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <span className="text-slate-800 dark:text-white text-base font-bold block">Adultes</span>
+                                        <span className="text-xs text-slate-500 font-normal">Plein tarif</span>
+                                    </div>
+                                    <div className="flex items-center bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 p-1">
+                                        <button type="button" className="text-primary disabled:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-md size-9 flex items-center justify-center transition-all" disabled={transferState.adults <= 1} onClick={() => setTransferState(p => ({...p, adults: p.adults - 1}))}><span className="material-symbols-outlined">remove</span></button>
+                                        <span className="w-10 text-center text-base font-bold text-slate-800 dark:text-white">{transferState.adults}</span>
+                                        <button type="button" className="text-primary disabled:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-md size-9 flex items-center justify-center transition-all" onClick={() => setTransferState(p => ({...p, adults: p.adults + 1}))}><span className="material-symbols-outlined">add</span></button>
+                                    </div>
+                                </div>
+                                {/* Enfants */}
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <span className="text-slate-800 dark:text-white text-base font-bold block">Enfants</span>
+                                        <span className="text-xs text-slate-500 font-normal">Plein tarif</span>
+                                    </div>
+                                    <div className="flex items-center bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 p-1">
+                                        <button type="button" className="text-primary disabled:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-md size-9 flex items-center justify-center transition-all" disabled={transferState.children <= 0} onClick={() => setTransferState(p => ({...p, children: p.children - 1}))}><span className="material-symbols-outlined">remove</span></button>
+                                        <span className="w-10 text-center text-base font-bold text-slate-800 dark:text-white">{transferState.children}</span>
+                                        <button type="button" className="text-primary disabled:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-md size-9 flex items-center justify-center transition-all" onClick={() => setTransferState(p => ({...p, children: p.children + 1}))}><span className="material-symbols-outlined">add</span></button>
+                                    </div>
+                                </div>
+                                {/* Bébés */}
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <span className="text-slate-800 dark:text-white text-base font-bold block">Bébés</span>
+                                        <span className="text-xs text-slate-500 font-normal">Plein tarif</span>
+                                    </div>
+                                    <div className="flex items-center bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 p-1">
+                                        <button type="button" className="text-primary disabled:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-md size-9 flex items-center justify-center transition-all" disabled={transferState.babies <= 0} onClick={() => setTransferState(p => ({...p, babies: p.babies - 1}))}><span className="material-symbols-outlined">remove</span></button>
+                                        <span className="w-10 text-center text-base font-bold text-slate-800 dark:text-white">{transferState.babies}</span>
+                                        <button type="button" className="text-primary disabled:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 rounded-md size-9 flex items-center justify-center transition-all" onClick={() => setTransferState(p => ({...p, babies: p.babies + 1}))}><span className="material-symbols-outlined">add</span></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        {/* Date & Time */}
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Date & Time</label>
-                            <div className="relative">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60">event</span>
-                                <input className="w-full pl-10 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100" type="datetime-local" />
-                            </div>
-                        </div>
-                        {/* Passengers */}
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-slate-600 dark:text-slate-400">Passengers</label>
-                            <div className="relative">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/60">group</span>
-                                <select className="w-full pl-10 pr-4 h-14 rounded-lg bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-800 dark:text-slate-100 appearance-none">
-                                    <option>1 Passenger</option>
-                                    <option>2 Passengers</option>
-                                    <option>3 Passengers</option>
-                                    <option>4+ Passengers</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="lg:col-span-4 flex justify-end mt-4">
-                            <button className="bg-primary hover:bg-primary/90 text-white font-bold py-4 px-12 rounded-lg flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
-                                Check Availability
+
+                        <div className="flex justify-end mt-4">
+                            <button type="submit" className="bg-primary hover:bg-primary/90 text-white font-bold py-5 px-12 rounded-lg flex items-center gap-3 transition-all shadow-lg shadow-primary/20 text-lg">
+                                Send Quote Request (Admin Approval)
                                 <span className="material-symbols-outlined">arrow_forward</span>
                             </button>
                         </div>
@@ -117,7 +251,7 @@ export default function Transfers() {
                     {/* Car 3 */}
                     <div className="group bg-white rounded-xl overflow-hidden border border-primary/5 hover:border-primary/30 transition-all dark:bg-slate-800">
                         <div className="aspect-[16/10] overflow-hidden">
-                            <img alt="Car image" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrgXkmwciKA1mMZZ0mCr-czvFbYsyI02g9DQuFHHFjOJEQzSOdT-REGQe6Y6yKJTc7YTJ6vdLuWGgtl6bczEzy7GaWgeL_2XIwpat5jyeDOx5bPc5yVyaeLt57FI-TfpV5I7PlFd0Optdr1yLLgQvFO75TF_XMY3Pnh4MWhCJ_lootSlqfh6fnhGjzk-36CZpY5whWrRZke74MH0-UwXrJXLvBUbB3cI9vZ9RILc0C5sU0mxt5ssDeYLKAxzXH8wcJSW_3o9IF213c" />
+                            <img alt="Car image" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrGXkmwciKA1mMZZ0mCr-czvFbYsyI02g9DQuFHHFjOJEQzSOdT-REGQe6Y6yKJTc7YTJ6vdLuWGgtl6bczEzy7GaWgeL_2XIwpat5jyeDOx5bPc5yVyaeLt57FI-TfpV5I7PlFd0Optdr1yLLgQvFO75TF_XMY3Pnh4MWhCJ_lootSlqfh6fnhGjzk-36CZpY5whWrRZke74MH0-UwXrJXLvBUbB3cI9vZ9RILc0C5sU0mxt5ssDeYLKAxzXH8wcJSW_3o9IF213c" />
                         </div>
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
