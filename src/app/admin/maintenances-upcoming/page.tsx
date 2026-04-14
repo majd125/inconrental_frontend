@@ -13,6 +13,12 @@ interface Vehicle {
     immatriculation: string;
 }
 
+interface User {
+    id: number;
+    name: string;
+    is_driver: boolean;
+}
+
 interface Maintenance {
     id: number;
     vehicule_id: number;
@@ -31,6 +37,8 @@ interface Maintenance {
     remarques: string | null;
     is_archived?: boolean;
     vehicule?: Vehicle;
+    assigned_driver_id: number | null;
+    driver?: User;
 }
 
 export default function MaintenancesUpcoming() {
@@ -43,6 +51,7 @@ export default function MaintenancesUpcoming() {
     const [success, setSuccess] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'urgent' | 'all'>('urgent');
+    const [drivers, setDrivers] = useState<User[]>([]);
 
     useEffect(() => {
         if (!authLoading && (!user || !user.is_admin)) {
@@ -77,8 +86,27 @@ export default function MaintenancesUpcoming() {
             }
         };
 
+        const fetchDrivers = async () => {
+            try {
+                const response = await fetch(`${API_URL}/admin/chauffeurs`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    },
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    setDrivers(result.data || []);
+                }
+            } catch (err) {
+                console.error("Failed to fetch drivers", err);
+            }
+        };
+
         if (user?.is_admin) {
             fetchAllMaintenances();
+            fetchDrivers();
         }
     }, [user, authLoading, router]);
 
@@ -130,6 +158,35 @@ export default function MaintenancesUpcoming() {
             if (!response.ok) throw new Error('Update failed');
 
             setSuccess('Car marked as received successfully');
+            fetchAllMaintenances();
+            
+            setTimeout(() => setSuccess(null), 3000);
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
+    const handleAssignDriver = async (mainId: number, driverId: number | null) => {
+        setActionLoading(true);
+        try {
+            await authService.getCsrfCookie();
+            const csrfToken = authService.getCookie('XSRF-TOKEN');
+
+            const response = await fetch(`${API_URL}/maintenances/${mainId}/assign-driver`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authService.getToken()}`,
+                    'Accept': 'application/json',
+                    ...(csrfToken ? { 'X-XSRF-TOKEN': csrfToken } : {}),
+                },
+                body: JSON.stringify({ assigned_driver_id: driverId }),
+                credentials: 'include',
+            });
+
+            if (!response.ok) throw new Error('Assignment failed');
+
+            setSuccess('Driver assigned successfully');
             fetchAllMaintenances();
             
             setTimeout(() => setSuccess(null), 3000);
@@ -258,6 +315,7 @@ export default function MaintenancesUpcoming() {
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Vehicle</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Task Info</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Next Due (Target)</th>
+                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Responsible</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Action</th>
                             </tr>
@@ -325,6 +383,21 @@ export default function MaintenancesUpcoming() {
                                                     ) : (
                                                         <span className="text-slate-600 font-mono text-sm">No Recurring Due</span>
                                                     )}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <div className="flex items-center gap-2">
+                                                    <select
+                                                        className="bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all outline-none"
+                                                        value={main.assigned_driver_id || ''}
+                                                        onChange={(e) => handleAssignDriver(main.id, e.target.value ? parseInt(e.target.value) : null)}
+                                                        disabled={actionLoading}
+                                                    >
+                                                        <option value="">No driver</option>
+                                                        {drivers.map(driver => (
+                                                            <option key={driver.id} value={driver.id}>{driver.name}</option>
+                                                        ))}
+                                                    </select>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5">

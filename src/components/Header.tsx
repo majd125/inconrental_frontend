@@ -37,9 +37,14 @@ export default function Header() {
                             </div>
                         )}
                         {user && !user.is_admin && user.is_driver && (
-                            <Link className="text-sm font-medium hover:text-primary transition-colors text-orange-400" href="/chauffeur/missions">
-                                My Missions
-                            </Link>
+                            <div className="flex gap-6">
+                                <Link className="text-sm font-medium hover:text-primary transition-colors text-orange-400" href="/chauffeur/missions">
+                                    My Missions
+                                </Link>
+                                <Link className="text-sm font-bold text-orange-500 hover:text-white transition-colors flex items-center gap-1" href="/chauffeur/maintenances">
+                                    <span className="material-symbols-outlined text-[16px]">build</span> My Maintenance
+                                </Link>
+                            </div>
                         )}
                         {user && !user.is_admin && !user.is_driver && (
                             <Link className="text-sm font-medium hover:text-primary transition-colors text-white flex items-center gap-1" href="/reservations">

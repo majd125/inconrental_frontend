@@ -34,8 +34,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         try {
-            const userData = await authService.me();
-            setUser(userData);
+            const result = await authService.me();
+            setUser(result.user);
         } catch (error) {
             console.error('Failed to fetch user:', error);
             authService.logout();
