@@ -8,6 +8,7 @@ interface User {
     name: string;
     email: string;
     is_admin: boolean;
+    is_driver: boolean;
 }
 
 interface AuthContextType {
