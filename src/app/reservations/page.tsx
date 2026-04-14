@@ -44,18 +44,18 @@ interface ExcursionReservation {
 
 interface TransferReservation {
     id: number;
-    user_id: number;
-    pickup_location: string;
-    destination: string;
-    pickup_datetime: string;
-    trip_type: string;
-    wait_duration: string | null;
-    return_datetime: string | null;
-    adults: number;
-    children: number;
-    babies: number;
-    quoted_price: string | null;
-    status: 'en_attente_prix' | 'en_attente_confirmation' | 'confirme' | 'annule';
+    utilisateur_id: number;
+    lieu_depart: string;
+    lieu_destination: string;
+    date_heure_depart: string;
+    type_trajet: string;
+    duree_attente: string | null;
+    date_heure_retour: string | null;
+    nb_adultes: number;
+    nb_enfants: number;
+    nb_bebes: number;
+    montant_total: string | null;
+    statut: 'en_attente_prix' | 'en_attente_confirmation' | 'confirme' | 'annule';
 }
 
 export default function MyReservations() {
@@ -127,7 +127,7 @@ export default function MyReservations() {
                 }
             });
             if (!response.ok) throw new Error('Failed to confirm');
-            setTransferReservations(prev => prev.map(t => t.id === id ? { ...t, status: 'confirme' } : t));
+            setTransferReservations(prev => prev.map(t => t.id === id ? { ...t, statut: 'confirme' } : t));
             showNotification('Transfer confirmed! Safe travels.', 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
@@ -367,29 +367,29 @@ export default function MyReservations() {
                                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                                             <div className="space-y-1">
                                                 <p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">Transfer Journey</p>
-                                                <h3 className="text-lg font-bold text-white mb-2">{res.pickup_location} → {res.destination}</h3>
+                                                <h3 className="text-lg font-bold text-white mb-2">{res.lieu_depart} → {res.lieu_destination}</h3>
                                                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest
-                                                    ${res.status === 'en_attente_prix' ? 'bg-orange-500/20 text-orange-500' : 
-                                                      res.status === 'en_attente_confirmation' ? 'bg-yellow-500/20 text-yellow-500' :
-                                                      res.status === 'confirme' ? 'bg-green-500/20 text-green-500' : 
+                                                    ${res.statut === 'en_attente_prix' ? 'bg-orange-500/20 text-orange-500' : 
+                                                      res.statut === 'en_attente_confirmation' ? 'bg-yellow-500/20 text-yellow-500' :
+                                                      res.statut === 'confirme' ? 'bg-green-500/20 text-green-500' : 
                                                       'bg-red-500/20 text-red-500'}`}
                                                 >
-                                                    {res.status === 'en_attente_prix' ? 'Reviewing' : res.status.replace('_', ' ')}
+                                                    {res.statut === 'en_attente_prix' ? 'Reviewing' : res.statut.replace('_', ' ')}
                                                 </div>
                                             </div>
                                             <div className="space-y-1">
                                                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Schedule & Passengers</p>
                                                 <p className="text-sm font-semibold text-white">
-                                                    {new Date(res.pickup_datetime).toLocaleString()}
+                                                    {new Date(res.date_heure_depart).toLocaleString()}
                                                 </p>
-                                                <p className="text-xs text-slate-400">{res.trip_type.replace('_', ' ')} • {res.adults}A, {res.children}C, {res.babies}B</p>
+                                                <p className="text-xs text-slate-400">{res.type_trajet.replace('_', ' ')} • {res.nb_adultes}A, {res.nb_enfants}C, {res.nb_bebes}B</p>
                                             </div>
                                             <div className="space-y-1 sm:text-right">
                                                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Price Quote</p>
-                                                {res.quoted_price ? (
+                                                {res.montant_total ? (
                                                     <>
-                                                        <p className="text-2xl font-black text-primary">${res.quoted_price}</p>
-                                                        {res.status === 'en_attente_confirmation' && (
+                                                        <p className="text-2xl font-black text-primary">${res.montant_total}</p>
+                                                        {res.statut === 'en_attente_confirmation' && (
                                                             <button 
                                                                 onClick={() => confirmTransfer(res.id)}
                                                                 className="mt-3 px-6 py-2 bg-green-500 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-green-500/20"

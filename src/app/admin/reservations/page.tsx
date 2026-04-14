@@ -52,23 +52,33 @@ interface ExcursionReservation {
 
 interface TransferReservation {
     id: number;
-    user_id: number;
-    pickup_location: string;
-    destination: string;
-    pickup_datetime: string;
-    trip_type: string;
-    wait_duration: string | null;
-    return_datetime: string | null;
-    adults: number;
-    children: number;
-    babies: number;
-    quoted_price: string | null;
-    status: 'en_attente_prix' | 'en_attente_confirmation' | 'confirme' | 'annule';
+    utilisateur_id: number;
+    chauffeur_id?: number | null;
+    lieu_depart: string;
+    lieu_destination: string;
+    date_heure_depart: string;
+    type_trajet: string;
+    duree_attente: string | null;
+    date_heure_retour: string | null;
+    nb_adultes: number;
+    nb_enfants: number;
+    nb_bebes: number;
+    montant_total: string | null;
+    statut: 'en_attente_prix' | 'en_attente_confirmation' | 'confirme' | 'annule' | 'termine';
     utilisateur: {
         name: string;
         email: string;
         telephone: string;
     };
+    chauffeur?: {
+        id: number;
+        name: string;
+    } | null;
+}
+
+interface Chauffeur {
+    id: number;
+    name: string;
 }
 
 import { useNotification } from '@/context/NotificationContext';
@@ -80,9 +90,10 @@ export default function AdminReservations() {
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [excursionReservations, setExcursionReservations] = useState<ExcursionReservation[]>([]);
     const [transferReservations, setTransferReservations] = useState<TransferReservation[]>([]);
+    const [chauffeurs, setChauffeurs] = useState<Chauffeur[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [filter, setFilter] = useState<'all' | 'en_attente' | 'confirme' | 'annule'>('all');
+    const [filter, setFilter] = useState<'all' | 'en_attente' | 'en_attente_prix' | 'confirme' | 'annule' | 'termine'>('all');
     const [activeTab, setActiveTab] = useState<'vehicles' | 'excursions' | 'transfers'>('vehicles');
 
     useEffect(() => {
@@ -93,7 +104,7 @@ export default function AdminReservations() {
 
         const fetchData = async () => {
             try {
-                const [vehRes, excRes, transRes] = await Promise.all([
+                const [vehRes, excRes, transRes, chauffeurRes] = await Promise.all([
                     fetch(`${API_URL}/admin/reservations`, {
                         headers: { 'Authorization': `Bearer ${authService.getToken()}` }
                     }),
@@ -102,20 +113,25 @@ export default function AdminReservations() {
                     }),
                     fetch(`${API_URL}/admin/transfer-reservations`, {
                         headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                    }),
+                    fetch(`${API_URL}/admin/chauffeurs`, {
+                        headers: { 'Authorization': `Bearer ${authService.getToken()}` }
                     })
                 ]);
 
-                if (!vehRes.ok || !excRes.ok || !transRes.ok) throw new Error('Failed to fetch reservations');
+                if (!vehRes.ok || !excRes.ok || !transRes.ok || !chauffeurRes.ok) throw new Error('Failed to fetch reservations');
                 
-                const [vehData, excData, transData] = await Promise.all([
+                const [vehData, excData, transData, chauffeurData] = await Promise.all([
                     vehRes.json(),
                     excRes.json(),
-                    transRes.json()
+                    transRes.json(),
+                    chauffeurRes.json()
                 ]);
 
                 setReservations(vehData.data || []);
                 setExcursionReservations(excData.data || []);
                 setTransferReservations(transData.data || []);
+                setChauffeurs(chauffeurData.data || []);
             } catch (err: any) {
                 setError(err.message);
             } finally {
@@ -143,6 +159,29 @@ export default function AdminReservations() {
                 res.id === id ? { ...res, quoted_price: price, status: 'en_attente_confirmation' } : res
             ));
             showNotification('Price quote sent to client.', 'success');
+        } catch (err: any) {
+            showNotification(err.message, 'error');
+        }
+    };
+
+    const assignChauffeur = async (reservationId: number, chauffeurId: number | null) => {
+        try {
+            const response = await fetch(`${API_URL}/admin/transfer-reservations/${reservationId}/assign-chauffeur`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authService.getToken()}`
+                },
+                body: JSON.stringify({ chauffeur_id: chauffeurId })
+            });
+
+            if (!response.ok) throw new Error('Failed to assign chauffeur');
+
+            const data = await response.json();
+            setTransferReservations(prev => prev.map(res => 
+                res.id === reservationId ? { ...res, chauffeur_id: chauffeurId, chauffeur: data.data.chauffeur } : res
+            ));
+            showNotification(chauffeurId ? 'Chauffeur assigned successfully.' : 'Chauffeur unassigned.', 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         }
@@ -202,6 +241,12 @@ export default function AdminReservations() {
         filter === 'all' ? true : res.statut === filter
     );
 
+    const filteredTransfers = transferReservations.filter(res => {
+        if (filter === 'all') return true;
+        if (filter === 'en_attente') return res.statut === 'en_attente_prix' || res.statut === 'en_attente_confirmation';
+        return res.statut === filter;
+    });
+
     if (authLoading || loading) {
         return (
             <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
@@ -260,14 +305,13 @@ export default function AdminReservations() {
                             </button>
                         </div>
 
-                        {/* Status Filter */}
                         <div className="flex gap-1 bg-slate-900/50 p-1 rounded-xl border border-white/5">
-                            {(['all', 'en_attente', 'confirme', 'annule'] as const).map((f) => (
+                            {(['all', 'en_attente', 'confirme', 'annule', 'termine'] as const).map((f) => (
                                 <button
                                     key={f}
                                     onClick={() => setFilter(f)}
                                     className={`px-3 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all
-                                        ${filter === f ? 'bg-white/10 text-white border border-white/10' : 'text-slate-500 hover:text-white'}`}
+                                        ${filter === f ? 'bg-white/10 text-white border border-white/10 shadow-lg' : 'text-slate-500 hover:text-white'}`}
                                 >
                                     {f === 'all' ? 'All Status' : f.replace('_', ' ')}
                                 </button>
@@ -292,8 +336,9 @@ export default function AdminReservations() {
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                         {activeTab === 'vehicles' ? 'Vehicle' : activeTab === 'excursions' ? 'Excursion' : 'Transfer Journey'}
                                     </th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Details</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Detail/Contact</th>
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                    {activeTab === 'transfers' && <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Chauffeur</th>}
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Total</th>
                                     <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
                                 </tr>
@@ -403,10 +448,10 @@ export default function AdminReservations() {
                                         ))
                                     )
                                 ) : (
-                                    transferReservations.length === 0 ? (
-                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">No transfer requests found.</td></tr>
+                                    filteredTransfers.length === 0 ? (
+                                        <tr><td colSpan={7} className="px-6 py-20 text-center text-slate-500 font-medium italic">No transfer requests found.</td></tr>
                                     ) : (
-                                        transferReservations.map((res) => (
+                                        filteredTransfers.map((res) => (
                                             <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col">
@@ -417,30 +462,58 @@ export default function AdminReservations() {
                                                 </td>
                                                 <td className="px-6 py-6 font-medium">
                                                     <div className="flex flex-col">
-                                                        <span className="text-white font-bold">{res.pickup_location}</span>
+                                                        <span className="text-white font-bold">{res.lieu_depart}</span>
                                                         <span className="text-primary text-[10px]">TO</span>
-                                                        <span className="text-white font-bold">{res.destination}</span>
+                                                        <span className="text-white font-bold">{res.lieu_destination}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col gap-1">
                                                         <div className="flex items-center gap-2 text-xs text-white">
                                                             <span className="material-symbols-outlined text-primary text-sm">schedule</span>
-                                                            {new Date(res.pickup_datetime).toLocaleString()}
+                                                            {new Date(res.date_heure_depart).toLocaleString()}
                                                         </div>
                                                         <div className="flex gap-2 text-[10px] font-black text-slate-400 uppercase mt-1">
-                                                            <span>{res.adults}A, {res.children}C, {res.babies}B</span>
-                                                            <span className="bg-white/5 px-2 rounded">{res.trip_type.replace('_', ' ')}</span>
+                                                            <span>{res.nb_adultes}A, {res.nb_enfants}C, {res.nb_bebes}B</span>
+                                                            <span className="bg-white/5 px-2 rounded">{res.type_trajet.replace('_', ' ')}</span>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest">
-                                                    <span className={`px-3 py-1 rounded-full ${res.status === 'en_attente_prix' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' : res.status === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'}`}>
-                                                        {res.status.replace('_', ' ')}
+                                                    <span className={`px-3 py-1 rounded-full ${
+                                                        res.statut === 'en_attente_prix' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' : 
+                                                        res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 
+                                                        res.statut === 'termine' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
+                                                        'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                                                        {res.statut.replace('_', ' ')}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-6">
-                                                    {res.status === 'en_attente_prix' ? (
+                                                    {res.statut !== 'termine' && res.statut !== 'annule' ? (
+                                                        <select 
+                                                            className="bg-slate-800 border border-white/10 rounded-lg px-2 py-1.5 text-[10px] text-white focus:outline-none focus:border-primary w-full cursor-pointer"
+                                                            value={res.chauffeur_id || ''}
+                                                            onChange={(e) => {
+                                                                const val = e.target.value;
+                                                                assignChauffeur(res.id, val ? parseInt(val) : null);
+                                                            }}
+                                                        >
+                                                            <option value="" className="bg-slate-800 text-white">No Driver</option>
+                                                            {chauffeurs.map(c => (
+                                                                <option key={c.id} value={c.id} className="bg-slate-800 text-white">
+                                                                    {c.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        <div className="flex items-center gap-1.5 text-blue-400 font-bold text-[11px]">
+                                                            <span className="material-symbols-outlined text-sm">person</span>
+                                                            {res.chauffeur?.name || (res.statut === 'termine' ? 'Driver Assigned' : '-')}
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-6">
+                                                    {res.statut === 'en_attente_prix' ? (
                                                         <div className="flex flex-col gap-2">
                                                             <input 
                                                                 type="number" 
@@ -455,12 +528,12 @@ export default function AdminReservations() {
                                                             <span className="text-[8px] text-slate-500">Press Enter</span>
                                                         </div>
                                                     ) : (
-                                                        <span className="text-lg font-black text-primary">${res.quoted_price}</span>
+                                                        <span className="text-lg font-black text-primary">{res.montant_total ? `$${res.montant_total}` : '-'}</span>
                                                     )}
                                                 </td>
                                                 <td className="px-6 py-6 text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        {res.status === 'en_attente_prix' && (
+                                                        {res.statut === 'en_attente_prix' && (
                                                             <button 
                                                                 onClick={(e) => {
                                                                     const input = (e.currentTarget.parentElement?.parentElement?.previousElementSibling?.querySelector('input') as HTMLInputElement);

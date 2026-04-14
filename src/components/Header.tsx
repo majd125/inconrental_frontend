@@ -36,7 +36,12 @@ export default function Header() {
                                 </Link>
                             </div>
                         )}
-                        {user && !user.is_admin && (
+                        {user && !user.is_admin && user.is_driver && (
+                            <Link className="text-sm font-medium hover:text-primary transition-colors text-orange-400" href="/chauffeur/missions">
+                                My Missions
+                            </Link>
+                        )}
+                        {user && !user.is_admin && !user.is_driver && (
                             <Link className="text-sm font-medium hover:text-primary transition-colors text-white flex items-center gap-1" href="/reservations">
                                 <span className="material-symbols-outlined text-[18px]">calendar_month</span> My Bookings
                             </Link>
