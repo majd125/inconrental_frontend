@@ -79,6 +79,7 @@ interface TransferReservation {
 interface Chauffeur {
     id: number;
     name: string;
+    is_busy?: boolean;
 }
 
 import { useNotification } from '@/context/NotificationContext';
@@ -91,6 +92,7 @@ export default function AdminReservations() {
     const [excursionReservations, setExcursionReservations] = useState<ExcursionReservation[]>([]);
     const [transferReservations, setTransferReservations] = useState<TransferReservation[]>([]);
     const [chauffeurs, setChauffeurs] = useState<Chauffeur[]>([]);
+    const [chauffeursAvailability, setChauffeursAvailability] = useState<Record<number, Chauffeur[]>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [filter, setFilter] = useState<'all' | 'en_attente' | 'en_attente_prix' | 'confirme' | 'annule' | 'termine'>('all');
@@ -141,6 +143,23 @@ export default function AdminReservations() {
 
         if (user?.is_admin) fetchData();
     }, [user, authLoading, router]);
+
+    const fetchChauffeursAvailability = async (reservationId: number) => {
+        try {
+            const res = await fetch(`${API_URL}/admin/chauffeurs?reservation_id=${reservationId}`, {
+                headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setChauffeursAvailability(prev => ({
+                    ...prev,
+                    [reservationId]: data.data
+                }));
+            }
+        } catch (err) {
+            console.error('Failed to fetch availability', err);
+        }
+    };
 
     const setTransferPrice = async (id: number, price: string) => {
         try {
@@ -493,15 +512,20 @@ export default function AdminReservations() {
                                                         <select 
                                                             className="bg-slate-800 border border-white/10 rounded-lg px-2 py-1.5 text-[10px] text-white focus:outline-none focus:border-primary w-full cursor-pointer"
                                                             value={res.chauffeur_id || ''}
+                                                            onFocus={() => {
+                                                                if (!chauffeursAvailability[res.id]) {
+                                                                    fetchChauffeursAvailability(res.id);
+                                                                }
+                                                            }}
                                                             onChange={(e) => {
                                                                 const val = e.target.value;
                                                                 assignChauffeur(res.id, val ? parseInt(val) : null);
                                                             }}
                                                         >
                                                             <option value="" className="bg-slate-800 text-white">No Driver</option>
-                                                            {chauffeurs.map(c => (
+                                                            {(chauffeursAvailability[res.id] || chauffeurs).map(c => (
                                                                 <option key={c.id} value={c.id} className="bg-slate-800 text-white">
-                                                                    {c.name}
+                                                                    {c.name} {c.is_busy ? '(Busy)' : ''}
                                                                 </option>
                                                             ))}
                                                         </select>
