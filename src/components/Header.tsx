@@ -34,6 +34,9 @@ export default function Header() {
                                 <Link className="text-sm font-bold text-green-400 hover:text-white transition-colors flex items-center gap-1" href="/admin/reservations">
                                     <span className="material-symbols-outlined text-[16px] text-green-500">list_alt</span> Reservations
                                 </Link>
+                                <Link className="text-sm font-bold text-fuchsia-400 hover:text-white transition-colors flex items-center gap-1" href="/admin/promotions">
+                                    <span className="material-symbols-outlined text-[16px] text-fuchsia-500">workspace_premium</span> Promotions
+                                </Link>
                             </div>
                         )}
                         {user && !user.is_admin && user.is_driver && (

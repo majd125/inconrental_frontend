@@ -20,6 +20,8 @@ interface Vehicle {
     image_url: string | null;
     statut: string;
     immatriculation?: string;
+    prix_final?: number;
+    active_promotion_percent?: number;
 }
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -356,7 +358,8 @@ export default function Catalog() {
     );
 
     const days = Math.ceil((new Date(localSearchData.date_fin).getTime() - new Date(localSearchData.date_debut).getTime()) / (1000 * 60 * 60 * 24)) || 1;
-    const vehicleTotal = selectedVehicle ? parseFloat(selectedVehicle.prix_base) * days : 0;
+    const vehiclePricePerDay = selectedVehicle ? (selectedVehicle.prix_final || parseFloat(selectedVehicle.prix_base)) : 0;
+    const vehicleTotal = vehiclePricePerDay * days;
     const babySeatsTotal = localSearchData.nb_sieges_bebe * days * 10;
     const computedTotal = (vehicleTotal + babySeatsTotal).toFixed(2);
 
@@ -465,10 +468,22 @@ export default function Catalog() {
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <h3 className="text-slate-900 dark:text-slate-100 text-xl font-bold">{vehicle.marque} {vehicle.modele}</h3>
-                                        <p className="text-primary font-medium text-sm capitalize">{vehicle.categorie}</p>
+                                        <div className="flex gap-2 items-center mt-1">
+                                            <p className="text-primary font-medium text-sm capitalize">{vehicle.categorie}</p>
+                                            {vehicle.active_promotion_percent > 0 && (
+                                                <span className="bg-fuchsia-500/20 text-fuchsia-500 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest">-{vehicle.active_promotion_percent}%</span>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-slate-900 dark:text-slate-100 text-xl font-black">${vehicle.prix_base}</p>
+                                        {vehicle.active_promotion_percent > 0 ? (
+                                            <>
+                                                <p className="text-slate-400 dark:text-slate-500 text-sm font-bold line-through decoration-red-500/50">${vehicle.prix_base}</p>
+                                                <p className="text-fuchsia-600 dark:text-fuchsia-400 text-xl font-black">${vehicle.prix_final}</p>
+                                            </>
+                                        ) : (
+                                            <p className="text-slate-900 dark:text-slate-100 text-xl font-black">${vehicle.prix_base}</p>
+                                        )}
                                         <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">/ day</p>
                                     </div>
                                 </div>
@@ -500,7 +515,12 @@ export default function Catalog() {
                                     </button>
                                 </div>
                                 <div className="p-8 text-left">
-                                    <h2 className="text-slate-900 dark:text-white text-3xl font-bold mb-2">{selectedVehicle.marque} {selectedVehicle.modele}</h2>
+                                    <h2 className="text-slate-900 dark:text-white text-3xl font-bold mb-2 flex items-center gap-3">
+                                        {selectedVehicle.marque} {selectedVehicle.modele}
+                                        {selectedVehicle.active_promotion_percent > 0 && (
+                                            <span className="bg-fuchsia-500/20 text-fuchsia-500 text-[12px] font-black px-2 py-1 rounded uppercase tracking-widest">-{selectedVehicle.active_promotion_percent}% PROMO</span>
+                                        )}
+                                    </h2>
                                     <p className="text-primary font-bold uppercase tracking-widest text-xs mb-6">{selectedVehicle.categorie}</p>
                                     <p className="text-slate-600 dark:text-slate-400 mb-8">{selectedVehicle.description || "Uncompromising performance meets luxury."}</p>
                                     
@@ -638,7 +658,14 @@ export default function Catalog() {
                                             <p className="text-sm text-slate-500">{selectedVehicle.categorie} • {selectedVehicle.transmission}</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-lg font-black text-primary">${selectedVehicle.prix_base}</p>
+                                            {selectedVehicle.active_promotion_percent > 0 ? (
+                                                <>
+                                                    <p className="text-sm text-slate-400 line-through decoration-red-500/50">${selectedVehicle.prix_base}</p>
+                                                    <p className="text-lg font-black text-fuchsia-500">${selectedVehicle.prix_final}</p>
+                                                </>
+                                            ) : (
+                                                <p className="text-lg font-black text-primary">${selectedVehicle.prix_base}</p>
+                                            )}
                                             <p className="text-xs text-slate-500 uppercase tracking-widest">/ day</p>
                                         </div>
                                     </div>
