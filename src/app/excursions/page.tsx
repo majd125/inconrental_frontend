@@ -16,6 +16,8 @@ interface Excursion {
     nombre_personnes_max: number;
     actif: boolean;
     image_url: string | null;
+    prix_final: number;
+    active_promotion_percent: number;
 }
 
 export default function Excursions() {
@@ -176,8 +178,15 @@ export default function Excursions() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a101c] via-[#0a101c]/40 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500"></div>
                                 
-                                <div className="absolute top-6 right-6 bg-primary/20 backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-1.5 text-primary border border-primary/30 text-xs font-black tracking-widest">
-                                    <span className="material-symbols-outlined text-sm fill-current">star</span> 5.0
+                                <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
+                                    <div className="bg-primary/20 backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-1.5 text-primary border border-primary/30 text-xs font-black tracking-widest">
+                                        <span className="material-symbols-outlined text-sm fill-current">star</span> 5.0
+                                    </div>
+                                    {excursion.active_promotion_percent > 0 && (
+                                        <div className="bg-fuchsia-500/80 backdrop-blur-md rounded-full px-4 py-1.5 text-white border border-fuchsia-400/30 text-xs font-black tracking-widest animate-pulse">
+                                            -{excursion.active_promotion_percent}% OFF
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="absolute bottom-8 left-8 right-8 space-y-4">
@@ -189,7 +198,14 @@ export default function Excursions() {
                                     <div className="flex items-center justify-between border-t border-white/10 pt-4">
                                         <div className="flex flex-col">
                                             <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Starting at</span>
-                                            <span className="text-white font-black text-2xl">${excursion.prix_par_personne}</span>
+                                            {excursion.active_promotion_percent > 0 ? (
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="text-white font-black text-2xl">${excursion.prix_final}</span>
+                                                    <span className="text-slate-500 text-sm line-through">${excursion.prix_par_personne}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-white font-black text-2xl">${excursion.prix_par_personne}</span>
+                                            )}
                                         </div>
                                         <button className="size-12 rounded-xl bg-white text-slate-900 flex items-center justify-center transition-all group-hover:bg-primary group-hover:text-white group-hover:rotate-12">
                                             <span className="material-symbols-outlined font-black">arrow_outward</span>
@@ -432,9 +448,9 @@ export default function Excursions() {
                                                  <div className="flex items-end gap-1">
                                                      <span className="text-sm font-bold text-primary mb-1">$</span>
                                                      <span className="text-4xl font-black text-white leading-none">
-                                                         {((parseFloat(selectedExcursion.prix_par_personne) * reservationData.adults) + 
-                                                           (parseFloat(selectedExcursion.prix_par_personne) * 0.8 * reservationData.children) + 
-                                                           (parseFloat(selectedExcursion.prix_par_personne) * 0.5 * reservationData.babies)).toFixed(2)}
+                                                         {(( (selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * reservationData.adults) + 
+                                                           ( (selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * 0.8 * reservationData.children) + 
+                                                           ( (selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * 0.5 * reservationData.babies)).toFixed(2)}
                                                      </span>
                                                  </div>
                                              </div>
