@@ -91,20 +91,20 @@ export default function ChauffeurMissions() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 text-center sm:text-left">
-                    <h1 className="text-4xl font-black text-white tracking-tighter mb-2">
-                        My <span className="text-primary italic">Missions</span>
+                    <h1 className="text-4xl font-black text-gray-900 tracking-tighter mb-2">
+                        My <span className="text-black italic">Missions</span>
                     </h1>
-                    <p className="text-slate-400 text-lg">Manage your upcoming transfer assignments.</p>
+                    <p className="text-gray-500 text-lg">Manage your upcoming transfer assignments.</p>
                 </div>
 
                 {error && (
@@ -114,30 +114,30 @@ export default function ChauffeurMissions() {
                     </div>
                 )}
 
-                <div className="flex p-1 bg-white/5 rounded-2xl border border-white/5 mb-8 w-fit mx-auto lg:mx-0">
+                <div className="flex p-1 bg-gray-50 rounded-2xl border border-gray-200 mb-8 w-fit mx-auto lg:mx-0">
                     <button 
                         onClick={() => setActiveTab('active')}
-                        className={`px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'active' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-600'}`}
                     >
                         Active ({activeMissions.length})
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
-                        className={`px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-600'}`}
                     >
                         History ({historyMissions.length})
                     </button>
                 </div>
 
                 {displayMissions.length === 0 ? (
-                    <div className="bg-slate-900/30 border border-white/5 rounded-3xl p-20 text-center">
+                    <div className="bg-white border border-gray-200 rounded-3xl p-20 text-center">
                         <span className="material-symbols-outlined text-6xl text-slate-700 mb-4">
                             {activeTab === 'active' ? 'event_busy' : 'history'}
                         </span>
-                        <h3 className="text-xl font-bold text-white mb-2">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">
                             {activeTab === 'active' ? 'No active missions' : 'No mission history'}
                         </h3>
-                        <p className="text-slate-500">
+                        <p className="text-gray-500">
                             {activeTab === 'active' 
                                 ? 'When an administrator assigns you a task, it will appear here.'
                                 : 'Completed tasks will be stored in this section.'}
@@ -146,61 +146,61 @@ export default function ChauffeurMissions() {
                 ) : (
                     <div className="grid gap-6">
                         {displayMissions.map((mission) => (
-                            <div key={mission.id} className="bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden hover:border-primary/30 transition-all group">
+                            <div key={mission.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-200 transition-all group">
                                 <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-4">
-                                            <span className="bg-primary/20 text-primary px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border border-primary/30">
+                                            <span className="bg-gray-100 text-black px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border border-gray-200">
                                                 Active Transfer
                                             </span>
-                                            <span className="text-[10px] text-slate-500 font-mono tracking-tighter uppercase">ID: #{mission.id}</span>
+                                            <span className="text-[10px] text-gray-500 font-mono tracking-tighter uppercase">ID: #{mission.id}</span>
                                         </div>
                                         
                                         <div className="grid sm:grid-cols-2 gap-8 mb-6">
                                             <div className="space-y-4">
                                                 <div className="flex items-start gap-3">
-                                                    <div className="mt-1 w-2 h-2 rounded-full bg-primary ring-4 ring-primary/20"></div>
+                                                    <div className="mt-1 w-2 h-2 rounded-full bg-black ring-4 ring-black/20"></div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Pickup Location</p>
-                                                        <p className="text-white font-bold text-lg">{mission.lieu_depart}</p>
+                                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Pickup Location</p>
+                                                        <p className="text-gray-900 font-bold text-lg">{mission.lieu_depart}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-start gap-3">
                                                     <div className="mt-1 w-2 h-2 rounded-full bg-orange-500 ring-4 ring-orange-500/20"></div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Destination</p>
-                                                        <p className="text-white font-bold text-lg">{mission.lieu_destination}</p>
+                                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Destination</p>
+                                                        <p className="text-gray-900 font-bold text-lg">{mission.lieu_destination}</p>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+                                            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                                                 <div className="flex items-center gap-3 mb-3">
-                                                    <span className="material-symbols-outlined text-primary">schedule</span>
+                                                    <span className="material-symbols-outlined text-black">schedule</span>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase">Departure Time</p>
-                                                        <p className="text-white font-bold">{new Date(mission.date_heure_depart).toLocaleString()}</p>
+                                                        <p className="text-[10px] font-black text-gray-500 uppercase">Departure Time</p>
+                                                        <p className="text-gray-900 font-bold">{new Date(mission.date_heure_depart).toLocaleString()}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-                                                    <span className="material-symbols-outlined text-primary">person</span>
+                                                    <span className="material-symbols-outlined text-black">person</span>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase">Client</p>
-                                                        <p className="text-white font-bold">{mission.utilisateur.name}</p>
-                                                        <p className="text-[11px] text-primary/70 font-mono">{mission.utilisateur.telephone}</p>
+                                                        <p className="text-[10px] font-black text-gray-500 uppercase">Client</p>
+                                                        <p className="text-gray-900 font-bold">{mission.utilisateur.name}</p>
+                                                        <p className="text-[11px] text-gray-500 font-mono">{mission.utilisateur.telephone}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/5">
-                                            <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase">
+                                        <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-200">
+                                            <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase">
                                                 <span className="material-symbols-outlined text-[16px]">groups</span>
                                                 {mission.nb_adultes} Adults, {mission.nb_enfants} Children, {mission.nb_bebes} Babies
                                             </div>
-                                            <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase">
+                                            <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase">
                                                 <span className="material-symbols-outlined text-[16px]">point_of_sale</span>
-                                                Quoted: <span className="text-white">${mission.montant_total}</span>
+                                                Quoted: <span className="text-gray-900">${mission.montant_total}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +208,7 @@ export default function ChauffeurMissions() {
                                     <div className="md:w-48 flex flex-col gap-2">
                                         <a 
                                             href={`tel:${mission.utilisateur.telephone}`}
-                                            className="w-full flex items-center justify-center gap-2 py-4 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-all font-bold text-xs border border-primary/20"
+                                            className="w-full flex items-center justify-center gap-2 py-4 bg-gray-100 text-black rounded-xl hover:bg-gray-100 transition-all font-bold text-xs border border-gray-200"
                                         >
                                             <span className="material-symbols-outlined text-sm">call</span>
                                             Call Client

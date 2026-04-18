@@ -89,37 +89,37 @@ export default function AdminVehicles() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
                 <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
                         <div className="flex items-center gap-4 mb-2">
-                            <h1 className="text-4xl font-black text-white tracking-tighter">
-                                Fleet <span className="text-primary">Administration</span>
+                            <h1 className="text-4xl font-black text-gray-900 tracking-tighter">
+                                Fleet <span className="text-black">Administration</span>
                             </h1>
-                            <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-sm font-bold border border-primary/30 flex items-center gap-2">
+                            <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-sm font-bold border border-gray-200 flex items-center gap-2">
                                 <span className="material-symbols-outlined text-[18px]">directions_car</span>
                                 {vehicles.length} TOTAL UNITS
                             </div>
                         </div>
-                        <p className="text-slate-400 text-lg">Manage your elite collection by brand and individual unit.</p>
+                        <p className="text-gray-500 text-lg">Manage your elite collection by brand and individual unit.</p>
                     </div>
                     <div className="flex gap-4">
                         <Link 
                             href="/admin/add-car" 
-                            className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold transition-all shadow-lg shadow-primary/20"
+                            className="flex items-center gap-2 px-6 py-3 bg-black hover:bg-black/90 text-white rounded-xl font-bold transition-all shadow-lg shadow-md"
                         >
                             <span className="material-symbols-outlined">add_circle</span>
                             Add New Car
                         </Link>
-                        <Link href="/catalog" className="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10 transition-all">
+                        <Link href="/catalog" className="flex items-center gap-2 px-6 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl font-bold hover:bg-gray-100 transition-all">
                             <span className="material-symbols-outlined">visibility</span>
                             Public Catalog
                         </Link>
@@ -134,37 +134,37 @@ export default function AdminVehicles() {
                 )}
 
                 {brands.length === 0 ? (
-                    <div className="text-center py-20 bg-slate-900/50 rounded-2xl border border-primary/10">
-                        <span className="material-symbols-outlined text-6xl text-slate-600 mb-4">directions_car_paused</span>
-                        <p className="text-slate-400 text-xl font-medium">No vehicles registered in the fleet yet.</p>
+                    <div className="text-center py-20 bg-white rounded-2xl border border-gray-200">
+                        <span className="material-symbols-outlined text-6xl text-gray-400 mb-4">directions_car_paused</span>
+                        <p className="text-gray-500 text-xl font-medium">No vehicles registered in the fleet yet.</p>
                     </div>
                 ) : (
                     <div className="space-y-12">
                         {brands.map((brand) => (
                             <section key={brand} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div className="flex items-center gap-4 mb-6">
-                                    <h2 className="text-2xl font-black text-primary uppercase tracking-widest">{brand}</h2>
-                                    <div className="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent"></div>
-                                    <span className="text-slate-500 font-bold text-xs uppercase tracking-wider bg-white/5 px-3 py-1 rounded-full border border-white/5">
+                                    <h2 className="text-2xl font-black text-black uppercase tracking-widest">{brand}</h2>
+                                    <div className="h-px flex-1 bg-gradient-to-r from-gray-200 to-transparent"></div>
+                                    <span className="text-gray-500 font-bold text-xs uppercase tracking-wider bg-gray-50 px-3 py-1 rounded-full border border-gray-200">
                                         {Object.values(groupedByBrandAndModel[brand]).flat().length} Unit(s)
                                     </span>
                                 </div>
 
                                 <div className="space-y-8">
                                     {Object.keys(groupedByBrandAndModel[brand]).sort().map((model) => (
-                                        <div key={model} className="bg-slate-900/30 border border-white/5 rounded-2xl p-6">
-                                            <div className="flex items-center justify-between mb-6 border-b border-primary/10 pb-4">
+                                        <div key={model} className="bg-white border border-gray-200 rounded-2xl p-6">
+                                            <div className="flex items-center justify-between mb-6 border-b border-gray-200 pb-4">
                                                 <div>
-                                                    <h3 className="text-xl font-bold text-white tracking-wide">{model}</h3>
-                                                    <p className="text-xs text-slate-500 font-medium">Model Variant</p>
+                                                    <h3 className="text-xl font-bold text-gray-900 tracking-wide">{model}</h3>
+                                                    <p className="text-xs text-gray-500 font-medium">Model Variant</p>
                                                 </div>
                                                 <div className="flex gap-3">
-                                                    <span className="flex items-center text-slate-500 font-bold text-xs bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+                                                    <span className="flex items-center text-gray-500 font-bold text-xs bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
                                                         {groupedByBrandAndModel[brand][model].length} Unit(s)
                                                     </span>
                                                     <Link 
                                                         href={`/admin/add-car?marque=${encodeURIComponent(brand)}&modele=${encodeURIComponent(model)}&template_id=${groupedByBrandAndModel[brand][model][0].id}`}
-                                                        className="flex items-center gap-1 text-xs font-bold text-primary hover:text-white bg-primary/10 hover:bg-primary transition-all px-4 py-1.5 rounded-full border border-primary/20"
+                                                        className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-white bg-white hover:bg-black transition-all px-4 py-1.5 rounded-full border border-gray-200 shadow-sm"
                                                     >
                                                         <span className="material-symbols-outlined text-[16px]">add</span>
                                                         Add Unit
@@ -175,11 +175,11 @@ export default function AdminVehicles() {
                                             {/* Units list */}
                                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                                 {groupedByBrandAndModel[brand][model].map(vehicle => (
-                                                    <div key={vehicle.id} className="bg-slate-900/80 border border-white/5 rounded-xl p-4 flex flex-col gap-4 font-sans shadow-lg">
+                                                    <div key={vehicle.id} className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-4 font-sans shadow-lg">
                                                         <div className="flex justify-between items-start">
                                                             <div className="flex items-center gap-2">
-                                                                <span className={`material-symbols-outlined ${vehicle.statut === 'disponible' ? 'text-green-500/80' : 'text-slate-500'}`}>directions_car</span>
-                                                                <span className="text-white font-mono font-bold tracking-wider">{vehicle.immatriculation}</span>
+                                                                <span className={`material-symbols-outlined ${vehicle.statut === 'disponible' ? 'text-green-500/80' : 'text-gray-500'}`}>directions_car</span>
+                                                                <span className="text-gray-900 font-mono font-bold tracking-wider">{vehicle.immatriculation}</span>
                                                             </div>
                                                             <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${
                                                                 vehicle.statut === 'disponible' ? 'bg-green-500/20 text-green-400' : 
@@ -189,27 +189,27 @@ export default function AdminVehicles() {
                                                                 {vehicle.statut}
                                                             </span>
                                                         </div>
-                                                        <div className="flex gap-2 mt-auto pt-2 border-t border-white/5">
+                                                        <div className="flex gap-2 mt-auto pt-2 border-t border-gray-100">
                                                             <Link 
                                                                 href={`/admin/vehicles/${vehicle.id}/documents`}
-                                                                className="flex-1 flex items-center justify-center gap-1.5 bg-white/5 hover:bg-primary hover:border-primary text-slate-300 hover:text-white font-bold py-2 rounded-lg transition-all border border-white/10 text-[10px] uppercase tracking-wider"
+                                                                className="flex-1 flex items-center justify-center gap-1.5 bg-white hover:bg-black text-gray-900 hover:text-white font-bold py-2 rounded-xl transition-all border border-gray-200 text-[10px] uppercase tracking-widest shadow-sm"
                                                             >
                                                                 <span className="material-symbols-outlined text-[16px]">description</span>
                                                                 Docs
                                                             </Link>
                                                             <Link 
                                                                 href={`/admin/vehicles/${vehicle.id}/maintenance`}
-                                                                className="flex-1 flex items-center justify-center gap-1.5 bg-white/5 hover:bg-orange-500 hover:border-orange-500 text-slate-300 hover:text-white font-bold py-2 rounded-lg transition-all border border-white/10 text-[10px] uppercase tracking-wider"
+                                                                className="flex-1 flex items-center justify-center gap-1.5 bg-white hover:bg-amber-500 text-gray-900 hover:text-white font-bold py-2 rounded-xl transition-all border border-gray-200 text-[10px] uppercase tracking-widest shadow-sm"
                                                             >
                                                                 <span className="material-symbols-outlined text-[16px]">build</span>
                                                                 Maint
                                                             </Link>
                                                             <button 
                                                                 onClick={() => handleDelete(vehicle.id)}
-                                                                className="w-10 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 rounded-lg transition-all border border-red-500/20 flex items-center justify-center group"
+                                                                className="w-10 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all border border-red-100 flex items-center justify-center group shadow-sm"
                                                                 title="Delete Unit"
                                                             >
-                                                                <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform">delete</span>
+                                                                <span className="material-symbols-outlined text-[16px] group-hover:scale-110 transition-transform">delete</span>
                                                             </button>
                                                         </div>
                                                     </div>

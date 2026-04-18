@@ -27,7 +27,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
           <div className={`p-4 rounded-xl shadow-2xl flex items-center gap-3 border ${
             notification.type === 'error' ? 'bg-red-500 text-white border-red-500/20' :
             notification.type === 'success' ? 'bg-green-500 text-white border-green-500/20' :
-            'bg-blue-500 text-white border-blue-500/20'
+            'bg-blue-500 text-gray-900 border-blue-500/20'
           }`}>
             <span className="material-symbols-outlined shrink-0 text-xl font-bold">
               {notification.type === 'error' ? 'error' : notification.type === 'success' ? 'check_circle' : 'info'}

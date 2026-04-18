@@ -46,15 +46,15 @@ export default function Signup() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a192f] flex flex-col justify-center items-center px-4 py-12">
-            <div className="max-w-2xl w-full space-y-8 bg-slate-900/50 p-10 rounded-2xl border border-primary/20 backdrop-blur-xl">
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-4 py-12">
+            <div className="max-w-2xl w-full space-y-8 bg-white p-10 rounded-2xl border border-gray-200 backdrop-blur-xl">
                 <div className="text-center">
-                    <Link href="/" className="flex items-center justify-center gap-3 mb-6">
-                        <span className="material-symbols-outlined text-4xl text-primary">rocket_launch</span>
-                        <h1 className="text-2xl font-bold tracking-tighter text-slate-100 italic">LUXE<span className="text-primary">DRIVE</span></h1>
+                    <Link href="/" className="flex items-center justify-center gap-3 mb-8">
+                        <span className="material-symbols-outlined text-4xl text-black">rocket_launch</span>
+                        <h1 className="text-2xl font-black tracking-[-0.05em] text-black">LUXE<span className="text-gray-400">DRIVE</span></h1>
                     </Link>
-                    <h2 className="text-3xl font-extrabold text-white">Create your account</h2>
-                    <p className="mt-2 text-sm text-slate-400">Join the elite circle of luxury</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Create your account</h2>
+                    <p className="mt-2 text-sm text-gray-500 font-medium">Join the elite circle of luxury</p>
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -66,45 +66,45 @@ export default function Signup() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Full Name</label>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Full Name</label>
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                     placeholder="John Doe"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Email Address</label>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Email Address</label>
                                 <input
                                     type="email"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Phone Number</label>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Phone Number</label>
                                 <input
                                     type="tel"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                     placeholder="+212 600 000 000"
                                     value={formData.telephone}
                                     onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Birth Date</label>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Birth Date</label>
                                 <input
                                     type="date"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all [color-scheme:dark]"
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all [color-scheme:light]"
                                     value={formData.date_naissance}
                                     onChange={(e) => setFormData({ ...formData, date_naissance: e.target.value })}
                                 />
@@ -112,46 +112,46 @@ export default function Signup() {
                         </div>
 
                         <div className="space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">City</label>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">City</label>
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                     placeholder="Casablanca"
                                     value={formData.ville}
                                     onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Address</label>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Address</label>
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                     placeholder="123 Luxury Ave"
                                     value={formData.adresse}
                                     onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-1">
+                            <div className="space-y-2">
                                 <div className="flex justify-between items-center ml-1">
-                                    <label className="text-xs font-bold text-primary uppercase tracking-tighter">License Number</label>
+                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest">License Number</label>
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <input
                                             type="checkbox"
-                                            className="accent-primary"
+                                            className="accent-black"
                                             checked={!hasLicense}
                                             onChange={(e) => setHasLicense(!e.target.checked)}
                                         />
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase">No License</span>
+                                        <span className="text-[10px] text-gray-500 font-black uppercase tracking-tight">No License</span>
                                     </label>
                                 </div>
                                 <input
                                     type="text"
                                     disabled={!hasLicense}
                                     required={hasLicense}
-                                    className={`w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all ${!hasLicense ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    className={`w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all ${!hasLicense ? 'opacity-50 cursor-not-allowed bg-gray-50' : 'shadow-sm'}`}
                                     placeholder={hasLicense ? "A1234567" : "No license provided"}
                                     value={hasLicense ? formData.numero_permis : ''}
                                     onChange={(e) => setFormData({ ...formData, numero_permis: e.target.value })}
@@ -162,22 +162,22 @@ export default function Signup() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Password</label>
+                            <label className="text-xs font-bold text-black uppercase tracking-tighter ml-1">Password</label>
                             <input
                                 type="password"
                                 required
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                 placeholder="••••••••"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             />
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Confirm Password</label>
+                            <label className="text-xs font-bold text-black uppercase tracking-tighter ml-1">Confirm Password</label>
                             <input
                                 type="password"
                                 required
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                 placeholder="••••••••"
                                 value={formData.password_confirmation}
                                 onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
@@ -189,7 +189,7 @@ export default function Signup() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                            className={`w-full h-14 bg-black hover:bg-black/90 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all shadow-2xl shadow-black/20 flex items-center justify-center gap-3 group active:scale-95 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
                             {loading ? (
                                 <>
@@ -197,14 +197,17 @@ export default function Signup() {
                                     <span>Creating Account...</span>
                                 </>
                             ) : (
-                                <span>Create Account</span>
+                                <>
+                                    <span>Create Account</span>
+                                    <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </>
                             )}
                         </button>
                     </div>
 
                     <div className="text-center text-sm">
-                        <span className="text-slate-400">Already have an account? </span>
-                        <Link href="/login" className="text-primary font-bold hover:underline">
+                        <span className="text-gray-500">Already have an account? </span>
+                        <Link href="/login" className="text-black font-bold hover:underline">
                             Log In
                         </Link>
                     </div>

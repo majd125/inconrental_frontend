@@ -100,21 +100,21 @@ export default function AddExcursion() {
 
     if (authLoading || !user || !user.is_admin) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-white tracking-tighter">Add New <span className="text-primary">Excursion</span></h1>
-                        <p className="text-slate-400 mt-2">Create a new extraordinary adventure</p>
+                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">Add New <span className="text-black">Excursion</span></h1>
+                        <p className="text-gray-500 mt-2">Create a new extraordinary adventure</p>
                     </div>
-                    <Link href="/excursions" className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all font-bold text-sm">
+                    <Link href="/excursions" className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm">
                         Back to Excursions
                     </Link>
                 </div>
@@ -133,21 +133,21 @@ export default function AddExcursion() {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-8 bg-slate-900/50 p-8 rounded-2xl border border-primary/20 backdrop-blur-xl shadow-2xl">
+                <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-2xl border border-gray-200 backdrop-blur-xl shadow-2xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Excursion Details Section */}
                         <div className="space-y-6">
-                            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+                            <h2 className="text-xl font-bold text-black flex items-center gap-2">
                                 <span className="material-symbols-outlined">map</span>
                                 Details
                             </h2>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase ml-1">Excursion Name</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Excursion Name</label>
                                 <input
                                     type="text"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                     placeholder="Ubud Spiritual Journey"
                                     value={formData.nom}
                                     onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
@@ -159,11 +159,11 @@ export default function AddExcursion() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Duration</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Duration</label>
                                     <input
                                         type="text"
                                         required
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                         placeholder="6 hours"
                                         value={formData.duree}
                                         onChange={(e) => setFormData({ ...formData, duree: e.target.value })}
@@ -173,11 +173,11 @@ export default function AddExcursion() {
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Price per Person ($)</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Price per Person ($)</label>
                                     <input
                                         type="number"
                                         required
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                         placeholder="85"
                                         value={formData.prix_par_personne}
                                         onChange={(e) => setFormData({ ...formData, prix_par_personne: e.target.value })}
@@ -190,11 +190,11 @@ export default function AddExcursion() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Min People</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Min People</label>
                                     <input
                                         type="number"
                                         required
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                         value={formData.nombre_personnes_min}
                                         onChange={(e) => setFormData({ ...formData, nombre_personnes_min: e.target.value })}
                                     />
@@ -203,11 +203,11 @@ export default function AddExcursion() {
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Max People</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Max People</label>
                                     <input
                                         type="number"
                                         required
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                         value={formData.nombre_personnes_max}
                                         onChange={(e) => setFormData({ ...formData, nombre_personnes_max: e.target.value })}
                                     />
@@ -218,9 +218,9 @@ export default function AddExcursion() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase ml-1">Visited Places (Comma separated)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Visited Places (Comma separated)</label>
                                 <textarea
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all min-h-[100px] resize-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all min-h-[100px] resize-none"
                                     placeholder="Monkey Forest, Tegalalang Rice Terrace, Tirta Empul"
                                     value={formData.lieux_visites}
                                     onChange={(e) => setFormData({ ...formData, lieux_visites: e.target.value })}
@@ -233,14 +233,14 @@ export default function AddExcursion() {
 
                         {/* Presentation Section */}
                         <div className="space-y-6">
-                            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+                            <h2 className="text-xl font-bold text-black flex items-center gap-2">
                                 <span className="material-symbols-outlined">image</span>
                                 Presentation
                             </h2>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-400 uppercase ml-1">Excursion Image</label>
-                                <div className="relative group border-2 border-dashed border-white/10 rounded-2xl p-4 text-center hover:border-primary/50 transition-all cursor-pointer bg-white/5">
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Excursion Image</label>
+                                <div className="relative group border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:border-gray-2000 transition-all cursor-pointer bg-gray-50">
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -251,14 +251,14 @@ export default function AddExcursion() {
                                         <div className="relative aspect-video rounded-xl overflow-hidden">
                                             <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <span className="text-white font-bold">Change Image</span>
+                                                <span className="text-gray-900 font-bold">Change Image</span>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="py-8">
-                                            <span className="material-symbols-outlined text-4xl text-slate-500 mb-2">add_photo_alternate</span>
-                                            <p className="text-sm text-slate-400">Drag and drop or click to upload image</p>
-                                            <p className="text-[10px] text-slate-600 mt-1 uppercase tracking-widest font-bold">Max size 2MB</p>
+                                            <span className="material-symbols-outlined text-4xl text-gray-500 mb-2">add_photo_alternate</span>
+                                            <p className="text-sm text-gray-500">Drag and drop or click to upload image</p>
+                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Max size 2MB</p>
                                         </div>
                                     )}
                                 </div>
@@ -268,9 +268,9 @@ export default function AddExcursion() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase ml-1">Description</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Description</label>
                                 <textarea
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all min-h-[150px] resize-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all min-h-[150px] resize-none"
                                     placeholder="Describe the excursion itinerary and experience..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -280,7 +280,7 @@ export default function AddExcursion() {
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
+                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
                                 <input
                                     type="checkbox"
                                     id="actif"
@@ -288,16 +288,16 @@ export default function AddExcursion() {
                                     checked={formData.actif}
                                     onChange={(e) => setFormData({ ...formData, actif: e.target.checked })}
                                 />
-                                <label htmlFor="actif" className="text-sm font-bold text-white cursor-pointer">Active and Visible to Users</label>
+                                <label htmlFor="actif" className="text-sm font-bold text-gray-900 cursor-pointer">Active and Visible to Users</label>
                             </div>
                         </div>
                     </div>
 
-                    <div className="pt-6 border-t border-white/5">
+                    <div className="pt-6 border-t border-gray-200">
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-50"
+                            className="w-full bg-black hover:bg-black/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-md flex items-center justify-center gap-3 disabled:opacity-50"
                         >
                             {loading ? (
                                 <>

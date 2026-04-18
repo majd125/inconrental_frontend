@@ -302,8 +302,8 @@ export default function VehicleMaintenances() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
@@ -317,28 +317,28 @@ export default function VehicleMaintenances() {
     if (activeTab === 'upcoming') displayDocs = upcomingDocs;
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-8 flex items-center justify-between border-b border-primary/10 pb-6">
+                <div className="mb-8 flex items-center justify-between border-b border-gray-200 pb-6">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-white tracking-tighter">
-                            Manage <span className="text-primary">Maintenance</span>
+                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">
+                            Manage <span className="text-black">Maintenance</span>
                         </h1>
                         {vehicle && (
-                            <p className="text-slate-400 mt-2 font-medium tracking-wide">
-                                {vehicle.marque} {vehicle.modele} — <span className="text-white font-mono">{vehicle.immatriculation}</span>
+                            <p className="text-gray-500 mt-2 font-medium tracking-wide">
+                                {vehicle.marque} {vehicle.modele} — <span className="text-gray-900 font-mono">{vehicle.immatriculation}</span>
                             </p>
                         )}
                     </div>
                     <div className="flex gap-4">
                         <button 
                             onClick={() => { setShowForm(!showForm); if(!showForm) { setEditingMain(null); setRenewingMain(null); resetForm(); } }}
-                            className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
+                            className="px-6 py-2.5 bg-black hover:bg-black/90 text-white rounded-lg font-bold transition-all shadow-lg shadow-md flex items-center gap-2"
                         >
                             <span className="material-symbols-outlined">{showForm ? 'close' : 'add'}</span>
                             {showForm ? 'Cancel' : 'Add Maintenance'}
                         </button>
-                        <Link href="/admin/vehicles" className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all font-bold text-sm flex items-center gap-2">
+                        <Link href="/admin/vehicles" className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm flex items-center gap-2">
                             <span className="material-symbols-outlined">arrow_back</span> Back
                         </Link>
                     </div>
@@ -359,67 +359,67 @@ export default function VehicleMaintenances() {
                 )}
 
                 {showForm && (
-                    <div className="mb-12 bg-slate-900/50 p-8 rounded-2xl border border-primary/20 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top duration-300">
-                        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary">{renewingMain ? 'check_circle' : (editingMain ? 'edit' : 'build')}</span>
+                    <div className="mb-12 bg-white p-8 rounded-2xl border border-gray-200 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top duration-300">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-black">{renewingMain ? 'check_circle' : (editingMain ? 'edit' : 'build')}</span>
                             {renewingMain ? 'Complete Maintenance (Log New Values)' : (editingMain ? 'Update Maintenance' : 'New Maintenance Record')}
                         </h2>
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Task Name (e.g., Vidange, Freins)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Task Name (e.g., Vidange, Freins)</label>
                                 <input 
                                     type="text"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.nom_maintenance}
                                     onChange={(e) => setFormData({...formData, nom_maintenance: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Date Started / Completed</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Date Started / Completed</label>
                                 <input 
                                     type="date"
                                     required
-                                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-primary outline-none [&::-webkit-calendar-picker-indicator]:invert"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none [&::-webkit-calendar-picker-indicator]:invert"
                                     value={formData.date}
                                     onChange={(e) => setFormData({...formData, date: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Current Mileage (KM)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Current Mileage (KM)</label>
                                 <input 
                                     type="number"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none font-mono"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
                                     value={formData.kilometrage}
                                     onChange={(e) => setFormData({...formData, kilometrage: e.target.value})}
                                 />
                             </div>
 
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Changed Parts (Optional)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Changed Parts (Optional)</label>
                                 <input 
                                     type="text"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.pieces_changees}
                                     placeholder="Filtre à huile, Plaquettes..."
                                     onChange={(e) => setFormData({...formData, pieces_changees: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Garage / Mechanic</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Garage / Mechanic</label>
                                 <input 
                                     type="text"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.garage}
                                     onChange={(e) => setFormData({...formData, garage: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Status</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Status</label>
                                 <select 
-                                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.statut}
                                     onChange={(e) => setFormData({...formData, statut: e.target.value as any})}
                                 >
@@ -430,40 +430,40 @@ export default function VehicleMaintenances() {
 
                             {/* COSTS */}
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Cost of Parts ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Cost of Parts ($)</label>
                                 <input 
                                     type="number"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none font-mono"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
                                     value={formData.cout_piece}
                                     onChange={(e) => setFormData({...formData, cout_piece: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Cost of Labor ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Cost of Labor ($)</label>
                                 <input 
                                     type="number"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none font-mono"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
                                     value={formData.cout_main_oeuvre}
                                     onChange={(e) => setFormData({...formData, cout_main_oeuvre: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-primary uppercase">Estimated Total Cost ($)</label>
-                                <div className="w-full bg-primary/10 border border-primary/20 rounded-lg px-4 py-2 text-primary font-bold font-mono">
+                                <label className="text-xs font-bold text-black uppercase">Estimated Total Cost ($)</label>
+                                <div className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2 text-black font-bold font-mono">
                                     ${dynamicTotal.toFixed(2)}
                                 </div>
                             </div>
 
                             {/* REGULAR MAINTENANCE TOGGLE */}
                             <div className="lg:col-span-4 mt-2">
-                                <label className="flex items-center gap-3 cursor-pointer p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors w-max">
+                                <label className="flex items-center gap-3 cursor-pointer p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors w-max">
                                     <input 
                                         type="checkbox" 
                                         className="w-5 h-5 accent-primary"
                                         checked={isReguliere}
                                         onChange={(e) => setIsReguliere(e.target.checked)}
                                     />
-                                    <span className="text-white font-bold tracking-wide">Maintenance Régulière (Require updates later)</span>
+                                    <span className="text-gray-900 font-bold tracking-wide">Maintenance Régulière (Require updates later)</span>
                                 </label>
                             </div>
 
@@ -491,19 +491,19 @@ export default function VehicleMaintenances() {
                             )}
 
                             <div className="lg:col-span-4 space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Full Description / Remarks</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Full Description / Remarks</label>
                                 <textarea 
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none min-h-[80px]"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none min-h-[80px]"
                                     value={formData.description}
                                     placeholder="Any additional details or remarks..."
                                     onChange={(e) => setFormData({...formData, description: e.target.value})}
                                 />
                             </div>
 
-                            <div className="lg:col-span-4 pt-4 border-t border-white/10 mt-2">
+                            <div className="lg:col-span-4 pt-4 border-t border-gray-200 mt-2">
                                 <button 
                                     disabled={actionLoading}
-                                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-50"
+                                    className="w-full bg-black hover:bg-black/90 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-md disabled:opacity-50"
                                 >
                                     {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : (renewingMain ? 'Complete & Save' : (editingMain ? 'Update Maintenance' : 'Save Maintenance'))}
                                 </button>
@@ -512,43 +512,43 @@ export default function VehicleMaintenances() {
                     </div>
                 )}
 
-                <div className="flex gap-4 mb-6 border-b border-white/10 pb-4">
+                <div className="flex gap-4 mb-6 border-b border-gray-200 pb-4">
                     <button 
                         onClick={() => setActiveTab('active')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         Active In-Garage (En Cours)
                     </button>
                     <button 
                         onClick={() => setActiveTab('upcoming')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'upcoming' ? 'bg-orange-500/20 text-orange-500 border border-orange-500/30' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'upcoming' ? 'bg-orange-500/20 text-orange-500 border border-orange-500/30' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         <span className="material-symbols-outlined text-[18px]">build_circle</span>
                         Upcoming Scheduled
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-slate-700 text-white shadow-lg shadow-slate-900/50' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-gray-800 text-gray-900 shadow-lg shadow-sm' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         Maintenance History (Terminé)
                     </button>
                 </div>
 
-                <div className="bg-slate-900/30 rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-2xl">
                     <table className="w-full text-left border-collapse min-w-[800px]">
                         <thead>
-                            <tr className="bg-white/[0.02] border-b border-white/10">
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Maintenance Task</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Date & Garage</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Mileage</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Total Cost</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                            <tr className="bg-gray-50 border-b border-gray-200">
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Maintenance Task</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Date & Garage</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Mileage</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Total Cost</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {displayDocs.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-slate-500 italic">No {activeTab === 'active' ? 'pending' : 'completed'} maintenance records found.</td>
+                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500 italic">No {activeTab === 'active' ? 'pending' : 'completed'} maintenance records found.</td>
                                 </tr>
                             ) : (
                                 displayDocs.map((main) => {
@@ -569,21 +569,21 @@ export default function VehicleMaintenances() {
                                     }
 
                                     return (
-                                        <tr key={main.id} className="hover:bg-white/[0.02] transition-colors group">
+                                        <tr key={main.id} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-5">
-                                            <p className="text-white font-bold">{main.nom_maintenance}</p>
-                                            {main.pieces_changees && <p className="text-xs text-slate-400 mt-1 line-clamp-1 truncate max-w-[200px]">Parts: {main.pieces_changees}</p>}
+                                            <p className="text-gray-900 font-bold">{main.nom_maintenance}</p>
+                                            {main.pieces_changees && <p className="text-xs text-gray-500 mt-1 line-clamp-1 truncate max-w-[200px]">Parts: {main.pieces_changees}</p>}
                                         </td>
                                         <td className="px-6 py-5">
-                                            <p className="text-slate-300 font-medium">{main.date ? new Date(main.date).toLocaleDateString() : 'N/A'}</p>
-                                            <p className="text-xs font-bold text-primary mt-1">{main.garage || 'Unknown Garage'}</p>
+                                            <p className="text-gray-600 font-medium">{main.date ? new Date(main.date).toLocaleDateString() : 'N/A'}</p>
+                                            <p className="text-xs font-bold text-black mt-1">{main.garage || 'Unknown Garage'}</p>
                                         </td>
                                         <td className="px-6 py-5">
                                             <div className="flex flex-col gap-1">
-                                                <p className="text-white font-mono">{main.kilometrage ? main.kilometrage.toLocaleString() : '-'} KM</p>
+                                                <p className="text-gray-900 font-mono">{main.kilometrage ? main.kilometrage.toLocaleString() : '-'} KM</p>
                                                 {(main.prochaine_echeance_km || main.prochaine_echeance_date) && activeTab !== 'history' && (
                                                     <>
-                                                        <div className="mt-1 flex items-center gap-1 text-[10px] uppercase font-bold text-slate-400 bg-white/5 px-2 py-0.5 rounded-full w-max">
+                                                        <div className="mt-1 flex items-center gap-1 text-[10px] uppercase font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full w-max">
                                                             <span className="material-symbols-outlined text-[12px]">schedule</span>
                                                             Target: {main.prochaine_echeance_km ? main.prochaine_echeance_km.toLocaleString() + ' KM' : ''}
                                                             {(main.prochaine_echeance_km && main.prochaine_echeance_date) && ' | '}
@@ -599,26 +599,26 @@ export default function VehicleMaintenances() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <span className="text-white font-bold font-mono text-lg">${main.cout_total || '0.00'}</span>
+                                            <span className="text-gray-900 font-bold font-mono text-lg">${main.cout_total || '0.00'}</span>
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 {main.statut === 'en_cours' && (
-                                                    <button onClick={() => handleReceived(main.id)} className="p-2 border border-blue-500/30 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors bg-blue-500/10 rounded-lg flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest whitespace-nowrap shadow-lg shadow-blue-500/5">
+                                                    <button onClick={() => handleReceived(main.id)} className="p-2 border border-blue-500/30 text-blue-500 hover:bg-blue-500 hover:text-gray-900 transition-colors bg-blue-500/10 rounded-lg flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest whitespace-nowrap shadow-lg shadow-blue-500/5">
                                                         <span className="material-symbols-outlined text-[14px]">local_shipping</span>
                                                         Car Received
                                                     </button>
                                                 )}
                                                 {!main.is_archived && activeTab !== 'history' && (main.prochaine_echeance_date || main.prochaine_echeance_km) && (
-                                                    <button onClick={() => startRenew(main)} className="p-2 border border-green-500/30 text-green-500 hover:bg-green-500 hover:text-white transition-colors bg-green-500/10 rounded-lg flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest whitespace-nowrap shadow-lg shadow-green-500/5">
+                                                    <button onClick={() => startRenew(main)} className="p-2 border border-green-500/30 text-green-500 hover:bg-green-500 hover:text-gray-900 transition-colors bg-green-500/10 rounded-lg flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest whitespace-nowrap shadow-lg shadow-green-500/5">
                                                         <span className="material-symbols-outlined text-[14px]">check_circle</span>
                                                         Mark Completed
                                                     </button>
                                                 )}
-                                                <button onClick={() => startEdit(main)} className="p-2 hover:text-primary transition-colors bg-white/5 rounded-lg">
+                                                <button onClick={() => startEdit(main)} className="p-2 hover:text-black transition-colors bg-gray-50 rounded-lg">
                                                     <span className="material-symbols-outlined text-[18px]">edit</span>
                                                 </button>
-                                                <button onClick={() => handleDelete(main.id)} className="p-2 hover:text-red-500 transition-colors bg-white/5 rounded-lg">
+                                                <button onClick={() => handleDelete(main.id)} className="p-2 hover:text-red-500 transition-colors bg-gray-50 rounded-lg">
                                                     <span className="material-symbols-outlined text-[18px]">delete</span>
                                                 </button>
                                             </div>
