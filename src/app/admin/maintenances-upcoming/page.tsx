@@ -218,8 +218,8 @@ export default function MaintenancesUpcoming() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
@@ -239,14 +239,14 @@ export default function MaintenancesUpcoming() {
     const displayList = activeTab === 'urgent' ? urgentList : allList;
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6">
+                <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-6">
                     <div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter">
-                            Upcoming <span className="text-primary">Maintenance</span>
+                        <h1 className="text-4xl font-black text-gray-900 tracking-tighter">
+                            Upcoming <span className="text-black">Maintenance</span>
                         </h1>
-                        <p className="text-slate-400 mt-2 text-lg">Global fleet service schedule and ongoing garage interventions.</p>
+                        <p className="text-gray-500 mt-2 text-lg">Global fleet service schedule and ongoing garage interventions.</p>
                     </div>
                 </div>
 
@@ -266,66 +266,66 @@ export default function MaintenancesUpcoming() {
 
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    <div className="bg-slate-900/50 border border-primary/20 rounded-2xl p-6 shadow-lg shadow-primary/5">
+                    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg shadow-sm">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-gray-100 text-black flex items-center justify-center">
                                 <span className="material-symbols-outlined">build</span>
                             </div>
                             <div>
-                                <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Total Tasks</p>
-                                <p className="text-3xl font-black text-white">{allList.length}</p>
+                                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Total Tasks</p>
+                                <p className="text-3xl font-black text-gray-900">{allList.length}</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div className="bg-slate-900/50 border border-red-500/20 rounded-2xl p-6 shadow-lg shadow-red-500/5">
+                    <div className="bg-white border border-red-500/20 rounded-2xl p-6 shadow-lg shadow-red-500/5">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-xl bg-red-500/20 text-red-500 flex items-center justify-center">
                                 <span className="material-symbols-outlined animate-pulse">warning</span>
                             </div>
                             <div>
-                                <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Urgent / Current</p>
+                                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Urgent / Current</p>
                                 <p className="text-3xl font-black text-red-500">{urgentList.length}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex gap-4 mb-6 border-b border-white/10 pb-4">
+                <div className="flex gap-4 mb-6 border-b border-gray-200 pb-4">
                     <button 
                         onClick={() => setActiveTab('urgent')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'urgent' ? 'bg-red-500/20 text-red-400 shadow-lg border border-red-500/50' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'urgent' ? 'bg-red-500/20 text-red-400 shadow-lg border border-red-500/50' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         <span className="material-symbols-outlined text-[18px]">warning</span>
                         Urgent Actions ({urgentList.length})
                     </button>
                     <button 
                         onClick={() => setActiveTab('all')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'all' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'all' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         <span className="material-symbols-outlined text-[18px]">list</span>
                         All Records ({allList.length})
                     </button>
                 </div>
 
-                <div className="bg-slate-900/30 rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-2xl">
                     <table className="w-full text-left border-collapse min-w-[900px]">
                         <thead>
-                            <tr className="bg-white/[0.02] border-b border-white/10">
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Vehicle</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Task Info</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Next Due (Target)</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Responsible</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Action</th>
+                            <tr className="bg-gray-50 border-b border-gray-200">
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Vehicle</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Task Info</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Next Due (Target)</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Responsible</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {displayList.length === 0 ? (
                                 <tr>
                                     <td colSpan={5} className="px-6 py-12 text-center">
-                                        <span className="material-symbols-outlined text-4xl text-slate-600 mb-2">check_circle</span>
-                                        <p className="text-slate-500 italic">No {activeTab} maintenance records found.</p>
+                                        <span className="material-symbols-outlined text-4xl text-gray-400 mb-2">check_circle</span>
+                                        <p className="text-gray-500 italic">No {activeTab} maintenance records found.</p>
                                     </td>
                                 </tr>
                             ) : (
@@ -348,20 +348,20 @@ export default function MaintenancesUpcoming() {
                                     }
 
                                     return (
-                                        <tr key={main.id} className="hover:bg-white/[0.02] transition-colors group">
+                                        <tr key={main.id} className="hover:bg-gray-50 transition-colors group">
                                             <td className="px-6 py-5">
                                                 <div className="flex flex-col">
-                                                    <span className="text-white font-bold tracking-wide">
+                                                    <span className="text-gray-900 font-bold tracking-wide">
                                                         {main.vehicule?.marque} {main.vehicule?.modele}
                                                     </span>
-                                                    <span className="text-slate-400 font-mono text-xs mt-1 bg-white/5 rounded-full px-2 py-0.5 w-max">
+                                                    <span className="text-gray-500 font-mono text-xs mt-1 bg-gray-50 rounded-full px-2 py-0.5 w-max">
                                                         {main.vehicule?.immatriculation}
                                                     </span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5">
-                                                <p className="text-slate-200 font-bold">{main.nom_maintenance}</p>
-                                                <p className="text-slate-500 text-[10px] uppercase font-bold mt-1 tracking-wider">
+                                                <p className="text-gray-800 font-bold">{main.nom_maintenance}</p>
+                                                <p className="text-gray-500 text-[10px] uppercase font-bold mt-1 tracking-wider">
                                                     Originated: {main.date ? new Date(main.date).toLocaleDateString() : 'N/A'}
                                                 </p>
                                             </td>
@@ -369,7 +369,7 @@ export default function MaintenancesUpcoming() {
                                                 <div className="flex flex-col gap-1">
                                                     {(main.prochaine_echeance_km || main.prochaine_echeance_date) ? (
                                                         <>
-                                                            <span className="text-white font-bold font-mono text-sm">
+                                                            <span className="text-gray-900 font-bold font-mono text-sm">
                                                                 {main.prochaine_echeance_km ? `${main.prochaine_echeance_km.toLocaleString()} KM` : ''} 
                                                                 {(main.prochaine_echeance_km && main.prochaine_echeance_date) ? ' | ' : ''} 
                                                                 {main.prochaine_echeance_date ? new Date(main.prochaine_echeance_date).toLocaleDateString() : ''}
@@ -381,14 +381,14 @@ export default function MaintenancesUpcoming() {
                                                             )}
                                                         </>
                                                     ) : (
-                                                        <span className="text-slate-600 font-mono text-sm">No Recurring Due</span>
+                                                        <span className="text-gray-400 font-mono text-sm">No Recurring Due</span>
                                                     )}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center gap-2">
                                                     <select
-                                                        className="bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all outline-none"
+                                                        className="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-black/50 transition-all outline-none"
                                                         value={main.assigned_driver_id || ''}
                                                         onChange={(e) => handleAssignDriver(main.id, e.target.value ? parseInt(e.target.value) : null)}
                                                         disabled={actionLoading}
@@ -407,7 +407,7 @@ export default function MaintenancesUpcoming() {
                                                         In Garage
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-slate-800 text-slate-400 border border-slate-700 w-max">
+                                                    <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-white text-gray-500 border border-gray-200 w-max">
                                                         Closed
                                                     </span>
                                                 )}
@@ -418,7 +418,7 @@ export default function MaintenancesUpcoming() {
                                                         <button 
                                                             onClick={() => handleReceived(main.id)}
                                                             disabled={actionLoading}
-                                                            className="inline-flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500 text-blue-500 hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap disabled:opacity-50"
+                                                            className="inline-flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500 text-blue-500 hover:text-gray-900 px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap disabled:opacity-50"
                                                         >
                                                             <span className="material-symbols-outlined text-[14px]">local_shipping</span>
                                                             Car Received
@@ -427,7 +427,7 @@ export default function MaintenancesUpcoming() {
                                                     {!main.is_archived && activeTab === 'urgent' && (main.prochaine_echeance_date || main.prochaine_echeance_km) && (
                                                         <Link 
                                                             href={`/admin/vehicles/${main.vehicule_id}/maintenance?renew=${main.id}`}
-                                                            className="inline-flex items-center gap-2 bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap"
+                                                            className="inline-flex items-center gap-2 bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-gray-900 px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap"
                                                         >
                                                             <span className="material-symbols-outlined text-[14px]">check_circle</span>
                                                             Mark Completed
@@ -435,7 +435,7 @@ export default function MaintenancesUpcoming() {
                                                     )}
                                                     <Link 
                                                         href={`/admin/vehicles/${main.vehicule_id}/maintenance`}
-                                                        className="inline-flex items-center gap-2 bg-primary/10 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap"
+                                                        className="inline-flex items-center gap-2 bg-gray-100 hover:bg-black text-black hover:text-gray-900 px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap"
                                                     >
                                                         Details
                                                         <span className="material-symbols-outlined text-[14px]">arrow_forward</span>

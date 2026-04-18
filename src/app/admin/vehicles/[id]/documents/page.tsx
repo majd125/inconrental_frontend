@@ -195,8 +195,8 @@ export default function VehicleDocuments() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
@@ -206,28 +206,28 @@ export default function VehicleDocuments() {
     const displayDocs = activeTab === 'active' ? activeDocs : historyDocs;
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
                 <div className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-white tracking-tighter">
-                            Manage <span className="text-primary">Documents</span>
+                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">
+                            Manage <span className="text-black">Documents</span>
                         </h1>
                         {vehicle && (
-                            <p className="text-slate-400 mt-2">
-                                {vehicle.marque} {vehicle.modele} — <span className="text-white font-mono">{vehicle.immatriculation}</span>
+                            <p className="text-gray-500 mt-2">
+                                {vehicle.marque} {vehicle.modele} — <span className="text-gray-900 font-mono">{vehicle.immatriculation}</span>
                             </p>
                         )}
                     </div>
                     <div className="flex gap-4">
                         <button 
                             onClick={() => { setShowForm(!showForm); if(!showForm) { setEditingDoc(null); resetForm(); } }}
-                            className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
+                            className="px-6 py-2.5 bg-black hover:bg-black/90 text-white rounded-lg font-bold transition-all shadow-lg shadow-md flex items-center gap-2"
                         >
                             <span className="material-symbols-outlined">{showForm ? 'close' : 'add'}</span>
                             {showForm ? 'Cancel' : 'Add Document'}
                         </button>
-                        <Link href="/catalog" className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all font-bold text-sm flex items-center gap-2">
+                        <Link href="/catalog" className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm flex items-center gap-2">
                             <span className="material-symbols-outlined">arrow_back</span> Back
                         </Link>
                     </div>
@@ -248,16 +248,16 @@ export default function VehicleDocuments() {
                 )}
 
                 {showForm && (
-                    <div className="mb-12 bg-slate-900/50 p-8 rounded-2xl border border-primary/20 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top duration-300">
-                        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary">{editingDoc ? 'edit' : 'add_circle'}</span>
+                    <div className="mb-12 bg-white p-8 rounded-2xl border border-gray-200 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top duration-300">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-black">{editingDoc ? 'edit' : 'add_circle'}</span>
                             {editingDoc ? 'Update Document' : 'New Administrative Document'}
                         </h2>
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Type</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Type</label>
                                 <select 
-                                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.type}
                                     onChange={(e) => setFormData({...formData, type: e.target.value as any})}
                                 >
@@ -268,29 +268,29 @@ export default function VehicleDocuments() {
                                 </select>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Number / ID</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Number / ID</label>
                                 <input 
                                     type="text"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.numero}
                                     onChange={(e) => setFormData({...formData, numero: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Start Date</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Start Date</label>
                                 <input 
                                     type="date"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.date_debut}
                                     onChange={(e) => setFormData({...formData, date_debut: e.target.value})}
                                 />
                             </div>
                             {formData.type !== 'carte_grise' && (
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-400 uppercase">Expiry Date</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Expiry Date</label>
                                     <input 
                                         type="date"
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                         value={formData.date_expiration}
                                         onChange={(e) => setFormData({...formData, date_expiration: e.target.value})}
                                     />
@@ -298,28 +298,28 @@ export default function VehicleDocuments() {
                             )}
                             {formData.type === 'assurance' && (
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-400 uppercase">Organisme</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Organisme</label>
                                     <input 
                                         type="text"
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                         value={formData.organisme}
                                         onChange={(e) => setFormData({...formData, organisme: e.target.value})}
                                     />
                                 </div>
                             )}
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Amount ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Amount ($)</label>
                                 <input 
                                     type="number"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.montant}
                                     onChange={(e) => setFormData({...formData, montant: e.target.value})}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Status</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Status</label>
                                 <select 
-                                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.statut}
                                     onChange={(e) => setFormData({...formData, statut: e.target.value as any})}
                                 >
@@ -328,9 +328,9 @@ export default function VehicleDocuments() {
                                 </select>
                             </div>
                             <div className="lg:col-span-4 space-y-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Remarks</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Remarks</label>
                                 <textarea 
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-primary outline-none min-h-[80px]"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none min-h-[80px]"
                                     value={formData.Remarques}
                                     onChange={(e) => setFormData({...formData, Remarques: e.target.value})}
                                 />
@@ -338,7 +338,7 @@ export default function VehicleDocuments() {
                             <div className="lg:col-span-4 pt-4">
                                 <button 
                                     disabled={actionLoading}
-                                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    className="w-full bg-black hover:bg-black/90 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                                 >
                                     {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : (editingDoc ? 'Update' : 'Save')}
                                 </button>
@@ -347,49 +347,49 @@ export default function VehicleDocuments() {
                     </div>
                 )}
 
-                <div className="flex gap-4 mb-6 border-b border-white/10 pb-4">
+                <div className="flex gap-4 mb-6 border-b border-gray-200 pb-4">
                     <button 
                         onClick={() => setActiveTab('active')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         Active Documents
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-slate-700 text-white shadow-lg shadow-slate-900/50' : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'}`}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-gray-800 text-gray-900 shadow-lg shadow-sm' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         History (Expired)
                     </button>
                 </div>
 
-                <div className="bg-slate-900/30 rounded-2xl border border-white/5 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-white/5">
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Type</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Number</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Validity</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Status</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Amount</th>
-                                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase text-right">Actions</th>
+                            <tr className="bg-gray-50">
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Type</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Number</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Validity</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Status</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Amount</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {displayDocs.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-12 text-center text-slate-500 italic">No {activeTab} documents found for this vehicle.</td>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 italic">No {activeTab} documents found for this vehicle.</td>
                                 </tr>
                             ) : (
                                 displayDocs.map((doc) => (
-                                    <tr key={doc.id} className="hover:bg-white/[0.02] transition-colors group">
+                                    <tr key={doc.id} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-4">
-                                            <span className="text-white font-bold capitalize">{doc.type.replace('_', ' ')}</span>
-                                            {doc.organisme && <p className="text-[10px] text-slate-500 uppercase">{doc.organisme}</p>}
+                                            <span className="text-gray-900 font-bold capitalize">{doc.type.replace('_', ' ')}</span>
+                                            {doc.organisme && <p className="text-[10px] text-gray-500 uppercase">{doc.organisme}</p>}
                                         </td>
-                                        <td className="px-6 py-4 text-slate-300 font-mono text-sm">{doc.numero}</td>
+                                        <td className="px-6 py-4 text-gray-600 font-mono text-sm">{doc.numero}</td>
                                         <td className="px-6 py-4">
-                                            <p className="text-xs text-slate-300">From: {doc.date_debut ? new Date(doc.date_debut).toLocaleDateString() : 'N/A'}</p>
-                                            <p className="text-xs font-bold text-primary">Until: {doc.date_expiration ? new Date(doc.date_expiration).toLocaleDateString() : 'N/A'}</p>
+                                            <p className="text-xs text-gray-600">From: {doc.date_debut ? new Date(doc.date_debut).toLocaleDateString() : 'N/A'}</p>
+                                            <p className="text-xs font-bold text-black">Until: {doc.date_expiration ? new Date(doc.date_expiration).toLocaleDateString() : 'N/A'}</p>
                                         </td>
                                         <td className="px-6 py-4">
                                             {(() => {
@@ -413,12 +413,12 @@ export default function VehicleDocuments() {
                                                 }
                                             })()}
                                         </td>
-                                        <td className="px-6 py-4 text-white font-bold">
+                                        <td className="px-6 py-4 text-gray-900 font-bold">
                                             {doc.montant ? `$${doc.montant}` : '-'}
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => startEdit(doc)} className="p-2 hover:text-primary transition-colors">
+                                                <button onClick={() => startEdit(doc)} className="p-2 hover:text-black transition-colors">
                                                     <span className="material-symbols-outlined text-xl">edit</span>
                                                 </button>
                                                 <button onClick={() => handleDelete(doc.id)} className="p-2 hover:text-red-500 transition-colors">

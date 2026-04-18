@@ -268,69 +268,69 @@ export default function AdminReservations() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-                <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></span>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <span className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></span>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#0a192f] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                     <div>
                         <div className="flex flex-wrap items-center gap-4 mb-3">
-                            <h1 className="text-4xl font-black text-white tracking-tighter">
-                                Agency <span className="text-primary italic font-black">Dashboard</span>
+                            <h1 className="text-4xl font-black text-gray-900 tracking-tighter">
+                                Agency <span className="text-black italic font-black">Dashboard</span>
                             </h1>
                             <div className="flex gap-2">
-                                <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-primary/30 uppercase flex items-center gap-2">
+                                <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-gray-200 uppercase flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[14px]">directions_car</span>
                                     {reservations.length} Vehicles
                                 </div>
-                                <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-primary/30 uppercase flex items-center gap-2">
+                                <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-gray-200 uppercase flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[14px]">explore</span>
                                     {excursionReservations.length} Excursions
                                 </div>
-                                <div className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-primary/30 uppercase flex items-center gap-2">
+                                <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-gray-200 uppercase flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[14px]">local_taxi</span>
                                     {transferReservations.length} Transfers
                                 </div>
                             </div>
                         </div>
-                        <p className="text-slate-400 text-lg">Manage all client requests and reservation statuses.</p>
+                        <p className="text-gray-500 text-lg">Manage all client requests and reservation statuses.</p>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4">
                         {/* Tab Switcher */}
-                        <div className="flex p-1 bg-slate-900/80 rounded-xl border border-white/5">
+                        <div className="flex p-1 bg-white rounded-xl border border-gray-200">
                             <button 
                                 onClick={() => setActiveTab('vehicles')}
-                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'vehicles' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'vehicles' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-900'}`}
                             >
                                 Vehicles
                             </button>
                             <button 
                                 onClick={() => setActiveTab('excursions')}
-                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'excursions' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'excursions' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-900'}`}
                             >
                                 Excursions
                             </button>
                             <button 
                                 onClick={() => setActiveTab('transfers')}
-                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'transfers' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                                className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'transfers' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-900'}`}
                             >
                                 Transfers
                             </button>
                         </div>
 
-                        <div className="flex gap-1 bg-slate-900/50 p-1 rounded-xl border border-white/5">
+                        <div className="flex gap-1 bg-white p-1 rounded-xl border border-gray-200">
                             {(['all', 'en_attente', 'confirme', 'annule', 'termine'] as const).map((f) => (
                                 <button
                                     key={f}
                                     onClick={() => setFilter(f)}
                                     className={`px-3 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all
-                                        ${filter === f ? 'bg-white/10 text-white border border-white/10 shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                                        ${filter === f ? 'bg-gray-100 text-gray-900 border border-gray-200 shadow-lg' : 'text-gray-500 hover:text-gray-900'}`}
                                 >
                                     {f === 'all' ? 'All Status' : f.replace('_', ' ')}
                                 </button>
@@ -346,53 +346,53 @@ export default function AdminReservations() {
                     </div>
                 )}
 
-                <div className="bg-slate-900/30 border border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm animate-in fade-in duration-500">
+                <div className="bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm animate-in fade-in duration-500">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/5">
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Client</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <tr className="border-b border-gray-200 bg-gray-50">
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Client</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">
                                         {activeTab === 'vehicles' ? 'Vehicle' : activeTab === 'excursions' ? 'Excursion' : 'Transfer Journey'}
                                     </th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Detail/Contact</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                                    {activeTab === 'transfers' && <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Chauffeur</th>}
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Total</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Detail/Contact</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Status</th>
+                                    {activeTab === 'transfers' && <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Chauffeur</th>}
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Total</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
                                 {activeTab === 'vehicles' ? (
                                     filteredVehicles.length === 0 ? (
-                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">No vehicle reservations found.</td></tr>
+                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">No vehicle reservations found.</td></tr>
                                     ) : (
                                         filteredVehicles.map((res) => (
-                                            <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
+                                            <tr key={res.id} className="hover:bg-gray-50 transition-colors group">
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col">
-                                                        <span className="text-white font-bold">{res.user.name}</span>
-                                                        <span className="text-[11px] text-slate-500">{res.user.email}</span>
-                                                        <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.user.telephone}</span>
+                                                        <span className="text-gray-900 font-bold">{res.user.name}</span>
+                                                        <span className="text-[11px] text-gray-500">{res.user.email}</span>
+                                                        <span className="text-[11px] text-gray-500 font-mono mt-0.5">{res.user.telephone}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6 font-medium">
                                                     <div className="flex flex-col">
-                                                        <span className="text-white">{res.vehicule.marque} {res.vehicule.modele}</span>
-                                                        <span className="text-[10px] text-slate-500 bg-white/5 px-2 py-0.5 rounded-md mt-1 border border-white/5 w-fit">{res.vehicule.immatriculation}</span>
+                                                        <span className="text-gray-900">{res.vehicule.marque} {res.vehicule.modele}</span>
+                                                        <span className="text-[10px] text-gray-500 bg-gray-50 px-2 py-0.5 rounded-md mt-1 border border-gray-200 w-fit">{res.vehicule.immatriculation}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col gap-1">
-                                                        <div className="flex items-center gap-2 text-xs text-white">
-                                                            <span className="material-symbols-outlined text-primary text-sm">calendar_month</span>
+                                                        <div className="flex items-center gap-2 text-xs text-gray-900">
+                                                            <span className="material-symbols-outlined text-black text-sm">calendar_month</span>
                                                             {new Date(res.date_debut).toLocaleDateString()} → {new Date(res.date_fin).toLocaleDateString()}
                                                         </div>
-                                                        <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
-                                                            <span className="material-symbols-outlined text-slate-600 text-[14px]">location_on</span>
+                                                        <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase">
+                                                            <span className="material-symbols-outlined text-gray-400 text-[14px]">location_on</span>
                                                             {res.lieu_depart}
                                                         </div>
-                                                        {res.nb_sieges_bebe > 0 && <span className="text-[10px] text-primary font-black uppercase">{res.nb_sieges_bebe} Baby Seats</span>}
+                                                        {res.nb_sieges_bebe > 0 && <span className="text-[10px] text-black font-black uppercase">{res.nb_sieges_bebe} Baby Seats</span>}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest">
@@ -400,101 +400,101 @@ export default function AdminReservations() {
                                                         {res.statut === 'annule' ? (res.cancelled_by_id === res.utilisateur_id ? 'Client' : 'Admin') : res.statut.replace('_', ' ')}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-6 text-lg font-black text-primary">${res.montant_total}</td>
+                                                <td className="px-6 py-6 text-lg font-black text-black">${res.montant_total}</td>
                                                 <td className="px-6 py-6 text-right">
                                                     {res.statut === 'en_attente' ? (
                                                         <div className="flex justify-end gap-2">
-                                                            <button onClick={() => updateStatus(res.id, 'confirme', 'vehicle')} className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">check</span></button>
-                                                            <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
+                                                            <button onClick={() => updateStatus(res.id, 'confirme', 'vehicle')} className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">check</span></button>
+                                                            <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
                                                         </div>
                                                     ) : res.statut === 'confirme' ? (
-                                                        <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
-                                                    ) : <span className="text-[10px] text-slate-600 uppercase font-black">History</span>}
+                                                        <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
+                                                    ) : <span className="text-[10px] text-gray-400 uppercase font-black">History</span>}
                                                 </td>
                                             </tr>
                                         ))
                                     )
                                 ) : activeTab === 'excursions' ? (
                                     filteredExcursions.length === 0 ? (
-                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-slate-500 font-medium italic">No excursion reservations found.</td></tr>
+                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">No excursion reservations found.</td></tr>
                                     ) : (
                                         filteredExcursions.map((res) => (
-                                            <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
+                                            <tr key={res.id} className="hover:bg-gray-50 transition-colors group">
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col">
-                                                        <span className="text-white font-bold">{res.utilisateur.name}</span>
-                                                        <span className="text-[11px] text-slate-500">{res.utilisateur.email}</span>
-                                                        <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.utilisateur.telephone}</span>
+                                                        <span className="text-gray-900 font-bold">{res.utilisateur.name}</span>
+                                                        <span className="text-[11px] text-gray-500">{res.utilisateur.email}</span>
+                                                        <span className="text-[11px] text-gray-500 font-mono mt-0.5">{res.utilisateur.telephone}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6 font-medium">
-                                                    <span className="text-white text-base font-bold">{res.excursion.nom}</span>
+                                                    <span className="text-gray-900 text-base font-bold">{res.excursion.nom}</span>
                                                 </td>
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col gap-1">
-                                                        <div className="flex items-center gap-2 text-xs text-white">
-                                                            <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
+                                                        <div className="flex items-center gap-2 text-xs text-gray-900">
+                                                            <span className="material-symbols-outlined text-black text-sm">calendar_today</span>
                                                             {new Date(res.date_reservation).toLocaleDateString()}
                                                         </div>
-                                                        <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase">
-                                                            <span className="material-symbols-outlined text-slate-600 text-[14px]">location_on</span>
+                                                        <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase">
+                                                            <span className="material-symbols-outlined text-gray-400 text-[14px]">location_on</span>
                                                             {res.lieu_depart}
                                                         </div>
-                                                        <div className="flex gap-2 text-[10px] font-black text-slate-400 uppercase mt-1">
+                                                        <div className="flex gap-2 text-[10px] font-black text-gray-500 uppercase mt-1">
                                                             <span>{res.nb_adultes}A</span>
                                                             {res.nb_enfants > 0 && <span>{res.nb_enfants}C</span>}
                                                             {res.nb_bebes > 0 && <span>{res.nb_bebes}B</span>}
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest text-white">
+                                                <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest text-gray-900">
                                                     <span className={`px-3 py-1 rounded-full ${res.statut === 'en_attente' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
                                                         {res.statut.replace('_', ' ')}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-6 text-lg font-black text-primary">${res.montant_total}</td>
+                                                <td className="px-6 py-6 text-lg font-black text-black">${res.montant_total}</td>
                                                 <td className="px-6 py-6 text-right">
                                                     {res.statut === 'en_attente' ? (
                                                         <div className="flex justify-end gap-2">
-                                                            <button onClick={() => updateStatus(res.id, 'confirme', 'excursion')} className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">check</span></button>
-                                                            <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
+                                                            <button onClick={() => updateStatus(res.id, 'confirme', 'excursion')} className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">check</span></button>
+                                                            <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
                                                         </div>
                                                     ) : res.statut === 'confirme' ? (
-                                                        <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
-                                                    ) : <span className="text-[10px] text-slate-600 uppercase font-black">History</span>}
+                                                        <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
+                                                    ) : <span className="text-[10px] text-gray-400 uppercase font-black">History</span>}
                                                 </td>
                                             </tr>
                                         ))
                                     )
                                 ) : (
                                     filteredTransfers.length === 0 ? (
-                                        <tr><td colSpan={7} className="px-6 py-20 text-center text-slate-500 font-medium italic">No transfer requests found.</td></tr>
+                                        <tr><td colSpan={7} className="px-6 py-20 text-center text-gray-500 font-medium italic">No transfer requests found.</td></tr>
                                     ) : (
                                         filteredTransfers.map((res) => (
-                                            <tr key={res.id} className="hover:bg-white/[0.02] transition-colors group">
+                                            <tr key={res.id} className="hover:bg-gray-50 transition-colors group">
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col">
-                                                        <span className="text-white font-bold">{res.utilisateur.name}</span>
-                                                        <span className="text-[11px] text-slate-500">{res.utilisateur.email}</span>
-                                                        <span className="text-[11px] text-primary/70 font-mono mt-0.5">{res.utilisateur.telephone}</span>
+                                                        <span className="text-gray-900 font-bold">{res.utilisateur.name}</span>
+                                                        <span className="text-[11px] text-gray-500">{res.utilisateur.email}</span>
+                                                        <span className="text-[11px] text-gray-500 font-mono mt-0.5">{res.utilisateur.telephone}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6 font-medium">
                                                     <div className="flex flex-col">
-                                                        <span className="text-white font-bold">{res.lieu_depart}</span>
-                                                        <span className="text-primary text-[10px]">TO</span>
-                                                        <span className="text-white font-bold">{res.lieu_destination}</span>
+                                                        <span className="text-gray-900 font-bold">{res.lieu_depart}</span>
+                                                        <span className="text-black text-[10px]">TO</span>
+                                                        <span className="text-gray-900 font-bold">{res.lieu_destination}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6">
                                                     <div className="flex flex-col gap-1">
-                                                        <div className="flex items-center gap-2 text-xs text-white">
-                                                            <span className="material-symbols-outlined text-primary text-sm">schedule</span>
+                                                        <div className="flex items-center gap-2 text-xs text-gray-900">
+                                                            <span className="material-symbols-outlined text-black text-sm">schedule</span>
                                                             {new Date(res.date_heure_depart).toLocaleString()}
                                                         </div>
-                                                        <div className="flex gap-2 text-[10px] font-black text-slate-400 uppercase mt-1">
+                                                        <div className="flex gap-2 text-[10px] font-black text-gray-500 uppercase mt-1">
                                                             <span>{res.nb_adultes}A, {res.nb_enfants}C, {res.nb_bebes}B</span>
-                                                            <span className="bg-white/5 px-2 rounded">{res.type_trajet.replace('_', ' ')}</span>
+                                                            <span className="bg-gray-50 px-2 rounded">{res.type_trajet.replace('_', ' ')}</span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -510,7 +510,7 @@ export default function AdminReservations() {
                                                 <td className="px-6 py-6">
                                                     {res.statut !== 'termine' && res.statut !== 'annule' ? (
                                                         <select 
-                                                            className="bg-slate-800 border border-white/10 rounded-lg px-2 py-1.5 text-[10px] text-white focus:outline-none focus:border-primary w-full cursor-pointer"
+                                                            className="bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-[10px] text-gray-900 focus:outline-none focus:border-black w-full cursor-pointer"
                                                             value={res.chauffeur_id || ''}
                                                             onFocus={() => {
                                                                 if (!chauffeursAvailability[res.id]) {
@@ -522,9 +522,9 @@ export default function AdminReservations() {
                                                                 assignChauffeur(res.id, val ? parseInt(val) : null);
                                                             }}
                                                         >
-                                                            <option value="" className="bg-slate-800 text-white">No Driver</option>
+                                                            <option value="" className="bg-white text-gray-900">No Driver</option>
                                                             {(chauffeursAvailability[res.id] || chauffeurs).map(c => (
-                                                                <option key={c.id} value={c.id} className="bg-slate-800 text-white">
+                                                                <option key={c.id} value={c.id} className="bg-white text-gray-900">
                                                                     {c.name} {c.is_busy ? '(Busy)' : ''}
                                                                 </option>
                                                             ))}
@@ -542,17 +542,17 @@ export default function AdminReservations() {
                                                             <input 
                                                                 type="number" 
                                                                 placeholder="Price" 
-                                                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary w-24"
+                                                                className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-black w-24"
                                                                 onKeyDown={(e) => {
                                                                     if (e.key === 'Enter') {
                                                                         setTransferPrice(res.id, (e.target as HTMLInputElement).value);
                                                                     }
                                                                 }}
                                                             />
-                                                            <span className="text-[8px] text-slate-500">Press Enter</span>
+                                                            <span className="text-[8px] text-gray-500">Press Enter</span>
                                                         </div>
                                                     ) : (
-                                                        <span className="text-lg font-black text-primary">{res.montant_total ? `$${res.montant_total}` : '-'}</span>
+                                                        <span className="text-lg font-black text-black">{res.montant_total ? `$${res.montant_total}` : '-'}</span>
                                                     )}
                                                 </td>
                                                 <td className="px-6 py-6 text-right">
@@ -564,12 +564,12 @@ export default function AdminReservations() {
                                                                     if (input.value) setTransferPrice(res.id, input.value);
                                                                     else showNotification('Please enter a price first.', 'error');
                                                                 }} 
-                                                                className="p-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition-all"
+                                                                className="p-2 bg-gray-100 text-black hover:bg-black hover:text-gray-900 rounded-lg transition-all"
                                                             >
                                                                 <span className="material-symbols-outlined">send</span>
                                                             </button>
                                                         )}
-                                                        <button onClick={() => updateStatus(res.id, 'annule', 'transfer')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
+                                                        <button onClick={() => updateStatus(res.id, 'annule', 'transfer')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">close</span></button>
                                                     </div>
                                                 </td>
                                             </tr>

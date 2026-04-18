@@ -42,15 +42,15 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a192f] flex flex-col justify-center items-center px-4 py-12">
-            <div className="max-w-md w-full space-y-8 bg-slate-900/50 p-10 rounded-2xl border border-primary/20 backdrop-blur-xl">
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-4 py-12">
+            <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl border border-gray-200 backdrop-blur-xl">
                 <div className="text-center">
-                    <Link href="/" className="flex items-center justify-center gap-3 mb-6">
-                        <span className="material-symbols-outlined text-4xl text-primary">rocket_launch</span>
-                        <h1 className="text-2xl font-bold tracking-tighter text-slate-100 italic">LUXE<span className="text-primary">DRIVE</span></h1>
+                    <Link href="/" className="flex items-center justify-center gap-3 mb-8">
+                        <span className="material-symbols-outlined text-4xl text-black">rocket_launch</span>
+                        <h1 className="text-2xl font-black tracking-[-0.05em] text-black">LUXE<span className="text-gray-400">DRIVE</span></h1>
                     </Link>
-                    <h2 className="text-3xl font-extrabold text-white">Welcome Back</h2>
-                    <p className="mt-2 text-sm text-slate-400">Log in to your elite dashboard</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Welcome Back</h2>
+                    <p className="mt-2 text-sm text-gray-500 font-medium">Access your exclusive dashboard</p>
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -65,24 +65,24 @@ export default function Login() {
                         </div>
                     )}
 
-                    <div className="space-y-4">
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Email Address</label>
+                    <div className="space-y-5">
+                        <div className="space-y-2">
+                            <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Email Address</label>
                             <input
                                 type="email"
                                 required
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                 placeholder="john@example.com"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             />
                         </div>
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold text-primary uppercase tracking-tighter ml-1">Password</label>
+                        <div className="space-y-2">
+                            <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Password</label>
                             <input
                                 type="password"
                                 required
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                                className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
                                 placeholder="••••••••"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -96,25 +96,26 @@ export default function Login() {
                                 id="remember-me"
                                 name="remember-me"
                                 type="checkbox"
-                                className="h-4 w-4 text-primary focus:ring-primary border-white/10 rounded bg-white/5"
+                                className="h-4 w-4 text-black focus:ring-black border-gray-200 rounded bg-gray-50"
                             />
-                            <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-400">
+                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-500">
                                 Remember me
                             </label>
                         </div>
 
                         <div className="text-sm">
-                            <a href="#" className="font-medium text-primary hover:underline">
+                            <a href="#" className="font-medium text-black hover:underline">
                                 Forgot password?
                             </a>
                         </div>
                     </div>
 
                     <div>
+                    <div>
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                            className={`w-full h-14 bg-black hover:bg-black/90 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all shadow-2xl shadow-black/20 flex items-center justify-center gap-3 group active:scale-95 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
                             {loading ? (
                                 <>
@@ -122,14 +123,18 @@ export default function Login() {
                                     <span>Verifying...</span>
                                 </>
                             ) : (
-                                <span>Sign In</span>
+                                <>
+                                    <span>Sign In</span>
+                                    <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </>
                             )}
                         </button>
                     </div>
+                    </div>
 
                     <div className="text-center text-sm">
-                        <span className="text-slate-400">Don't have an account? </span>
-                        <Link href="/signup" className="text-primary font-bold hover:underline">
+                        <span className="text-gray-500">Don't have an account? </span>
+                        <Link href="/signup" className="text-black font-bold hover:underline">
                             Sign Up
                         </Link>
                     </div>

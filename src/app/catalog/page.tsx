@@ -62,9 +62,8 @@ function FilterDropdown({
 }) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-    const active = value !== options[0]; // first option is always "All / Any"
+    const active = value !== options[0];
 
-    // close on outside click
     useEffect(() => {
         const handler = (e: MouseEvent) => {
             if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -77,30 +76,30 @@ function FilterDropdown({
         <div ref={ref} className="relative">
             <button
                 onClick={() => setOpen((p) => !p)}
-                className={`flex h-10 items-center justify-center gap-2 rounded-lg px-4 transition-all group border
+                className={`flex h-11 items-center justify-center gap-2 rounded-xl px-4 transition-all border
                     ${active
-                        ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
-                        : 'bg-primary/10 hover:bg-primary/20 border-primary/30 text-slate-900 dark:text-slate-100'
+                        ? 'bg-black text-white border-black ring-4 ring-black/5'
+                        : 'bg-white hover:bg-gray-50 border-gray-200 text-gray-900 shadow-sm'
                     }`}
             >
-                <p className="text-sm font-semibold">{active ? value : label}</p>
+                <p className="text-sm font-bold tracking-tight">{active ? value : label}</p>
                 <span
-                    className={`material-symbols-outlined text-lg transition-transform ${open ? 'rotate-180' : ''} ${active ? 'text-white' : 'text-primary'}`}
+                    className={`material-symbols-outlined text-[20px] transition-transform duration-300 ${open ? 'rotate-180' : ''} ${active ? 'text-white' : 'text-gray-400'}`}
                 >
                     expand_more
                 </span>
             </button>
 
             {open && (
-                <div className="absolute top-12 left-0 z-40 min-w-[180px] rounded-xl bg-white dark:bg-[#0d1b2e] border border-primary/20 shadow-2xl shadow-primary/10 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute top-13 left-0 z-50 min-w-[220px] rounded-2xl bg-white border border-gray-200 shadow-2xl py-2 animate-in fade-in slide-in-from-top-2 duration-200">
                     {options.map((opt) => (
                         <button
                             key={opt}
                             onClick={() => { onChange(opt); setOpen(false); }}
-                            className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors
+                            className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors
                                 ${opt === value
-                                    ? 'bg-primary/10 text-primary font-bold'
-                                    : 'text-slate-700 dark:text-slate-300 hover:bg-primary/5'
+                                    ? 'bg-gray-50 text-black font-bold'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                                 }`}
                         >
                             {opt}
@@ -367,27 +366,27 @@ export default function Catalog() {
         <div className="flex-1 px-6 md:px-20 py-8 max-w-7xl mx-auto w-full">
             {/* Search Summary (Minimal) */}
             {pickup && (
-                <div className="bg-primary/5 border border-primary/10 rounded-xl p-3 mb-6 flex items-center justify-between">
-                    <p className="text-xs font-bold text-slate-400">Results for: <span className="text-primary">{pickup}</span></p>
-                    <Link href="/" className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">New search</Link>
+                <div className="bg-black/5 border border-gray-200 rounded-xl p-3 mb-6 flex items-center justify-between">
+                    <p className="text-xs font-bold text-gray-500">Results for: <span className="text-black">{pickup}</span></p>
+                    <Link href="/" className="text-[10px] font-black text-black uppercase tracking-widest hover:underline">New search</Link>
                 </div>
             )}
 
             {/* Hero Section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-                <div className="flex flex-col gap-4">
-                    <h1 className="text-slate-900 dark:text-slate-100 text-5xl font-black leading-tight tracking-tighter">
-                        Exquisite <span className="text-primary">Collection</span>
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-gray-900 text-4xl md:text-5xl font-black leading-tight tracking-tighter">
+                        Exquisite <span className="text-black">Collection</span>
                     </h1>
-                    <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl">
-                        Uncompromising performance meets absolute luxury. Select from our curated fleet of the world&apos;s most prestigious vehicles.
+                    <p className="text-gray-500 text-base md:text-lg max-w-2xl font-medium">
+                        A curated selection of premium vehicles combining luxury, comfort, and performance.
                     </p>
                 </div>
                 
                 {user?.is_admin && (
                     <Link 
                         href="/admin/add-car" 
-                        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-white px-8 transition-all shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 whitespace-nowrap"
+                        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-black text-white px-8 transition-all shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 whitespace-nowrap"
                     >
                         <span className="material-symbols-outlined text-xl">add_circle</span>
                         <p className="font-extrabold tracking-tight">ADD NEW CAR</p>
@@ -400,7 +399,7 @@ export default function Catalog() {
                 <FilterDropdown label="Category" options={categoryOptions} value={categoryFilter} onChange={setCategoryFilter} />
                 <FilterDropdown label="Price Range" options={priceRangeOptions} value={priceFilter} onChange={setPriceFilter} />
                 <FilterDropdown label="Transmission" options={transmissionOptions} value={transmissionFilter} onChange={setTransmissionFilter} />
-                <div className="h-6 w-px bg-primary/20 mx-1 hidden md:block" />
+                <div className="h-6 w-px bg-gray-100 mx-1 hidden md:block" />
                 {hasActiveFilters && (
                     <button onClick={clearAllFilters} className="flex h-10 items-center justify-center gap-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 px-4 transition-all text-red-500">
                         <span className="material-symbols-outlined text-lg">filter_list_off</span>
@@ -408,14 +407,14 @@ export default function Catalog() {
                     </button>
                 )}
                 {!loading && (
-                    <p className="ml-auto text-slate-500 text-sm font-medium">
+                    <p className="ml-auto text-gray-500 text-sm font-medium">
                         {groupedModels.length} model{groupedModels.length !== 1 ? 's' : ''} available
                     </p>
                 )}
             </div>
 
             {/* Category Tabs */}
-            <div className="border-b border-primary/10 mb-8 overflow-x-auto">
+            <div className="border-b border-gray-200 mb-8 overflow-x-auto">
                 <div className="flex gap-10 min-w-max">
                     {TAB_CATEGORIES.map((tab) => (
                         <button
@@ -423,8 +422,8 @@ export default function Catalog() {
                             onClick={() => setActiveTab(tab)}
                             className={`border-b-2 pb-4 font-bold text-sm tracking-wide transition-all ${
                                 activeTab === tab
-                                    ? 'border-primary text-primary'
-                                    : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
+                                    ? 'border-black text-black'
+                                    : 'border-transparent text-gray-500 hover:text-slate-900 dark:hover:text-slate-100'
                             }`}
                         >
                             {tab.toUpperCase()}
@@ -437,16 +436,16 @@ export default function Catalog() {
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <div key={i} className="h-[400px] rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
+                        <div key={i} className="h-[400px] rounded-xl bg-slate-100 dark:bg-white animate-pulse"></div>
                     ))}
                 </div>
             ) : error ? (
                 <div className="text-center py-20 bg-red-500/5 rounded-2xl border border-red-500/10">
-                    <p className="text-slate-600 dark:text-slate-400 font-medium">{error}</p>
+                    <p className="text-gray-400 dark:text-gray-500 font-medium">{error}</p>
                 </div>
             ) : groupedModels.length === 0 ? (
-                <div className="text-center py-20 bg-slate-50 dark:bg-primary/5 rounded-2xl border border-primary/10">
-                    <p className="text-slate-600 dark:text-slate-400 font-medium text-lg">No vehicles match your filters.</p>
+                <div className="text-center py-20 bg-slate-50 dark:bg-black/5 rounded-2xl border border-gray-200">
+                    <p className="text-gray-400 dark:text-gray-500 font-medium text-lg">No vehicles match your filters.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -454,37 +453,37 @@ export default function Catalog() {
                         <div
                             key={vehicle.id}
                             onClick={() => setSelectedVehicle(vehicle)}
-                            className="group flex flex-col bg-slate-50 dark:bg-primary/5 rounded-xl overflow-hidden border border-primary/10 hover:border-primary/40 transition-all cursor-pointer shadow-sm hover:shadow-primary/10 hover:shadow-lg hover:-translate-y-1"
+                            className="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-black/10 transition-all cursor-pointer shadow-sm hover:shadow-lg hover:-translate-y-1"
                         >
                             <div className="relative overflow-hidden aspect-[16/9]">
-                                <div className="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url(${vehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
-                                <div className="absolute top-4 right-4 flex flex-col items-end gap-1">
-                                    <div className={`text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest ${vehicle.statut === 'disponible' ? 'bg-primary text-white' : 'bg-red-500 text-white'}`}>
+                                <div className="w-full h-full bg-center bg-cover transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url(${vehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
+                                <div className="absolute top-4 right-4">
+                                    <div className={`text-[10px] font-black px-3 py-1 rounded shadow-sm ${vehicle.statut === 'disponible' ? 'bg-white text-black' : 'bg-red-500 text-white'}`}>
                                         {vehicle.statut === 'disponible' ? 'Available' : 'Reserved'}
                                     </div>
                                 </div>
                             </div>
-                            <div className="p-6 flex flex-col gap-4 text-left">
+                            <div className="p-6 flex flex-col gap-4">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h3 className="text-slate-900 dark:text-slate-100 text-xl font-bold">{vehicle.marque} {vehicle.modele}</h3>
-                                        <div className="flex gap-2 items-center mt-1">
-                                            <p className="text-primary font-medium text-sm capitalize">{vehicle.categorie}</p>
+                                        <h3 className="text-gray-900 text-xl font-bold tracking-tight">{vehicle.marque} {vehicle.modele}</h3>
+                                        <div className="flex gap-2 items-center mt-1.5">
+                                            <span className="text-gray-500 font-bold text-[11px] uppercase tracking-wider px-2 py-0.5 bg-gray-50 border border-gray-200 rounded-md">{vehicle.categorie}</span>
                                             {vehicle.active_promotion_percent > 0 && (
-                                                <span className="bg-fuchsia-500/20 text-fuchsia-500 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest">-{vehicle.active_promotion_percent}%</span>
+                                                <span className="bg-black text-white text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-widest">-{vehicle.active_promotion_percent}% PROMO</span>
                                             )}
                                         </div>
                                     </div>
                                     <div className="text-right">
                                         {vehicle.active_promotion_percent > 0 ? (
                                             <>
-                                                <p className="text-slate-400 dark:text-slate-500 text-sm font-bold line-through decoration-red-500/50">${vehicle.prix_base}</p>
-                                                <p className="text-fuchsia-600 dark:text-fuchsia-400 text-xl font-black">${vehicle.prix_final}</p>
+                                                <p className="text-gray-400 text-xs font-bold line-through">${vehicle.prix_base}</p>
+                                                <p className="text-black text-2xl font-black tracking-tighter">${vehicle.prix_final}</p>
                                             </>
                                         ) : (
-                                            <p className="text-slate-900 dark:text-slate-100 text-xl font-black">${vehicle.prix_base}</p>
+                                            <p className="text-black text-2xl font-black tracking-tighter">${vehicle.prix_base}</p>
                                         )}
-                                        <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">/ day</p>
+                                        <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">/ Day</p>
                                     </div>
                                 </div>
                             </div>
@@ -496,249 +495,203 @@ export default function Catalog() {
             {/* Modal */}
             {selectedVehicle && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+                    className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md"
                     onClick={() => {
                         setSelectedVehicle(null);
                         setModalStep('vehicle');
                     }}
                 >
                     <div
-                        className="relative w-full max-w-xl bg-white dark:bg-[#0d1b2e] rounded-2xl overflow-hidden border border-primary/20 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+                        className="relative w-full max-w-xl bg-white rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto custom-scrollbar"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {modalStep === 'vehicle' ? (
                             <>
                                 <div className="relative aspect-video w-full overflow-hidden">
-                                    <div className="absolute inset-0 bg-center bg-cover" style={{ backgroundImage: `url(${selectedVehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
-                                    <button onClick={() => setSelectedVehicle(null)} className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-primary transition-all">
-                                        <span className="material-symbols-outlined">close</span>
+                                    <div className="absolute inset-0 bg-center bg-cover transition-transform duration-[2s] scale-110" style={{ backgroundImage: `url(${selectedVehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                    <button onClick={() => setSelectedVehicle(null)} className="absolute top-6 right-6 size-10 bg-white/10 backdrop-blur-md hover:bg-white text-white hover:text-black rounded-full flex items-center justify-center transition-all z-10">
+                                        <span className="material-symbols-outlined text-xl">close</span>
                                     </button>
-                                </div>
-                                <div className="p-8 text-left">
-                                    <h2 className="text-slate-900 dark:text-white text-3xl font-bold mb-2 flex items-center gap-3">
-                                        {selectedVehicle.marque} {selectedVehicle.modele}
-                                        {selectedVehicle.active_promotion_percent > 0 && (
-                                            <span className="bg-fuchsia-500/20 text-fuchsia-500 text-[12px] font-black px-2 py-1 rounded uppercase tracking-widest">-{selectedVehicle.active_promotion_percent}% PROMO</span>
-                                        )}
-                                    </h2>
-                                    <p className="text-primary font-bold uppercase tracking-widest text-xs mb-6">{selectedVehicle.categorie}</p>
-                                    <p className="text-slate-600 dark:text-slate-400 mb-8">{selectedVehicle.description || "Uncompromising performance meets luxury."}</p>
                                     
-                                    <button 
-                                        onClick={handleActionClick} 
-                                        className="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
-                                    >
-                                        {!user ? "Login to Rent" : (isMissingDetails ? "Setup Rental Details" : "Review Reservation")}
-                                    </button>
+                                    <div className="absolute bottom-8 left-8 right-8 text-white">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <span className="text-[10px] font-black px-3 py-1 bg-white text-black rounded-full uppercase tracking-widest">{selectedVehicle.categorie}</span>
+                                            {selectedVehicle.active_promotion_percent > 0 && (
+                                                <span className="text-[10px] font-black px-3 py-1 bg-black text-white rounded-full border border-white/20 uppercase tracking-widest">Special Offer</span>
+                                            )}
+                                        </div>
+                                        <h2 className="text-4xl font-black tracking-tighter">{selectedVehicle.marque} {selectedVehicle.modele}</h2>
+                                    </div>
+                                </div>
+
+                                <div className="p-6 md:p-8">
+                                    <div className="grid grid-cols-3 gap-3 mb-6">
+                                        <div className="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex flex-col items-center text-center">
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Transmission</p>
+                                            <p className="text-gray-900 font-bold text-xs">{selectedVehicle.transmission}</p>
+                                        </div>
+                                        <div className="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex flex-col items-center text-center">
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Fuel Type</p>
+                                            <p className="text-gray-900 font-bold text-xs">{selectedVehicle.carburant}</p>
+                                        </div>
+                                        <div className="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex flex-col items-center text-center">
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Year</p>
+                                            <p className="text-gray-900 font-bold text-xs">{selectedVehicle.annee}</p>
+                                        </div>
+                                    </div>
+
+                                    <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                                        {selectedVehicle.description || "Experience the pinnacle of automotive engineering combining luxury, comfort, and performance."}
+                                    </p>
+                                    
+                                    <div className="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Daily Rate</p>
+                                            <div className="flex items-baseline gap-1.5">
+                                                <span className="text-2xl font-black text-black tracking-tighter">${selectedVehicle.prix_final || selectedVehicle.prix_base}</span>
+                                                <span className="text-gray-400 font-medium text-xs">/ day</span>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={handleActionClick} 
+                                            className="flex-1 py-3.5 bg-black text-white text-sm font-bold rounded-2xl shadow-xl hover:shadow-black/20 hover:-translate-y-1 active:translate-y-0 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {!user ? "Login to Secure" : "Initialize Booking"}
+                                            <span className="material-symbols-outlined text-lg">trending_flat</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </>
                         ) : modalStep === 'form' ? (
-                            <div className="p-8 text-left animate-in slide-in-from-right-8 duration-300">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-slate-900 dark:text-white text-2xl font-black">Rental Details</h2>
-                                    <button onClick={() => setModalStep('vehicle')} className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
-                                        <span className="material-symbols-outlined">arrow_back</span>
+                            <div className="p-8 animate-in slide-in-from-right-8 duration-500">
+                                <div className="flex items-center justify-between mb-8">
+                                    <div>
+                                        <h2 className="text-2xl font-black tracking-tighter">Rental Configuration</h2>
+                                        <p className="text-gray-500 text-sm">Fine-tune your rental settings</p>
+                                    </div>
+                                    <button onClick={() => setModalStep('vehicle')} className="size-10 bg-gray-50 hover:bg-gray-100 rounded-full flex items-center justify-center transition-all">
+                                        <span className="material-symbols-outlined text-gray-400">arrow_back</span>
                                     </button>
                                 </div>
-                                
-                                <p className="text-sm text-slate-500 mb-6">Please fill in your dates and locations to proceed with booking the <span className="font-bold text-slate-800 dark:text-slate-200">{selectedVehicle.marque} {selectedVehicle.modele}</span>.</p>
 
-                                <div className="space-y-4 mb-8">
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Pick-up Location</label>
-                                        <select 
-                                            value={localSearchData.lieu_depart}
-                                            onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart: e.target.value})}
-                                            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white"
-                                        >
-                                            {LOCATIONS.map(loc => <option key={loc} value={loc} className="dark:bg-[#0d1b2e]">{loc}</option>)}
-                                        </select>
-                                        {localSearchData.lieu_depart === "Other location" && (
-                                            <input 
-                                                type="text" 
-                                                placeholder="Specify Location" 
-                                                className="w-full bg-slate-100 dark:bg-white/5 border border-primary/40 rounded-xl py-3 px-4 text-sm mt-2 outline-none text-slate-900 dark:text-white focus:ring-1 focus:ring-primary" 
-                                                value={localSearchData.lieu_depart_autre} 
-                                                onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart_autre: e.target.value})} 
-                                            />
-                                        )}
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Drop-off Location</label>
-                                        <select 
-                                            value={localSearchData.lieu_arrivee}
-                                            onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee: e.target.value})}
-                                            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white"
-                                        >
-                                            {LOCATIONS.map(loc => <option key={loc} value={loc} className="dark:bg-[#0d1b2e]">{loc}</option>)}
-                                        </select>
-                                        {localSearchData.lieu_arrivee === "Other location" && (
-                                            <input 
-                                                type="text" 
-                                                placeholder="Specify Location" 
-                                                className="w-full bg-slate-100 dark:bg-white/5 border border-primary/40 rounded-xl py-3 px-4 text-sm mt-2 outline-none text-slate-900 dark:text-white focus:ring-1 focus:ring-primary" 
-                                                value={localSearchData.lieu_arrivee_autre} 
-                                                onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee_autre: e.target.value})} 
-                                            />
-                                        )}
-                                    </div>
-
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-black text-primary uppercase tracking-widest">Pick-up Date</label>
-                                            <input 
-                                                type="datetime-local" 
-                                                value={localSearchData.date_debut}
-                                                onChange={(e) => setLocalSearchData({...localSearchData, date_debut: e.target.value})}
-                                                className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white dark:[&::-webkit-calendar-picker-indicator]:invert" 
-                                            />
+                                <div className="space-y-6 mb-10">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Departure</label>
+                                            <select 
+                                                value={localSearchData.lieu_depart}
+                                                onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart: e.target.value})}
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold text-gray-900 focus:border-black transition-all outline-none appearance-none"
+                                            >
+                                                {LOCATIONS.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+                                            </select>
                                         </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-black text-primary uppercase tracking-widest">Return Date</label>
-                                            <input 
-                                                type="datetime-local" 
-                                                value={localSearchData.date_fin}
-                                                onChange={(e) => setLocalSearchData({...localSearchData, date_fin: e.target.value})}
-                                                className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 text-sm font-semibold outline-none text-slate-900 dark:text-white dark:[&::-webkit-calendar-picker-indicator]:invert" 
-                                            />
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Arrival</label>
+                                            <select 
+                                                value={localSearchData.lieu_arrivee}
+                                                onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee: e.target.value})}
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold text-gray-900 focus:border-black transition-all outline-none appearance-none"
+                                            >
+                                                {LOCATIONS.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {(localSearchData.lieu_depart === "Other location" || localSearchData.lieu_arrivee === "Other location") && (
+                                        <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 animate-in slide-in-from-top-2">
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Custom Address Details</p>
+                                            <div className="space-y-4">
+                                                {localSearchData.lieu_depart === "Other location" && (
+                                                    <input type="text" placeholder="Full Pick-up Address..." className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" value={localSearchData.lieu_depart_autre} onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart_autre: e.target.value})} />
+                                                )}
+                                                {localSearchData.lieu_arrivee === "Other location" && (
+                                                    <input type="text" placeholder="Full Drop-off Address..." className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" value={localSearchData.lieu_arrivee_autre} onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee_autre: e.target.value})} />
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Starts</label>
+                                            <input type="datetime-local" value={localSearchData.date_debut} onChange={(e) => setLocalSearchData({...localSearchData, date_debut: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-black" />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Ends</label>
+                                            <input type="datetime-local" value={localSearchData.date_fin} onChange={(e) => setLocalSearchData({...localSearchData, date_fin: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-black" />
                                         </div>
                                     </div>
                                     
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Baby Seats (<span className="text-slate-500">$10/day</span>)</label>
-                                        <div className="flex items-center justify-between bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2">
-                                            <span className="text-slate-900 dark:text-white text-sm font-bold">{localSearchData.nb_sieges_bebe} Seats</span>
-                                            <div className="flex gap-2">
-                                                <button 
-                                                    onClick={() => setLocalSearchData({...localSearchData, nb_sieges_bebe: Math.max(0, localSearchData.nb_sieges_bebe - 1)})}
-                                                    className="size-8 rounded-lg bg-slate-200 dark:bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
-                                                >
-                                                    <span className="material-symbols-outlined text-sm">remove</span>
+                                    <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl">
+                                        <div>
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Add-ons</p>
+                                            <p className="text-gray-900 font-bold">Child Safety Seats</p>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-sm font-black text-black">{localSearchData.nb_sieges_bebe}</span>
+                                            <div className="flex gap-1.5">
+                                                <button onClick={() => setLocalSearchData({...localSearchData, nb_sieges_bebe: Math.max(0, localSearchData.nb_sieges_bebe - 1)})} className="size-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm">
+                                                    <span className="material-symbols-outlined text-[16px]">remove_circle</span>
                                                 </button>
-                                                <button 
-                                                    onClick={() => setLocalSearchData({...localSearchData, nb_sieges_bebe: localSearchData.nb_sieges_bebe + 1})}
-                                                    className="size-8 rounded-lg bg-slate-200 dark:bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
-                                                >
-                                                    <span className="material-symbols-outlined text-sm">add</span>
+                                                <button onClick={() => setLocalSearchData({...localSearchData, nb_sieges_bebe: localSearchData.nb_sieges_bebe + 1})} className="size-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm">
+                                                    <span className="material-symbols-outlined text-[16px]">add_circle</span>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                {reservationError && (
-                                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-in slide-in-from-top-1">
-                                        <span className="material-symbols-outlined text-sm">error</span>
-                                        {reservationError}
-                                    </div>
-                                )}
 
                                 <button 
                                     onClick={() => setModalStep('summary')}
                                     disabled={isMissingDetails}
-                                    className="w-full py-4 bg-primary text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full py-5 bg-black text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl hover:shadow-black/20 hover:-translate-y-1 disabled:opacity-30 disabled:pointer-events-none transition-all flex items-center justify-center gap-3"
                                 >
-                                    <span className="material-symbols-outlined text-lg">summarize</span>
-                                    Review Summary
+                                    Proceed to Summary
+                                    <span className="material-symbols-outlined text-lg">arrow_forward</span>
                                 </button>
                             </div>
                         ) : modalStep === 'summary' ? (
-                            <div className="p-8 text-left animate-in slide-in-from-right-8 duration-300">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-slate-900 dark:text-white text-2xl font-black">Order Summary</h2>
-                                    <button onClick={() => setModalStep('form')} className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors">
-                                        <span className="material-symbols-outlined">arrow_back</span>
-                                    </button>
+                            <div className="p-10 animate-in slide-in-from-right-8 duration-500">
+                                <div className="text-center mb-10">
+                                    <div className="size-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+                                        <span className="material-symbols-outlined text-black size-8">fact_check</span>
+                                    </div>
+                                    <h2 className="text-3xl font-black tracking-tighter">Review Order</h2>
+                                    <p className="text-gray-500">Verify your reservation details</p>
                                 </div>
                                 
-                                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-6 mb-8 border border-slate-100 dark:border-white/10">
-                                    <div className="flex justify-between items-center mb-6 pb-6 border-b border-slate-200 dark:border-white/10">
-                                        <div>
-                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedVehicle.marque} {selectedVehicle.modele}</h3>
-                                            <p className="text-sm text-slate-500">{selectedVehicle.categorie} • {selectedVehicle.transmission}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            {selectedVehicle.active_promotion_percent > 0 ? (
-                                                <>
-                                                    <p className="text-sm text-slate-400 line-through decoration-red-500/50">${selectedVehicle.prix_base}</p>
-                                                    <p className="text-lg font-black text-fuchsia-500">${selectedVehicle.prix_final}</p>
-                                                </>
-                                            ) : (
-                                                <p className="text-lg font-black text-primary">${selectedVehicle.prix_base}</p>
-                                            )}
-                                            <p className="text-xs text-slate-500 uppercase tracking-widest">/ day</p>
-                                        </div>
+                                <div className="space-y-4 mb-10">
+                                    <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Vehicle</span>
+                                        <span className="font-bold text-gray-900">{selectedVehicle.marque} {selectedVehicle.modele}</span>
                                     </div>
-
-                                    <div className="space-y-4 mb-6">
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-slate-500">Pick-up</span>
-                                            <span className="font-semibold text-slate-900 dark:text-white text-right">
-                                                {localSearchData.lieu_depart === 'Other location' ? localSearchData.lieu_depart_autre : localSearchData.lieu_depart}<br/>
-                                                <span className="text-xs text-slate-400 font-normal">{localSearchData.date_debut ? new Date(localSearchData.date_debut).toLocaleString() : ''}</span>
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-slate-500">Return</span>
-                                            <span className="font-semibold text-slate-900 dark:text-white text-right">
-                                                {localSearchData.lieu_arrivee === 'Other location' ? localSearchData.lieu_arrivee_autre : localSearchData.lieu_arrivee}<br/>
-                                                <span className="text-xs text-slate-400 font-normal">{localSearchData.date_fin ? new Date(localSearchData.date_fin).toLocaleString() : ''}</span>
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-slate-500">Duration</span>
-                                            <span className="font-semibold text-slate-900 dark:text-white">{days} day{days > 1 ? 's' : ''}</span>
-                                        </div>
+                                    <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Duration</span>
+                                        <span className="font-bold text-gray-900">{days} day{days > 1 ? 's' : ''}</span>
                                     </div>
-
-                                    <div className="space-y-3 pt-6 border-t border-slate-200 dark:border-white/10">
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-slate-600 dark:text-slate-400">Rental Cost</span>
-                                            <span className="font-bold text-slate-900 dark:text-white">${vehicleTotal.toFixed(2)}</span>
-                                        </div>
-                                        {localSearchData.nb_sieges_bebe > 0 && (
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-slate-600 dark:text-slate-400">Baby Seats ({localSearchData.nb_sieges_bebe} × $10/day)</span>
-                                                <span className="font-bold text-slate-900 dark:text-white">${babySeatsTotal.toFixed(2)}</span>
-                                            </div>
-                                        )}
-                                        <div className="flex justify-between items-center pt-4 mt-4 border-t border-slate-200 dark:border-white/10">
-                                            <span className="text-base font-black text-slate-900 dark:text-white uppercase tracking-widest">Total</span>
-                                            <span className="text-2xl font-black text-primary">${computedTotal}</span>
-                                        </div>
+                                    <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Total Price</span>
+                                        <span className="text-2xl font-black text-black">${computedTotal}</span>
                                     </div>
                                 </div>
 
-                                {reservationError && (
-                                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-in slide-in-from-top-1">
-                                        <span className="material-symbols-outlined text-sm">error</span>
-                                        {reservationError}
-                                    </div>
-                                )}
-
                                 {reservationSuccess ? (
-                                    <div className="w-full py-4 bg-green-500 text-white font-black uppercase tracking-widest text-xs rounded-xl flex items-center justify-center gap-2 animate-in fade-in zoom-in duration-300 shadow-lg shadow-green-500/20">
-                                        <span className="material-symbols-outlined">check_circle</span>
-                                        Reservation Confirmed!
+                                    <div className="bg-black text-white p-6 rounded-2xl text-center font-bold animate-in zoom-in duration-500">
+                                        <p>Reservation Confirmed. Thank you!</p>
                                     </div>
                                 ) : (
-                                    <button 
-                                        onClick={handleReservation}
-                                        disabled={reservationLoading}
-                                        className="w-full py-4 bg-primary text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {reservationLoading ? (
-                                            <>
-                                                <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span>
-                                                Processing...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span className="material-symbols-outlined text-lg">check_circle</span>
-                                                Confirm Reservation
-                                            </>
-                                        )}
-                                    </button>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button onClick={() => setModalStep('form')} className="py-4 bg-gray-50 hover:bg-gray-100 text-gray-500 font-bold rounded-2xl transition-all">Back</button>
+                                        <button 
+                                            onClick={handleReservation}
+                                            disabled={reservationLoading}
+                                            className="py-4 bg-black text-white font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-xl hover:shadow-black/20 hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {reservationLoading ? "Processing..." : "Confirm & Pay"}
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         ) : null}
