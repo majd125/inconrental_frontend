@@ -9,7 +9,7 @@ export default function Footer() {
                         <div className="bg-black text-white p-1 rounded-md flex items-center justify-center">
                             <span className="material-symbols-outlined text-xl">rocket_launch</span>
                         </div>
-                        <h1 className="text-lg font-bold tracking-tight text-gray-900">LUXE<span className="font-black">DRIVE</span></h1>
+                        <h1 className="text-lg font-bold tracking-tight text-gray-900">ICON<span className="font-black">RENTAL</span></h1>
                     </div>
                     <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
                         Setting the standard for luxury mobility worldwide. Experience the pinnacle of automotive excellence and service.
@@ -38,21 +38,21 @@ export default function Footer() {
                     </ul>
                 </div>
                 <div>
-                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Locations</h4>
+                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Location & Contact</h4>
                     <div className="space-y-4">
                         <div className="flex items-start gap-3 text-sm text-gray-500">
                             <span className="material-symbols-outlined text-gray-400 text-lg">location_on</span>
-                            <span>Monaco, Place du Casino <br />Monte-Carlo 98000</span>
+                            <span>Imm. Sadok Bacha Avenue hédi Ouali <br />Hammamet, 8050, Tunisie</span>
                         </div>
-                        <div className="flex items-start gap-3 text-sm text-gray-500">
-                            <span className="material-symbols-outlined text-gray-400 text-lg">location_on</span>
-                            <span>Dubai, Downtown <br />Burj Khalifa District</span>
+                        <div className="flex items-center gap-3 text-sm text-gray-500">
+                            <span className="material-symbols-outlined text-gray-400 text-lg">alternate_email</span>
+                            <a href="mailto:iconrental123@gmail.com" className="hover:text-black transition-colors">iconrental123@gmail.com</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 text-center md:text-left">
-                <p>© 2024 LUXE DRIVE. All Rights Reserved.</p>
+                <p>© 2024 ICON RENTAL. All Rights Reserved.</p>
                 <div className="flex gap-6">
                     <Link className="hover:text-gray-900 transition-colors" href="#">Cookie Settings</Link>
                     <Link className="hover:text-gray-900 transition-colors" href="#">Legal Notices</Link>

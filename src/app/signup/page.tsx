@@ -51,7 +51,7 @@ export default function Signup() {
                 <div className="text-center">
                     <Link href="/" className="flex items-center justify-center gap-3 mb-8">
                         <span className="material-symbols-outlined text-4xl text-black">rocket_launch</span>
-                        <h1 className="text-2xl font-black tracking-[-0.05em] text-black">LUXE<span className="text-gray-400">DRIVE</span></h1>
+                        <h1 className="text-2xl font-black tracking-[-0.05em] text-black">ICON<span className="text-gray-400">RENTAL</span></h1>
                     </Link>
                     <h2 className="text-3xl font-black text-gray-900 tracking-tight">Create your account</h2>
                     <p className="mt-2 text-sm text-gray-500 font-medium">Join the elite circle of luxury</p>

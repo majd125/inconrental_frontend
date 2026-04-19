@@ -248,20 +248,20 @@ export default function Transfers() {
                             </div>
                         </div>
                     </div>
-                    {/* Car 3 */}
+                    {/* Car 3: Mercedes V-Class */}
                     <div className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-gray-200 transition-all dark:bg-white">
                         <div className="aspect-[16/10] overflow-hidden">
-                            <img alt="Car image" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrGXkmwciKA1mMZZ0mCr-czvFbYsyI02g9DQuFHHFjOJEQzSOdT-REGQe6Y6yKJTc7YTJ6vdLuWGgtl6bczEzy7GaWgeL_2XIwpat5jyeDOx5bPc5yVyaeLt57FI-TfpV5I7PlFd0Optdr1yLLgQvFO75TF_XMY3Pnh4MWhCJ_lootSlqfh6fnhGjzk-36CZpY5whWrRZke74MH0-UwXrJXLvBUbB3cI9vZ9RILc0C5sU0mxt5ssDeYLKAxzXH8wcJSW_3o9IF213c" />
+                            <img alt="Mercedes V-Class" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="/Mercedes_VClass.jpg" />
                         </div>
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-xl font-bold">Executive Sprinter</h3>
-                                <span className="text-black font-bold">$250+</span>
+                                <h3 className="text-xl font-bold">Mercedes V-Class</h3>
+                                <span className="text-black font-bold">$200+</span>
                             </div>
-                            <p className="text-sm text-gray-500 mb-4">Mercedes-Benz Sprinter Executive</p>
+                            <p className="text-sm text-gray-500 mb-4">Premium Executive Van</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> 14 Max</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 12 Bags</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> 7 Max</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 6 Bags</span>
                                 <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">tv</span> Entertainment</span>
                             </div>
                         </div>
