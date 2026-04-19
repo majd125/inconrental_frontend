@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "LuxeDrive | Luxury Car Catalog",
+  title: "IconRental | Luxury Car Catalog",
   description: "Uncompromising performance meets absolute luxury.",
 };
 

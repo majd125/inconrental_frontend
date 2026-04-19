@@ -15,7 +15,7 @@ export default function Header() {
                             <span className="material-symbols-outlined text-2xl">rocket_launch</span>
                         </div>
                         <h1 className="text-xl font-bold tracking-tight text-gray-900">
-                            LUXE<span className="font-black">DRIVE</span>
+                            ICON<span className="font-black">RENTAL</span>
                         </h1>
                     </Link>
                     <nav className="hidden md:flex items-center gap-8">
