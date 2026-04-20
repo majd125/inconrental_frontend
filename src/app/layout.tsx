@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 import { AuthProvider } from "@/context/AuthContext";
 import { NotificationProvider } from "@/context/NotificationContext";
+import ChatBot from "@/components/ChatBot";
 
 export default function RootLayout({
   children,
@@ -30,6 +31,7 @@ export default function RootLayout({
             <main className="pt-20">
               {children}
             </main>
+            <ChatBot />
             <Footer />
           </AuthProvider>
         </NotificationProvider>

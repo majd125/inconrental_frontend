@@ -123,7 +123,7 @@ export default function ServiceDetail() {
                         <div className="sticky top-28 space-y-6">
                             <div className="rounded-2xl border border-slate-200 dark:border-gray-200 bg-white dark:bg-white p-8 shadow-xl shadow-slate-200/50 dark:shadow-none">
                                 <div className="mb-6 flex items-end gap-2">
-                                    <span className="text-4xl font-black text-black">$1,250</span>
+                                    <span className="text-4xl font-black text-black">1250 TND</span>
                                     <span className="text-gray-500 dark:text-gray-500 mb-1">/ per person</span>
                                 </div>
                                 <form className="space-y-4">
@@ -153,7 +153,7 @@ export default function ServiceDetail() {
                                     <div className="py-4 border-t border-b border-slate-100 dark:border-slate-800 my-6">
                                         <div className="flex justify-between text-sm mb-2">
                                             <span>Base Price (2 Adults)</span>
-                                            <span>$2,500</span>
+                                            <span>2500 TND</span>
                                         </div>
                                         <div className="flex justify-between text-sm mb-2">
                                             <span>Insurance Waiver</span>
@@ -161,7 +161,7 @@ export default function ServiceDetail() {
                                         </div>
                                         <div className="flex justify-between text-sm font-bold text-slate-900 dark:text-gray-900 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
                                             <span>Total Amount</span>
-                                            <span>$2,500</span>
+                                            <span>2500 TND</span>
                                         </div>
                                     </div>
                                     <button className="w-full bg-black text-white py-4 rounded-xl font-bold text-lg hover:bg-black/90 transition-all flex items-center justify-center gap-2 group" type="submit">
@@ -209,7 +209,7 @@ export default function ServiceDetail() {
                                 <h4 className="text-xl font-bold mb-2 group-hover:text-black transition-colors">Pacific Highway Classic</h4>
                                 <p className="text-sm text-gray-500 dark:text-gray-500 mb-4 line-clamp-2">Vintage roadster experience through the rolling hills of Big Sur.</p>
                                 <div className="flex justify-between items-center">
-                                    <span className="font-bold text-lg">$890</span>
+                                    <span className="font-bold text-lg">890 TND</span>
                                     <span className="text-xs text-gray-500 flex items-center gap-1">
                                         <span className="material-symbols-outlined text-sm">schedule</span> 6h
                                     </span>
@@ -227,7 +227,7 @@ export default function ServiceDetail() {
                                 <h4 className="text-xl font-bold mb-2 group-hover:text-black transition-colors">Swiss Alpine Pass</h4>
                                 <p className="text-sm text-gray-500 dark:text-gray-500 mb-4 line-clamp-2">Challenge your skills across the highest peaks in the Alps.</p>
                                 <div className="flex justify-between items-center">
-                                    <span className="font-bold text-lg">$1,450</span>
+                                    <span className="font-bold text-lg">1450 TND</span>
                                     <span className="text-xs text-gray-500 flex items-center gap-1">
                                         <span className="material-symbols-outlined text-sm">schedule</span> 2 Days
                                     </span>
@@ -245,7 +245,7 @@ export default function ServiceDetail() {
                                 <h4 className="text-xl font-bold mb-2 group-hover:text-black transition-colors">Dubai Desert Dash</h4>
                                 <p className="text-sm text-gray-500 dark:text-gray-500 mb-4 line-clamp-2">Sunset dunes and ultra-luxury performance in the heart of UAE.</p>
                                 <div className="flex justify-between items-center">
-                                    <span className="font-bold text-lg">$2,100</span>
+                                    <span className="font-bold text-lg">2100 TND</span>
                                     <span className="text-xs text-gray-500 flex items-center gap-1">
                                         <span className="material-symbols-outlined text-sm">schedule</span> 4h
                                     </span>

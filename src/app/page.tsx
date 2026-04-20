@@ -285,7 +285,7 @@ export default function Home() {
           <div className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
             <div className="relative h-64 overflow-hidden bg-gray-50">
               <img alt="Clio 5" className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" src="/renault-clio5.jpg" />
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">$40<span className="text-gray-500 font-medium text-[10px] ml-1">/DAY</span></div>
+              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">40 TND<span className="text-gray-500 font-medium text-[10px] ml-1">/DAY</span></div>
             </div>
             <div className="p-6 space-y-5">
               <div className="flex justify-between items-start">
@@ -307,7 +307,7 @@ export default function Home() {
           <div className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
             <div className="relative h-64 overflow-hidden bg-gray-50">
               <img alt="Seat Leon" className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" src="/seat-leon.jpg" />
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">$60<span className="text-gray-500 font-medium text-[10px] ml-1">/DAY</span></div>
+              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">60 TND<span className="text-gray-500 font-medium text-[10px] ml-1">/DAY</span></div>
             </div>
             <div className="p-6 space-y-5">
               <div className="flex justify-between items-start">
@@ -329,7 +329,7 @@ export default function Home() {
           <div className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
             <div className="relative h-64 overflow-hidden bg-gray-50">
               <img alt="VW Golf" className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" src="/golf-gti.jpg" />
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">$55<span className="text-gray-500 font-medium text-[10px] ml-1">/DAY</span></div>
+              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm">55 TND<span className="text-gray-500 font-medium text-[10px] ml-1">/DAY</span></div>
             </div>
             <div className="p-6 space-y-5">
               <div className="flex justify-between items-start">

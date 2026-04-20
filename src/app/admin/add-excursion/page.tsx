@@ -173,7 +173,7 @@ export default function AddExcursion() {
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Price per Person ($)</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Price per Person (TND)</label>
                                     <input
                                         type="number"
                                         required

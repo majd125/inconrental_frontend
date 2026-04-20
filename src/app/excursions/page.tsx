@@ -200,11 +200,11 @@ export default function Excursions() {
                                             <span className="text-white/50 text-[10px] font-black uppercase tracking-widest">Starting at</span>
                                             {excursion.active_promotion_percent > 0 ? (
                                                 <div className="flex items-baseline gap-2">
-                                                    <span className="text-white font-black text-2xl">${excursion.prix_final}</span>
-                                                    <span className="text-white/40 text-sm line-through">${excursion.prix_par_personne}</span>
+                                                    <span className="text-white font-black text-2xl">{Math.round(excursion.prix_final)} TND</span>
+                                                    <span className="text-white/40 text-sm line-through">{Math.round(parseFloat(excursion.prix_par_personne))} TND</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-white font-black text-2xl">${excursion.prix_par_personne}</span>
+                                                <span className="text-white font-black text-2xl">{Math.round(parseFloat(excursion.prix_par_personne))} TND</span>
                                             )}
                                         </div>
                                         <button className="size-12 rounded-xl bg-white text-black flex items-center justify-center transition-all group-hover:bg-black group-hover:text-white group-hover:rotate-12">
@@ -446,11 +446,10 @@ export default function Excursions() {
                                              <div className="flex justify-between items-end mb-4 px-1">
                                                  <span className="text-gray-500 font-medium pb-1">Total Amount:</span>
                                                  <div className="flex items-end gap-1">
-                                                     <span className="text-sm font-bold text-black mb-1">$</span>
                                                      <span className="text-4xl font-black text-gray-900 leading-none">
-                                                         {(( (selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * reservationData.adults) + 
-                                                           ( (selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * 0.8 * reservationData.children) + 
-                                                           ( (selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * 0.5 * reservationData.babies)).toFixed(2)}
+                                                         {Math.round(((selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * reservationData.adults) + 
+                                                           ((selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * 0.8 * reservationData.children) + 
+                                                           ((selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * 0.5 * reservationData.babies))} TND
                                                      </span>
                                                  </div>
                                              </div>
