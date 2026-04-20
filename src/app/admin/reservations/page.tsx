@@ -400,7 +400,7 @@ export default function AdminReservations() {
                                                         {res.statut === 'annule' ? (res.cancelled_by_id === res.utilisateur_id ? 'Client' : 'Admin') : res.statut.replace('_', ' ')}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-6 text-lg font-black text-black">${res.montant_total}</td>
+                                                <td className="px-6 py-6 text-lg font-black text-black">{res.montant_total} TND</td>
                                                 <td className="px-6 py-6 text-right">
                                                     {res.statut === 'en_attente' ? (
                                                         <div className="flex justify-end gap-2">
@@ -452,7 +452,7 @@ export default function AdminReservations() {
                                                         {res.statut.replace('_', ' ')}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-6 text-lg font-black text-black">${res.montant_total}</td>
+                                                <td className="px-6 py-6 text-lg font-black text-black">{res.montant_total} TND</td>
                                                 <td className="px-6 py-6 text-right">
                                                     {res.statut === 'en_attente' ? (
                                                         <div className="flex justify-end gap-2">
@@ -552,7 +552,7 @@ export default function AdminReservations() {
                                                             <span className="text-[8px] text-gray-500">Press Enter</span>
                                                         </div>
                                                     ) : (
-                                                        <span className="text-lg font-black text-black">{res.montant_total ? `$${res.montant_total}` : '-'}</span>
+                                                        <span className="text-lg font-black text-black">{res.montant_total ? `${res.montant_total} TND` : '-'}</span>
                                                     )}
                                                 </td>
                                                 <td className="px-6 py-6 text-right">

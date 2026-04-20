@@ -272,7 +272,7 @@ export default function AddCar() {
                                     </select>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Price per Day ($)</label>
+                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Price per Day (TND)</label>
                                     <input
                                         type="number"
                                         required

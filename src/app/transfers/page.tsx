@@ -220,7 +220,7 @@ export default function Transfers() {
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-xl font-bold">First Class Sedan</h3>
-                                <span className="text-black font-bold">$120+</span>
+                                <span className="text-black font-bold">120+ TND</span>
                             </div>
                             <p className="text-sm text-gray-500 mb-4">Mercedes S-Class or BMW 7 Series</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">
@@ -238,7 +238,7 @@ export default function Transfers() {
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-xl font-bold">Business SUV</h3>
-                                <span className="text-black font-bold">$160+</span>
+                                <span className="text-black font-bold">160+ TND</span>
                             </div>
                             <p className="text-sm text-gray-500 mb-4">Cadillac Escalade or Range Rover</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">
@@ -256,7 +256,7 @@ export default function Transfers() {
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-xl font-bold">Mercedes V-Class</h3>
-                                <span className="text-black font-bold">$200+</span>
+                                <span className="text-black font-bold">200+ TND</span>
                             </div>
                             <p className="text-sm text-gray-500 mb-4">Premium Executive Van</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">

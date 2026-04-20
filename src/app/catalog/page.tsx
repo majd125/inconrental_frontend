@@ -27,10 +27,10 @@ interface Vehicle {
 // ── helpers ──────────────────────────────────────────────────────────────────
 const PRICE_RANGES = [
     { label: 'Any Price', min: 0, max: Infinity },
-    { label: 'Under $100 / day', min: 0, max: 100 },
-    { label: '$100 – $300 / day', min: 100, max: 300 },
-    { label: '$300 – $600 / day', min: 300, max: 600 },
-    { label: '$600+ / day', min: 600, max: Infinity },
+    { label: 'Under 100 TND / day', min: 0, max: 100 },
+    { label: '100 – 300 TND / day', min: 100, max: 300 },
+    { label: '300 – 600 TND / day', min: 300, max: 600 },
+    { label: '600+ TND / day', min: 600, max: Infinity },
 ];
 
 const LOCATIONS = [
@@ -360,7 +360,7 @@ export default function Catalog() {
     const vehiclePricePerDay = selectedVehicle ? (selectedVehicle.prix_final || parseFloat(selectedVehicle.prix_base)) : 0;
     const vehicleTotal = vehiclePricePerDay * days;
     const babySeatsTotal = localSearchData.nb_sieges_bebe * days * 10;
-    const computedTotal = (vehicleTotal + babySeatsTotal).toFixed(2);
+    const computedTotal = Math.round(vehicleTotal + babySeatsTotal);
 
     return (
         <div className="flex-1 px-6 md:px-20 py-8 max-w-7xl mx-auto w-full">
@@ -477,11 +477,11 @@ export default function Catalog() {
                                     <div className="text-right">
                                         {vehicle.active_promotion_percent > 0 ? (
                                             <>
-                                                <p className="text-gray-400 text-xs font-bold line-through">${vehicle.prix_base}</p>
-                                                <p className="text-black text-2xl font-black tracking-tighter">${vehicle.prix_final}</p>
+                                                <p className="text-gray-400 text-xs font-bold line-through">{Math.round(parseFloat(vehicle.prix_base))} TND</p>
+                                                <p className="text-black text-2xl font-black tracking-tighter">{Math.round(vehicle.prix_final || 0)} TND</p>
                                             </>
                                         ) : (
-                                            <p className="text-black text-2xl font-black tracking-tighter">${vehicle.prix_base}</p>
+                                            <p className="text-black text-2xl font-black tracking-tighter">{Math.round(parseFloat(vehicle.prix_base))} TND</p>
                                         )}
                                         <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">/ Day</p>
                                     </div>
@@ -549,7 +549,7 @@ export default function Catalog() {
                                         <div>
                                             <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Daily Rate</p>
                                             <div className="flex items-baseline gap-1.5">
-                                                <span className="text-2xl font-black text-black tracking-tighter">${selectedVehicle.prix_final || selectedVehicle.prix_base}</span>
+                                                <span className="text-2xl font-black text-black tracking-tighter">{Math.round(selectedVehicle.prix_final || parseFloat(selectedVehicle.prix_base))} TND</span>
                                                 <span className="text-gray-400 font-medium text-xs">/ day</span>
                                             </div>
                                         </div>
@@ -673,7 +673,7 @@ export default function Catalog() {
                                     </div>
                                     <div className="flex justify-between items-center py-4 border-b border-gray-100">
                                         <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Total Price</span>
-                                        <span className="text-2xl font-black text-black">${computedTotal}</span>
+                                        <span className="text-2xl font-black text-black">{computedTotal} TND</span>
                                     </div>
                                 </div>
 

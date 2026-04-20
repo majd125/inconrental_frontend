@@ -278,7 +278,7 @@ export default function MyReservations() {
                                             </div>
                                             <div className="space-y-1 sm:text-right">
                                                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Total Price</p>
-                                                <p className="text-2xl font-black text-black">${res.montant_total}</p>
+                                                <p className="text-2xl font-black text-black">{res.montant_total} TND</p>
                                                 {(res.statut === 'en_attente' || (res.statut === 'confirme' && new Date(res.date_debut) > new Date())) && (
                                                     <button 
                                                         onClick={() => handleCancel(res.id)}
@@ -340,7 +340,7 @@ export default function MyReservations() {
                                             </div>
                                             <div className="space-y-1 sm:text-right">
                                                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Total Price</p>
-                                                <p className="text-2xl font-black text-black">${res.montant_total}</p>
+                                                <p className="text-2xl font-black text-black">{res.montant_total} TND</p>
                                                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-2">{res.excursion.duree}</p>
                                             </div>
                                         </div>
@@ -388,7 +388,7 @@ export default function MyReservations() {
                                                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Price Quote</p>
                                                 {res.montant_total ? (
                                                     <>
-                                                        <p className="text-2xl font-black text-black">${res.montant_total}</p>
+                                                        <p className="text-2xl font-black text-black">{res.montant_total} TND</p>
                                                         {res.statut === 'en_attente_confirmation' && (
                                                             <button 
                                                                 onClick={() => confirmTransfer(res.id)}
