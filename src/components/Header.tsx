@@ -74,7 +74,15 @@ export default function Header() {
                     <div className="flex items-center gap-4">
                         {user ? (
                             <div className="flex items-center gap-4">
-                                <span className="text-sm text-gray-600">Bonjour, <span className="text-black font-semibold">{user.name}</span></span>
+                                <Link href="/profile" className="flex items-center gap-2 group">
+                                    <div className="size-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 group-hover:border-black transition-all">
+                                        <span className="material-symbols-outlined text-sm group-hover:text-black">person</span>
+                                    </div>
+                                    <span className="text-sm text-gray-600 group-hover:text-black transition-colors">
+                                        Bonjour, <span className="text-black font-semibold">{user.name}</span>
+                                    </span>
+                                </Link>
+                                <div className="h-4 w-[1px] bg-gray-200"></div>
                                 <button
                                     onClick={logout}
                                     className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-black transition-colors tracking-wide"
