@@ -70,7 +70,7 @@ export default function ChatBot() {
         <div className="bg-blue-600 p-4 flex justify-between items-center text-white">
           <div className="flex items-center gap-2">
             <MessageCircle size={20} />
-            <h3 className="font-semibold text-white m-0 p-0 shadow-none border-0 uppercase text-sm tracking-wider">IconRental Assistant</h3>
+            <h3 className="font-semibold text-white m-0 p-0 shadow-none border-0 uppercase text-sm tracking-wider">Assistant IconRental</h3>
           </div>
           <button onClick={() => setIsOpen(false)} className="text-white hover:opacity-70 transition-opacity">
             <X size={20} />
@@ -80,7 +80,7 @@ export default function ChatBot() {
         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 flex flex-col">
           {messages.length === 0 ? (
             <div className="text-center text-gray-400 mt-auto mb-auto">
-              <p className="text-sm">Hi! How can I help you today?</p>
+              <p className="text-sm">Bonjour ! Comment puis-je vous aider aujourd'hui ?</p>
             </div>
           ) : (
             messages.map((m) => (
@@ -98,7 +98,7 @@ export default function ChatBot() {
             <div className="flex justify-start">
               <div className="bg-white border border-gray-200 rounded-2xl px-4 py-2 rounded-bl-none shadow-sm flex items-center gap-2 text-gray-500">
                 <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                <span className="text-sm">Thinking...</span>
+                <span className="text-sm">Réflexion en cours...</span>
               </div>
             </div>
           )}
@@ -111,7 +111,7 @@ export default function ChatBot() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               disabled={isLoading}
-              placeholder="Ask a question..."
+              placeholder="Posez une question..."
               className="w-full bg-gray-100 text-gray-900 border-transparent rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm transition-all shadow-inner"
               suppressHydrationWarning
             />

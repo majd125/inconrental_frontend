@@ -117,7 +117,7 @@ export default function DocumentsExpiry() {
                 throw new Error(result.message || 'Renewal failed');
             }
 
-            setSuccess('Document renewed successfully! Old document stored in history.');
+            setSuccess('Document renouvelé avec succès ! Ancien document archivé dans l\'historique.');
             setRenewingDoc(null);
             fetchData();
             
@@ -169,14 +169,14 @@ export default function DocumentsExpiry() {
                 <div className="mb-8 flex items-center justify-between border-b border-gray-200 pb-6">
                     <div>
                         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">
-                            Documents <span className="text-black">Expiry Manager</span>
+                            Gestionnaire d'Expiration des <span className="text-black">Documents</span>
                         </h1>
                         <p className="text-gray-500 mt-2 text-sm font-medium tracking-wide">
-                            Track expirations, renew administrative documents, and view payment history.
+                            Suivez les expirations, renouvelez les documents administratifs et consultez l'historique des paiements.
                         </p>
                     </div>
                     <Link href="/admin/vehicles" className="px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">directions_car</span> Manage Fleet
+                        <span className="material-symbols-outlined text-[18px]">directions_car</span> Gérer la Flotte
                     </Link>
                 </div>
 
@@ -198,7 +198,7 @@ export default function DocumentsExpiry() {
                     <div className="mb-8 bg-red-500/10 border border-red-500/20 rounded-2xl p-6 shadow-lg shadow-red-500/5">
                         <h3 className="text-red-400 font-bold flex items-center gap-2 mb-4">
                             <span className="material-symbols-outlined">warning</span>
-                            Urgent Actions Required
+                            Actions Urgentes Requises
                         </h3>
                         <div className="flex gap-4 overflow-x-auto pb-2">
                             {urgentDocs.map(doc => {
@@ -208,14 +208,14 @@ export default function DocumentsExpiry() {
                                         <div className="flex justify-between">
                                             <span className="text-gray-900 font-bold capitalize">{doc.type.replace('_', ' ')}</span>
                                             <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${isExpired ? 'bg-red-500 text-white' : 'bg-orange-500/20 text-orange-400'}`}>
-                                                {isExpired ? 'EXPIRED' : 'Expiring Soon'}
+                                                {isExpired ? 'EXPIRÉ' : 'Expire Bientôt'}
                                             </span>
                                         </div>
                                         <div className="text-gray-500 text-sm">
                                             {doc.vehicule?.marque} {doc.vehicule?.modele} <span className="text-gray-900 font-mono ml-1">{doc.vehicule?.immatriculation}</span>
                                         </div>
                                         <button onClick={() => startRenew(doc)} className="mt-2 w-full bg-red-500/20 hover:bg-red-500 text-red-100 font-bold py-2 rounded-lg transition-colors text-xs uppercase tracking-wider">
-                                            Renew Now
+                                            Renouveler Maintenant
                                         </button>
                                     </div>
                                 );
@@ -229,13 +229,13 @@ export default function DocumentsExpiry() {
                         onClick={() => setActiveTab('active')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
-                        Active / Expiring
+                        Actif / Expirant
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-gray-800 text-gray-900 shadow-lg shadow-sm' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
-                        History (Renewed)
+                        Historique (Renouvelé)
                     </button>
                 </div>
 
@@ -243,18 +243,18 @@ export default function DocumentsExpiry() {
                     <table className="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Vehicle</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Document Type</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Véhicule</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Type de Document</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Dates</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Amount Paid</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Statut</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Montant Payé</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {displayDocs.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 italic">No {activeTab} documents found.</td>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 italic">Aucun document {activeTab === 'active' ? 'actif' : 'historique'} trouvé.</td>
                                 </tr>
                             ) : (
                                 displayDocs.map((doc) => {
@@ -271,9 +271,9 @@ export default function DocumentsExpiry() {
                                                 <p className="text-xs font-mono text-gray-500 mt-1">{doc.numero || 'No ID'}</p>
                                             </td>
                                             <td className="px-6 py-5">
-                                                <p className="text-xs text-gray-500">Start: <span className="text-gray-600">{doc.date_debut ? new Date(doc.date_debut).toLocaleDateString() : 'N/A'}</span></p>
+                                                <p className="text-xs text-gray-500">Début : <span className="text-gray-600">{doc.date_debut ? new Date(doc.date_debut).toLocaleDateString() : 'N/A'}</span></p>
                                                 <p className={`text-xs font-bold ${activeTab === 'active' && isExpired ? 'text-red-400' : 'text-black'}`}>
-                                                    Ends: {doc.date_expiration ? new Date(doc.date_expiration).toLocaleDateString() : 'N/A'}
+                                                    Fin : {doc.date_expiration ? new Date(doc.date_expiration).toLocaleDateString() : 'N/A'}
                                                 </p>
                                             </td>
                                             <td className="px-6 py-5">
@@ -281,24 +281,24 @@ export default function DocumentsExpiry() {
                                                     if (activeTab === 'active') {
                                                         return isExpired ? (
                                                             <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-red-500/20 text-red-500 border border-red-500/30">
-                                                                Expired
+                                                                Expiré
                                                             </span>
                                                         ) : (
                                                             <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">
-                                                                Valid
+                                                                Valide
                                                             </span>
                                                         );
                                                     } else {
                                                         return (
                                                             <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/30">
-                                                                Payed
+                                                                Payé
                                                             </span>
                                                         );
                                                     }
                                                 })()}
                                             </td>
                                             <td className="px-6 py-5 text-gray-600 font-bold">
-                                                {doc.montant ? `$${doc.montant}` : '-'}
+                                                {doc.montant ? `${doc.montant} TND` : '-'}
                                             </td>
                                             <td className="px-6 py-5 text-right">
                                                 {activeTab === 'active' ? (
@@ -306,10 +306,10 @@ export default function DocumentsExpiry() {
                                                         onClick={() => startRenew(doc)} 
                                                         className="px-4 py-2 bg-gray-100 hover:bg-black text-black hover:text-gray-900 rounded-lg transition-all text-xs font-bold tracking-wide border border-gray-200 hover:shadow-lg uppercase"
                                                     >
-                                                        Mark as Payed
+                                                        Marquer comme Payé
                                                     </button>
                                                 ) : (
-                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest bg-white px-3 py-1 rounded-full">Archived</span>
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest bg-white px-3 py-1 rounded-full">Archivé</span>
                                                 )}
                                             </td>
                                         </tr>
@@ -332,14 +332,14 @@ export default function DocumentsExpiry() {
                             <span className="material-symbols-outlined">close</span>
                         </button>
                         
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Renew Document</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Renouveler le Document</h2>
                         <p className="text-gray-500 mb-6 text-sm">
-                            Marking <strong>{renewingDoc.type.replace('_', ' ')}</strong> for <span className="font-mono text-gray-900">{renewingDoc.vehicule?.immatriculation}</span> as payed.
+                            Marquage de <strong>{renewingDoc.type.replace('_', ' ')}</strong> pour <span className="font-mono text-gray-900">{renewingDoc.vehicule?.immatriculation}</span> comme payé.
                         </p>
 
                         <form onSubmit={handleRenewSubmit} className="space-y-4">
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">New ID / Document # (optional)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Nouvel ID / N° de Document (optionnel)</label>
                                 <input 
                                     type="text"
                                     className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -350,7 +350,7 @@ export default function DocumentsExpiry() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">New Start Date</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Nouvelle Date de Début</label>
                                     <input 
                                         type="date"
                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -359,7 +359,7 @@ export default function DocumentsExpiry() {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">New Expiry</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Nouvelle Date d'Expiration</label>
                                     <input 
                                         type="date"
                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -369,7 +369,7 @@ export default function DocumentsExpiry() {
                                 </div>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Amount Paid ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Montant Payé (TND)</label>
                                 <input 
                                     type="number"
                                     className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -388,7 +388,7 @@ export default function DocumentsExpiry() {
                                 ) : (
                                     <>
                                         <span className="material-symbols-outlined text-[20px]">payments</span>
-                                        Confirm Renewal
+                                        Confirmer le Renouvellement
                                     </>
                                 )}
                             </button>

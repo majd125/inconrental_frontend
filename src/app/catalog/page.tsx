@@ -26,11 +26,11 @@ interface Vehicle {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const PRICE_RANGES = [
-    { label: 'Any Price', min: 0, max: Infinity },
-    { label: 'Under 100 TND / day', min: 0, max: 100 },
-    { label: '100 – 300 TND / day', min: 100, max: 300 },
-    { label: '300 – 600 TND / day', min: 300, max: 600 },
-    { label: '600+ TND / day', min: 600, max: Infinity },
+    { label: 'Tous les Prix', min: 0, max: Infinity },
+    { label: 'Moins de 100 TND / jour', min: 0, max: 100 },
+    { label: '100 – 300 TND / jour', min: 100, max: 300 },
+    { label: '300 – 600 TND / jour', min: 300, max: 600 },
+    { label: '600+ TND / jour', min: 600, max: Infinity },
 ];
 
 const LOCATIONS = [
@@ -38,11 +38,11 @@ const LOCATIONS = [
     "Aéroport international de Djerba-Zarzis (DJE)",
     "Aéroport international d'Enfidha-Hammamet (NBE)",
     "Aéroport international de Monastir Habib-Bourguiba (MIR)",
-    "Our local office in Hammamet Nabeul",
-    "Other location"
+    "Notre bureau local à Hammamet Nabeul",
+    "Autre emplacement"
 ];
 
-const TAB_CATEGORIES = ['All', 'Economy', 'Compact', 'Sedan', 'SUV', 'Luxury', 'Sports'];
+const TAB_CATEGORIES = ['Tout', 'Économie', 'Compacte', 'Berline', 'SUV', 'Luxe', 'Sport'];
 
 function unique<T>(arr: T[]): T[] {
     return Array.from(new Set(arr));
@@ -168,16 +168,16 @@ export default function Catalog() {
             return;
         }
 
-        const finalPickup = localSearchData.lieu_depart === "Other location" 
+        const finalPickup = localSearchData.lieu_depart === "Autre emplacement" 
             ? localSearchData.lieu_depart_autre 
             : localSearchData.lieu_depart;
             
-        const finalReturn = localSearchData.lieu_arrivee === "Other location" 
+        const finalReturn = localSearchData.lieu_arrivee === "Autre emplacement" 
             ? localSearchData.lieu_arrivee_autre 
             : localSearchData.lieu_arrivee;
 
         if (!localSearchData.date_debut || !localSearchData.date_fin || !finalPickup) {
-            setReservationError("Please fill in all rental details.");
+            setReservationError("Veuillez remplir tous les détails de la location.");
             return;
         }
 
@@ -212,7 +212,7 @@ export default function Catalog() {
             }
 
             setReservationSuccess(true);
-            showNotification('Reservation submitted successfully!', 'success');
+            showNotification('Réservation soumise avec succès !', 'success');
             setTimeout(() => {
                 router.push('/reservations');
             }, 2000);
@@ -227,10 +227,10 @@ export default function Catalog() {
 
 
     // ── filter state ──────────────────────────────────────────────────────────
-    const [activeTab, setActiveTab] = useState('All');
-    const [categoryFilter, setCategoryFilter] = useState('All Categories');
-    const [priceFilter, setPriceFilter] = useState('Any Price');
-    const [transmissionFilter, setTransmissionFilter] = useState('All Transmissions');
+    const [activeTab, setActiveTab] = useState('Tout');
+    const [categoryFilter, setCategoryFilter] = useState('Toutes les catégories');
+    const [priceFilter, setPriceFilter] = useState('Tous les Prix');
+    const [transmissionFilter, setTransmissionFilter] = useState('Toutes les transmissions');
 
     // ── fetch ──────────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -281,25 +281,25 @@ export default function Catalog() {
     }, [selectedVehicle]);
 
     // ── derived filter options from real data ─────────────────────────────────
-    const categoryOptions = ['All Categories', ...unique(vehicles.map((v) => v.categorie)).sort()];
-    const transmissionOptions = ['All Transmissions', ...unique(vehicles.map((v) => v.transmission)).sort()];
+    const categoryOptions = ['Toutes les catégories', ...unique(vehicles.map((v) => v.categorie)).sort()];
+    const transmissionOptions = ['Toutes les transmissions', ...unique(vehicles.map((v) => v.transmission)).sort()];
     const priceRangeOptions = PRICE_RANGES.map((p) => p.label);
 
     // ── filtering logic ────────────────────────────────────────────────────────
     const selectedPriceRange = PRICE_RANGES.find((p) => p.label === priceFilter) ?? PRICE_RANGES[0];
 
     const filteredVehicles = vehicles.filter((v) => {
-        if (activeTab !== 'All') {
+        if (activeTab !== 'Tout') {
             const tabLower = activeTab.toLowerCase();
             const catLower = v.categorie.toLowerCase();
             
             // Mapping English tabs to French backend categories
             const mapping: Record<string, string> = {
-                'economy': 'economique',
-                'compact': 'compacte',
-                'sedan': 'berline',
-                'luxury': 'luxe',
-                'sports': 'sport'
+                'économie': 'economique',
+                'compacte': 'compacte',
+                'berline': 'berline',
+                'luxe': 'luxe',
+                'sport': 'sport'
             };
 
             const mappedCategory = mapping[tabLower] || tabLower;
@@ -308,24 +308,24 @@ export default function Catalog() {
                 return false;
             }
         }
-        if (categoryFilter !== 'All Categories' && v.categorie !== categoryFilter) return false;
+        if (categoryFilter !== 'Toutes les catégories' && v.categorie !== categoryFilter) return false;
         const price = parseFloat(v.prix_base);
         if (!isNaN(price) && (price < selectedPriceRange.min || price > selectedPriceRange.max)) return false;
-        if (transmissionFilter !== 'All Transmissions' && v.transmission !== transmissionFilter) return false;
+        if (transmissionFilter !== 'Toutes les transmissions' && v.transmission !== transmissionFilter) return false;
         return true;
     });
 
     const hasActiveFilters =
-        activeTab !== 'All' ||
-        categoryFilter !== 'All Categories' ||
-        priceFilter !== 'Any Price' ||
-        transmissionFilter !== 'All Transmissions';
+        activeTab !== 'Tout' ||
+        categoryFilter !== 'Toutes les catégories' ||
+        priceFilter !== 'Tous les Prix' ||
+        transmissionFilter !== 'Toutes les transmissions';
 
     const clearAllFilters = () => {
-        setActiveTab('All');
-        setCategoryFilter('All Categories');
-        setPriceFilter('Any Price');
-        setTransmissionFilter('All Transmissions');
+        setActiveTab('Tout');
+        setCategoryFilter('Toutes les catégories');
+        setPriceFilter('Tous les Prix');
+        setTransmissionFilter('Toutes les transmissions');
     };
 
     interface GroupedVehicle extends Vehicle {
@@ -367,8 +367,8 @@ export default function Catalog() {
             {/* Search Summary (Minimal) */}
             {pickup && (
                 <div className="bg-black/5 border border-gray-200 rounded-xl p-3 mb-6 flex items-center justify-between">
-                    <p className="text-xs font-bold text-gray-500">Results for: <span className="text-black">{pickup}</span></p>
-                    <Link href="/" className="text-[10px] font-black text-black uppercase tracking-widest hover:underline">New search</Link>
+                    <p className="text-xs font-bold text-gray-500">Résultats pour : <span className="text-black">{pickup}</span></p>
+                    <Link href="/" className="text-[10px] font-black text-black uppercase tracking-widest hover:underline">Nouvelle recherche</Link>
                 </div>
             )}
 
@@ -376,10 +376,10 @@ export default function Catalog() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-gray-900 text-4xl md:text-5xl font-black leading-tight tracking-tighter">
-                        Exquisite <span className="text-black">Collection</span>
+                        Collection <span className="text-black">Exquise</span>
                     </h1>
                     <p className="text-gray-500 text-base md:text-lg max-w-2xl font-medium">
-                        A curated selection of premium vehicles combining luxury, comfort, and performance.
+                        Une sélection soignée de véhicules premium alliant luxe, confort et performances.
                     </p>
                 </div>
                 
@@ -389,26 +389,26 @@ export default function Catalog() {
                         className="flex h-12 items-center justify-center gap-2 rounded-xl bg-black text-white px-8 transition-all shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 whitespace-nowrap"
                     >
                         <span className="material-symbols-outlined text-xl">add_circle</span>
-                        <p className="font-extrabold tracking-tight">ADD NEW CAR</p>
+                        <p className="font-extrabold tracking-tight">AJOUTER UNE VOITURE</p>
                     </Link>
                 )}
             </div>
 
             {/* Filter Toolbar */}
             <div className="flex flex-wrap items-center gap-3 mb-4">
-                <FilterDropdown label="Category" options={categoryOptions} value={categoryFilter} onChange={setCategoryFilter} />
-                <FilterDropdown label="Price Range" options={priceRangeOptions} value={priceFilter} onChange={setPriceFilter} />
+                <FilterDropdown label="Catégorie" options={categoryOptions} value={categoryFilter} onChange={setCategoryFilter} />
+                <FilterDropdown label="Gamme de Prix" options={priceRangeOptions} value={priceFilter} onChange={setPriceFilter} />
                 <FilterDropdown label="Transmission" options={transmissionOptions} value={transmissionFilter} onChange={setTransmissionFilter} />
                 <div className="h-6 w-px bg-gray-100 mx-1 hidden md:block" />
                 {hasActiveFilters && (
                     <button onClick={clearAllFilters} className="flex h-10 items-center justify-center gap-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 px-4 transition-all text-red-500">
                         <span className="material-symbols-outlined text-lg">filter_list_off</span>
-                        <p className="text-sm font-semibold">Clear All</p>
+                        <p className="text-sm font-semibold">Tout effacer</p>
                     </button>
                 )}
                 {!loading && (
                     <p className="ml-auto text-gray-500 text-sm font-medium">
-                        {groupedModels.length} model{groupedModels.length !== 1 ? 's' : ''} available
+                        {groupedModels.length} modèle{groupedModels.length !== 1 ? 's' : ''} disponible{groupedModels.length !== 1 ? 's' : ''}
                     </p>
                 )}
             </div>
@@ -445,7 +445,7 @@ export default function Catalog() {
                 </div>
             ) : groupedModels.length === 0 ? (
                 <div className="text-center py-20 bg-slate-50 dark:bg-black/5 rounded-2xl border border-gray-200">
-                    <p className="text-gray-400 dark:text-gray-500 font-medium text-lg">No vehicles match your filters.</p>
+                    <p className="text-gray-400 dark:text-gray-500 font-medium text-lg">Aucun véhicule ne correspond à vos filtres.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -459,7 +459,7 @@ export default function Catalog() {
                                 <div className="w-full h-full bg-center bg-cover transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url(${vehicle.image_url || 'https://via.placeholder.com/800x450?text=No+Image'})` }}></div>
                                 <div className="absolute top-4 right-4">
                                     <div className={`text-[10px] font-black px-3 py-1 rounded shadow-sm ${vehicle.statut === 'disponible' ? 'bg-white text-black' : 'bg-red-500 text-white'}`}>
-                                        {vehicle.statut === 'disponible' ? 'Available' : 'Reserved'}
+                                        {vehicle.statut === 'disponible' ? 'Disponible' : 'Réservé'}
                                     </div>
                                 </div>
                             </div>
@@ -483,7 +483,7 @@ export default function Catalog() {
                                         ) : (
                                             <p className="text-black text-2xl font-black tracking-tighter">{Math.round(parseFloat(vehicle.prix_base))} TND</p>
                                         )}
-                                        <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">/ Day</p>
+                                        <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">/ Jour</p>
                                     </div>
                                 </div>
                             </div>
@@ -518,7 +518,7 @@ export default function Catalog() {
                                         <div className="flex items-center gap-3 mb-2">
                                             <span className="text-[10px] font-black px-3 py-1 bg-white text-black rounded-full uppercase tracking-widest">{selectedVehicle.categorie}</span>
                                             {selectedVehicle.active_promotion_percent > 0 && (
-                                                <span className="text-[10px] font-black px-3 py-1 bg-black text-white rounded-full border border-white/20 uppercase tracking-widest">Special Offer</span>
+                                                <span className="text-[10px] font-black px-3 py-1 bg-black text-white rounded-full border border-white/20 uppercase tracking-widest">Offre Spéciale</span>
                                             )}
                                         </div>
                                         <h2 className="text-4xl font-black tracking-tighter">{selectedVehicle.marque} {selectedVehicle.modele}</h2>
@@ -532,32 +532,32 @@ export default function Catalog() {
                                             <p className="text-gray-900 font-bold text-xs">{selectedVehicle.transmission}</p>
                                         </div>
                                         <div className="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex flex-col items-center text-center">
-                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Fuel Type</p>
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Carburant</p>
                                             <p className="text-gray-900 font-bold text-xs">{selectedVehicle.carburant}</p>
                                         </div>
                                         <div className="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex flex-col items-center text-center">
-                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Year</p>
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Année</p>
                                             <p className="text-gray-900 font-bold text-xs">{selectedVehicle.annee}</p>
                                         </div>
                                     </div>
 
                                     <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                                        {selectedVehicle.description || "Experience the pinnacle of automotive engineering combining luxury, comfort, and performance."}
+                                        {selectedVehicle.description || "Découvrez le summum de l'ingénierie automobile alliant luxe, confort et performances."}
                                     </p>
                                     
                                     <div className="flex items-center justify-between gap-4">
                                         <div>
-                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Daily Rate</p>
+                                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Tarif Journalier</p>
                                             <div className="flex items-baseline gap-1.5">
                                                 <span className="text-2xl font-black text-black tracking-tighter">{Math.round(selectedVehicle.prix_final || parseFloat(selectedVehicle.prix_base))} TND</span>
-                                                <span className="text-gray-400 font-medium text-xs">/ day</span>
+                                                <span className="text-gray-400 font-medium text-xs">/ jour</span>
                                             </div>
                                         </div>
                                         <button 
                                             onClick={handleActionClick} 
                                             className="flex-1 py-3.5 bg-black text-white text-sm font-bold rounded-2xl shadow-xl hover:shadow-black/20 hover:-translate-y-1 active:translate-y-0 transition-all flex items-center justify-center gap-2"
                                         >
-                                            {!user ? "Login to Secure" : "Initialize Booking"}
+                                            {!user ? "Connectez-vous pour Réserver" : "Initialiser la Réservation"}
                                             <span className="material-symbols-outlined text-lg">trending_flat</span>
                                         </button>
                                     </div>
@@ -567,8 +567,8 @@ export default function Catalog() {
                             <div className="p-8 animate-in slide-in-from-right-8 duration-500">
                                 <div className="flex items-center justify-between mb-8">
                                     <div>
-                                        <h2 className="text-2xl font-black tracking-tighter">Rental Configuration</h2>
-                                        <p className="text-gray-500 text-sm">Fine-tune your rental settings</p>
+                                        <h2 className="text-2xl font-black tracking-tighter">Configuration de Location</h2>
+                                        <p className="text-gray-500 text-sm">Ajustez vos paramètres de location</p>
                                     </div>
                                     <button onClick={() => setModalStep('vehicle')} className="size-10 bg-gray-50 hover:bg-gray-100 rounded-full flex items-center justify-center transition-all">
                                         <span className="material-symbols-outlined text-gray-400">arrow_back</span>
@@ -578,7 +578,7 @@ export default function Catalog() {
                                 <div className="space-y-6 mb-10">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-1.5">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Departure</label>
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Départ</label>
                                             <select 
                                                 value={localSearchData.lieu_depart}
                                                 onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart: e.target.value})}
@@ -588,7 +588,7 @@ export default function Catalog() {
                                             </select>
                                         </div>
                                         <div className="space-y-1.5">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Arrival</label>
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Arrivée</label>
                                             <select 
                                                 value={localSearchData.lieu_arrivee}
                                                 onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee: e.target.value})}
@@ -599,15 +599,15 @@ export default function Catalog() {
                                         </div>
                                     </div>
 
-                                    {(localSearchData.lieu_depart === "Other location" || localSearchData.lieu_arrivee === "Other location") && (
+                                    {(localSearchData.lieu_depart === "Autre emplacement" || localSearchData.lieu_arrivee === "Autre emplacement") && (
                                         <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 animate-in slide-in-from-top-2">
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Custom Address Details</p>
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Détails d'Adresse Personnalisée</p>
                                             <div className="space-y-4">
-                                                {localSearchData.lieu_depart === "Other location" && (
-                                                    <input type="text" placeholder="Full Pick-up Address..." className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" value={localSearchData.lieu_depart_autre} onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart_autre: e.target.value})} />
+                                                {localSearchData.lieu_depart === "Autre emplacement" && (
+                                                    <input type="text" placeholder="Adresse complète de prise en charge..." className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" value={localSearchData.lieu_depart_autre} onChange={(e) => setLocalSearchData({...localSearchData, lieu_depart_autre: e.target.value})} />
                                                 )}
-                                                {localSearchData.lieu_arrivee === "Other location" && (
-                                                    <input type="text" placeholder="Full Drop-off Address..." className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" value={localSearchData.lieu_arrivee_autre} onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee_autre: e.target.value})} />
+                                                {localSearchData.lieu_arrivee === "Autre emplacement" && (
+                                                    <input type="text" placeholder="Adresse complète de restitution..." className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" value={localSearchData.lieu_arrivee_autre} onChange={(e) => setLocalSearchData({...localSearchData, lieu_arrivee_autre: e.target.value})} />
                                                 )}
                                             </div>
                                         </div>
@@ -615,19 +615,19 @@ export default function Catalog() {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-1.5">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Starts</label>
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Début</label>
                                             <input type="datetime-local" value={localSearchData.date_debut} onChange={(e) => setLocalSearchData({...localSearchData, date_debut: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-black" />
                                         </div>
                                         <div className="space-y-1.5">
-                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Ends</label>
+                                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Fin</label>
                                             <input type="datetime-local" value={localSearchData.date_fin} onChange={(e) => setLocalSearchData({...localSearchData, date_fin: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-black" />
                                         </div>
                                     </div>
                                     
                                     <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl">
                                         <div>
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Add-ons</p>
-                                            <p className="text-gray-900 font-bold">Child Safety Seats</p>
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Options supplémentaires</p>
+                                            <p className="text-gray-900 font-bold">Sièges Bébé</p>
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <span className="text-sm font-black text-black">{localSearchData.nb_sieges_bebe}</span>
@@ -648,7 +648,7 @@ export default function Catalog() {
                                     disabled={isMissingDetails}
                                     className="w-full py-5 bg-black text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl hover:shadow-black/20 hover:-translate-y-1 disabled:opacity-30 disabled:pointer-events-none transition-all flex items-center justify-center gap-3"
                                 >
-                                    Proceed to Summary
+                                    Passer au Récapitulatif
                                     <span className="material-symbols-outlined text-lg">arrow_forward</span>
                                 </button>
                             </div>
@@ -658,38 +658,38 @@ export default function Catalog() {
                                     <div className="size-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
                                         <span className="material-symbols-outlined text-black size-8">fact_check</span>
                                     </div>
-                                    <h2 className="text-3xl font-black tracking-tighter">Review Order</h2>
-                                    <p className="text-gray-500">Verify your reservation details</p>
+                                    <h2 className="text-3xl font-black tracking-tighter">Récapitulatif</h2>
+                                    <p className="text-gray-500">Vérifiez les détails de votre réservation</p>
                                 </div>
                                 
                                 <div className="space-y-4 mb-10">
                                     <div className="flex justify-between items-center py-4 border-b border-gray-100">
-                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Vehicle</span>
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Véhicule</span>
                                         <span className="font-bold text-gray-900">{selectedVehicle.marque} {selectedVehicle.modele}</span>
                                     </div>
                                     <div className="flex justify-between items-center py-4 border-b border-gray-100">
-                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Duration</span>
-                                        <span className="font-bold text-gray-900">{days} day{days > 1 ? 's' : ''}</span>
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Durée</span>
+                                        <span className="font-bold text-gray-900">{days} jour{days > 1 ? 's' : ''}</span>
                                     </div>
                                     <div className="flex justify-between items-center py-4 border-b border-gray-100">
-                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Total Price</span>
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Prix Total</span>
                                         <span className="text-2xl font-black text-black">{computedTotal} TND</span>
                                     </div>
                                 </div>
 
                                 {reservationSuccess ? (
                                     <div className="bg-black text-white p-6 rounded-2xl text-center font-bold animate-in zoom-in duration-500">
-                                        <p>Reservation Confirmed. Thank you!</p>
+                                        <p>Réservation Confirmée. Merci !</p>
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
-                                        <button onClick={() => setModalStep('form')} className="py-4 bg-gray-50 hover:bg-gray-100 text-gray-500 font-bold rounded-2xl transition-all">Back</button>
+                                        <button onClick={() => setModalStep('form')} className="py-4 bg-gray-50 hover:bg-gray-100 text-gray-500 font-bold rounded-2xl transition-all">Retour</button>
                                         <button 
                                             onClick={handleReservation}
                                             disabled={reservationLoading}
                                             className="py-4 bg-black text-white font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-xl hover:shadow-black/20 hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
                                         >
-                                            {reservationLoading ? "Processing..." : "Confirm & Pay"}
+                                            {reservationLoading ? "Traitement..." : "Confirmer et Payer"}
                                         </button>
                                     </div>
                                 )}

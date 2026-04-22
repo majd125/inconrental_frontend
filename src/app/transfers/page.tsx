@@ -27,7 +27,7 @@ export default function Transfers() {
         e.preventDefault();
         
         if (!user) {
-            showNotification('You must be logged in to request a transfer.', 'error');
+            showNotification('Vous devez être connecté pour demander un transfert.', 'error');
             router.push('/login');
             return;
         }
@@ -49,7 +49,7 @@ export default function Transfers() {
                 throw new Error(data.message || 'Failed to send request');
             }
 
-            showNotification('Your transfer request has been sent! An admin will review it and provide a quote soon.', 'success');
+            showNotification('Votre demande de transfert a été envoyée ! Un administrateur l\'examinera et vous fournira un devis prochainement.', 'success');
             router.push('/reservations');
         } catch (err: any) {
             showNotification(err.message, 'error');
@@ -62,9 +62,9 @@ export default function Transfers() {
             <section className="relative h-[60vh] min-h-[500px] w-full flex flex-col justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLgiRI61M0kg4AkMIDh9ZfQujbepPhlqSt00pwUzvGJgbK6sOWIkCTh5WpyPhEosZcmjfIO1Dv1eL6xlm6sCtSrYJ4-3S-ZzA4LeMrL_4bEae0zrNJcxJtFvaI1KFP2PFfSy8dfHIzZPTH2fIgUzTMniYymICrpGkPMfnmCkbH9DTKM6USiM0tf_RQuV4-YBFtti6nWqtH2haIlhCNx5Xar9DUZKAR-1rOM4L1sj2uppN4cxCltFaJJjn2xOh46lNYZBMJSZHaYDkT')" }}></div>
                 <div className="relative z-10 px-6 md:px-20 max-w-4xl">
-                    <span className="inline-block py-1 px-3 rounded-full bg-gray-100 text-black text-xs font-bold uppercase tracking-widest mb-4">World-Class Excellence</span>
-                    <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-6">Exclusivity in Every Mile</h1>
-                    <p className="text-lg md:text-xl text-gray-600 max-w-2xl font-light">Experience unparalleled comfort and professional service tailored to your schedule. Premium private transfers for those who value time and luxury.</p>
+                    <span className="inline-block py-1 px-3 rounded-full bg-gray-100 text-black text-xs font-bold uppercase tracking-widest mb-4">Excellence de Classe Mondiale</span>
+                    <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-6">L'Exclusivité à Chaque Kilomètre</h1>
+                    <p className="text-lg md:text-xl text-gray-600 max-w-2xl font-light">Faites l'expérience d'un confort inégalé et d'un service professionnel adapté à votre emploi du temps. Des transferts privés premium pour ceux qui accordent de l'importance au temps et au luxe.</p>
                 </div>
             </section>
 
@@ -73,17 +73,17 @@ export default function Transfers() {
                 <div className="bg-background-light rounded-xl shadow-2xl border border-gray-200 p-8 dark:bg-white">
                     <div className="flex items-center gap-3 mb-8">
                         <span className="material-symbols-outlined text-black text-3xl">calendar_month</span>
-                        <h2 className="text-2xl font-bold">Reserve Your Transfer</h2>
+                        <h2 className="text-2xl font-bold">Réservez Votre Transfert</h2>
                     </div>
                     <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
                         {/* Top inputs: Pickup, Dest, Date */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Pickup */}
                             <div className="flex flex-col gap-3">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Pick-up Location</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Lieu de Prise en Charge</label>
                                 <div className="relative group">
                                     <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors text-2xl">location_on</span>
-                                    <input required value={transferState.pickup} onChange={e => setTransferState({...transferState, pickup: e.target.value})} className="w-full pl-12 pr-4 h-[52px] rounded-xl bg-white border border-gray-300 focus:ring-1 focus:ring-black focus:border-black transition-all outline-none text-gray-900 font-bold placeholder:text-gray-500 placeholder:font-medium shadow-sm" placeholder="Airport, Hotel, or Address" type="text" />
+                                    <input required value={transferState.pickup} onChange={e => setTransferState({...transferState, pickup: e.target.value})} className="w-full pl-12 pr-4 h-[52px] rounded-xl bg-white border border-gray-300 focus:ring-1 focus:ring-black focus:border-black transition-all outline-none text-gray-900 font-bold placeholder:text-gray-500 placeholder:font-medium shadow-sm" placeholder="Aéroport, Hôtel ou Adresse" type="text" />
                                 </div>
                             </div>
                             {/* Destination */}
@@ -91,12 +91,12 @@ export default function Transfers() {
                                 <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Destination</label>
                                 <div className="relative group">
                                     <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors text-2xl">navigation</span>
-                                    <input required value={transferState.destination} onChange={e => setTransferState({...transferState, destination: e.target.value})} className="w-full pl-12 pr-4 h-[52px] rounded-xl bg-white border border-gray-300 focus:ring-1 focus:ring-black focus:border-black transition-all outline-none text-gray-900 font-bold placeholder:text-gray-500 placeholder:font-medium shadow-sm" placeholder="Where are you going?" type="text" />
+                                    <input required value={transferState.destination} onChange={e => setTransferState({...transferState, destination: e.target.value})} className="w-full pl-12 pr-4 h-[52px] rounded-xl bg-white border border-gray-300 focus:ring-1 focus:ring-black focus:border-black transition-all outline-none text-gray-900 font-bold placeholder:text-gray-500 placeholder:font-medium shadow-sm" placeholder="Où allez-vous ?" type="text" />
                                 </div>
                             </div>
                             {/* Date & Time */}
                             <div className="flex flex-col gap-3">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Date & Time</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Date et Heure</label>
                                 <div className="relative group">
                                     <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors text-2xl">event</span>
                                     <input required value={transferState.datetime} onChange={e => setTransferState({...transferState, datetime: e.target.value})} className="w-full pl-12 pr-4 h-[52px] rounded-xl bg-white border border-gray-300 focus:ring-1 focus:ring-black focus:border-black transition-all outline-none text-gray-900 font-bold shadow-sm" type="datetime-local" />
@@ -106,7 +106,7 @@ export default function Transfers() {
 
                         {/* Trip Options */}
                         <div className="flex flex-col gap-6 bg-gray-50/50 p-8 rounded-2xl border border-gray-200 shadow-inner">
-                            <h3 className="text-gray-900 text-[11px] font-black uppercase tracking-widest mb-2 px-3 py-1 bg-white inline-block w-fit rounded-full border border-gray-100">Trip Journey</h3>
+                            <h3 className="text-gray-900 text-[11px] font-black uppercase tracking-widest mb-2 px-3 py-1 bg-white inline-block w-fit rounded-full border border-gray-100">Type de Trajet</h3>
                             <div className="flex flex-wrap gap-10 lg:gap-16">
                                 <label className="flex items-center gap-4 cursor-pointer group">
                                     <input type="radio" name="tripType" value="simple" checked={transferState.tripType === 'simple'} onChange={(e) => setTransferState({...transferState, tripType: e.target.value})} className="accent-black h-5 w-5 cursor-pointer" />
@@ -127,18 +127,18 @@ export default function Transfers() {
                                 <div className="mt-4 pl-6 border-l-4 border-black/10 flex flex-col sm:flex-row gap-8 animate-in fade-in slide-in-from-left-4">
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <input type="radio" name="waitDuration" value="half" checked={transferState.waitDuration === 'half'} onChange={(e) => setTransferState({...transferState, waitDuration: e.target.value})} className="accent-black h-4 w-4" />
-                                        <span className="text-gray-500 text-xs font-bold uppercase tracking-wide group-hover:text-black transition-colors">Half Day (Less than 6h)</span>
+                                        <span className="text-gray-500 text-xs font-bold uppercase tracking-wide group-hover:text-black transition-colors">Demi-journée (Moins de 6h)</span>
                                     </label>
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <input type="radio" name="waitDuration" value="full" checked={transferState.waitDuration === 'full'} onChange={(e) => setTransferState({...transferState, waitDuration: e.target.value})} className="accent-black h-4 w-4" />
-                                        <span className="text-gray-500 text-xs font-bold uppercase tracking-wide group-hover:text-black transition-colors">Full Day (More than 8h)</span>
+                                        <span className="text-gray-500 text-xs font-bold uppercase tracking-wide group-hover:text-black transition-colors">Journée complète (Plus de 8h)</span>
                                     </label>
                                 </div>
                             )}
 
                             {transferState.tripType === 'diff_days' && (
                                 <div className="mt-4 pl-6 border-l-4 border-black/10 flex flex-col gap-3 max-w-md animate-in fade-in slide-in-from-left-4">
-                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Return Date & Time</label>
+                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Date et Heure de Retour</label>
                                     <div className="relative group">
                                         <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors text-2xl">event</span>
                                         <input required type="datetime-local" className="w-full pl-12 pr-4 h-[52px] rounded-xl bg-white border border-gray-300 focus:ring-1 focus:ring-black focus:border-black transition-all outline-none text-gray-900 font-bold shadow-sm" value={transferState.returnDatetime} onChange={(e) => setTransferState({...transferState, returnDatetime: e.target.value})} />
@@ -149,13 +149,13 @@ export default function Transfers() {
 
                         {/* Passengers listExactly like Excursions */}
                         <div className="flex flex-col gap-4">
-                             <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Passengers Setup</label>
+                             <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Configuration des Passagers</label>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-gray-50/50 p-8 rounded-2xl border border-gray-200 shadow-inner">
                                 {/* Adultes */}
                                 <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                                     <div>
                                         <span className="text-gray-900 text-base font-black block">Adultes</span>
-                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Full Price</span>
+                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Plein Tarif</span>
                                     </div>
                                     <div className="flex items-center bg-gray-50 rounded-lg p-1">
                                         <button type="button" className="text-gray-900 hover:bg-black hover:text-white rounded-md size-9 flex items-center justify-center transition-all shadow-sm active:scale-90" disabled={transferState.adults <= 1} onClick={() => setTransferState(p => ({...p, adults: p.adults - 1}))}><span className="material-symbols-outlined">remove</span></button>
@@ -167,7 +167,7 @@ export default function Transfers() {
                                 <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                                     <div>
                                         <span className="text-gray-900 text-base font-black block">Enfants</span>
-                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">7 - 12 Years</span>
+                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">7 - 12 Ans</span>
                                     </div>
                                     <div className="flex items-center bg-gray-50 rounded-lg p-1">
                                         <button type="button" className="text-gray-900 hover:bg-black hover:text-white rounded-md size-9 flex items-center justify-center transition-all shadow-sm active:scale-90" disabled={transferState.children <= 0} onClick={() => setTransferState(p => ({...p, children: p.children - 1}))}><span className="material-symbols-outlined">remove</span></button>
@@ -179,7 +179,7 @@ export default function Transfers() {
                                 <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                                     <div>
                                         <span className="text-gray-900 text-base font-black block">Bébés</span>
-                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">0 - 6 Years</span>
+                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">0 - 6 Ans</span>
                                     </div>
                                     <div className="flex items-center bg-gray-50 rounded-lg p-1">
                                         <button type="button" className="text-gray-900 hover:bg-black hover:text-white rounded-md size-9 flex items-center justify-center transition-all shadow-sm active:scale-90" disabled={transferState.babies <= 0} onClick={() => setTransferState(p => ({...p, babies: p.babies - 1}))}><span className="material-symbols-outlined">remove</span></button>
@@ -192,7 +192,7 @@ export default function Transfers() {
 
                         <div className="flex justify-end mt-4">
                             <button type="submit" className="w-full md:w-auto bg-black hover:bg-black/90 text-white font-black text-xs uppercase tracking-[0.3em] py-6 px-16 rounded-2xl flex items-center justify-center gap-4 transition-all shadow-2xl shadow-black/20 group active:scale-95">
-                                REQUEST QUOTE
+                                DEMANDER UN DEVIS
                                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </button>
                         </div>
@@ -204,11 +204,11 @@ export default function Transfers() {
             <section className="px-6 md:px-20 py-20 bg-background-light/50 dark:bg-background-dark/50">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                     <div className="max-w-2xl">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Executive Fleet</h2>
-                        <p className="text-gray-400 dark:text-gray-500">From luxury sedans to spacious executive vans, we provide the perfect vehicle for every occasion, maintained to the highest standards of safety and cleanliness.</p>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Notre Flotte Executive</h2>
+                        <p className="text-gray-400 dark:text-gray-500">Des berlines de luxe aux fourgons exécutifs spacieux, nous fournissons le véhicule parfait pour chaque occasion, entretenu selon les normes de sécurité et de propreté les plus strictes.</p>
                     </div>
                     <a className="text-black font-bold flex items-center gap-1 hover:underline" href="#">
-                        View All Vehicles <span className="material-symbols-outlined">chevron_right</span>
+                        Voir Tous Les Véhicules <span className="material-symbols-outlined">chevron_right</span>
                     </a>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -219,14 +219,14 @@ export default function Transfers() {
                         </div>
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-xl font-bold">First Class Sedan</h3>
+                                <h3 className="text-xl font-bold">Berline Première Classe</h3>
                                 <span className="text-black font-bold">120+ TND</span>
                             </div>
-                            <p className="text-sm text-gray-500 mb-4">Mercedes S-Class or BMW 7 Series</p>
+                            <p className="text-sm text-gray-500 mb-4">Mercedes Classe S ou BMW Série 7</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> 3 Max</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 2 Bags</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">wifi</span> Free WiFi</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> Max 3</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 2 Bagages</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">wifi</span> WiFi Gratuit</span>
                             </div>
                         </div>
                     </div>
@@ -237,14 +237,14 @@ export default function Transfers() {
                         </div>
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-xl font-bold">Business SUV</h3>
+                                <h3 className="text-xl font-bold">SUV Affaires</h3>
                                 <span className="text-black font-bold">160+ TND</span>
                             </div>
-                            <p className="text-sm text-gray-500 mb-4">Cadillac Escalade or Range Rover</p>
+                            <p className="text-sm text-gray-500 mb-4">Cadillac Escalade ou Range Rover</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> 6 Max</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 5 Bags</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">water_drop</span> Refreshments</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> Max 6</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 5 Bagages</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">water_drop</span> Rafraîchissements</span>
                             </div>
                         </div>
                     </div>
@@ -258,11 +258,11 @@ export default function Transfers() {
                                 <h3 className="text-xl font-bold">Mercedes V-Class</h3>
                                 <span className="text-black font-bold">200+ TND</span>
                             </div>
-                            <p className="text-sm text-gray-500 mb-4">Premium Executive Van</p>
+                            <p className="text-sm text-gray-500 mb-4">Fourgon Exécutif Premium</p>
                             <div className="flex gap-4 text-gray-400 dark:text-gray-500 text-xs">
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> 7 Max</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 6 Bags</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">tv</span> Entertainment</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">person</span> Max 7</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">luggage</span> 6 Bagages</span>
+                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">tv</span> Divertissement</span>
                             </div>
                         </div>
                     </div>
@@ -276,29 +276,29 @@ export default function Transfers() {
                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-black">
                             <span className="material-symbols-outlined text-3xl">verified_user</span>
                         </div>
-                        <h4 className="text-lg font-bold">Licensed Chauffeurs</h4>
-                        <p className="text-gray-400 dark:text-gray-500 text-sm">Professional, vetted drivers with extensive local knowledge and background checks.</p>
+                        <h4 className="text-lg font-bold">Chauffeurs Agréés</h4>
+                        <p className="text-gray-400 dark:text-gray-500 text-sm">Chauffeurs professionnels et certifiés avec une connaissance approfondie de la région et une vérification des antécédents.</p>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-black">
                             <span className="material-symbols-outlined text-3xl">update</span>
                         </div>
-                        <h4 className="text-lg font-bold">Real-time Tracking</h4>
-                        <p className="text-gray-400 dark:text-gray-500 text-sm">Monitor your ride in real-time and get automated flight delay adjustments.</p>
+                        <h4 className="text-lg font-bold">Suivi en Temps Réel</h4>
+                        <p className="text-gray-400 dark:text-gray-500 text-sm">Suivez votre trajet en temps réel et bénéficiez d'ajustements automatiques en cas de retard de vol.</p>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-black">
                             <span className="material-symbols-outlined text-3xl">sell</span>
                         </div>
-                        <h4 className="text-lg font-bold">Fixed Pricing</h4>
-                        <p className="text-gray-400 dark:text-gray-500 text-sm">No hidden fees or surge pricing. The price you see is the price you pay.</p>
+                        <h4 className="text-lg font-bold">Prix Fixe</h4>
+                        <p className="text-gray-400 dark:text-gray-500 text-sm">Aucun frais caché ni tarification dynamique. Le prix que vous voyez est le prix que vous payez.</p>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-black">
                             <span className="material-symbols-outlined text-3xl">support_agent</span>
                         </div>
-                        <h4 className="text-lg font-bold">24/7 Support</h4>
-                        <p className="text-gray-400 dark:text-gray-500 text-sm">Dedicated concierge team available around the clock for any assistance.</p>
+                        <h4 className="text-lg font-bold">Assistance 24/7</h4>
+                        <p className="text-gray-400 dark:text-gray-500 text-sm">Équipe de conciergerie dédiée disponible 24h/24 et 7j/7 pour toute assistance.</p>
                     </div>
                 </div>
             </section>

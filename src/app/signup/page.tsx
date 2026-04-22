@@ -39,7 +39,7 @@ export default function Signup() {
             login(data.token, data.user);
             router.push('/');
         } catch (err: any) {
-            setError(err.message || 'Something went wrong during registration');
+            setError(err.message || "Une erreur s'est produite lors de l'inscription");
         } finally {
             setLoading(false);
         }
@@ -53,8 +53,8 @@ export default function Signup() {
                         <span className="material-symbols-outlined text-4xl text-black">rocket_launch</span>
                         <h1 className="text-2xl font-black tracking-[-0.05em] text-black">ICON<span className="text-gray-400">RENTAL</span></h1>
                     </Link>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Create your account</h2>
-                    <p className="mt-2 text-sm text-gray-500 font-medium">Join the elite circle of luxury</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Créez votre compte</h2>
+                    <p className="mt-2 text-sm text-gray-500 font-medium">Rejoignez le cercle d'élite du luxe</p>
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -67,7 +67,7 @@ export default function Signup() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Full Name</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Nom Complet</label>
                                 <input
                                     type="text"
                                     required
@@ -78,7 +78,7 @@ export default function Signup() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Email Address</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Adresse Email</label>
                                 <input
                                     type="email"
                                     required
@@ -89,7 +89,7 @@ export default function Signup() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Phone Number</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Numéro de Téléphone</label>
                                 <input
                                     type="tel"
                                     required
@@ -100,7 +100,7 @@ export default function Signup() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Birth Date</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Date de Naissance</label>
                                 <input
                                     type="date"
                                     required
@@ -113,7 +113,7 @@ export default function Signup() {
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">City</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Ville</label>
                                 <input
                                     type="text"
                                     required
@@ -124,7 +124,7 @@ export default function Signup() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Address</label>
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Adresse</label>
                                 <input
                                     type="text"
                                     required
@@ -136,7 +136,7 @@ export default function Signup() {
                             </div>
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center ml-1">
-                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest">License Number</label>
+                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest">Numéro de Permis</label>
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -144,7 +144,7 @@ export default function Signup() {
                                             checked={!hasLicense}
                                             onChange={(e) => setHasLicense(!e.target.checked)}
                                         />
-                                        <span className="text-[10px] text-gray-500 font-black uppercase tracking-tight">No License</span>
+                                        <span className="text-[10px] text-gray-500 font-black uppercase tracking-tight">Pas de Permis</span>
                                     </label>
                                 </div>
                                 <input
@@ -152,7 +152,7 @@ export default function Signup() {
                                     disabled={!hasLicense}
                                     required={hasLicense}
                                     className={`w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all ${!hasLicense ? 'opacity-50 cursor-not-allowed bg-gray-50' : 'shadow-sm'}`}
-                                    placeholder={hasLicense ? "A1234567" : "No license provided"}
+                                    placeholder={hasLicense ? "A1234567" : "Aucun permis fourni"}
                                     value={hasLicense ? formData.numero_permis : ''}
                                     onChange={(e) => setFormData({ ...formData, numero_permis: e.target.value })}
                                 />
@@ -162,7 +162,7 @@ export default function Signup() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-black uppercase tracking-tighter ml-1">Password</label>
+                            <label className="text-xs font-bold text-black uppercase tracking-tighter ml-1">Mot de passe</label>
                             <input
                                 type="password"
                                 required
@@ -173,7 +173,7 @@ export default function Signup() {
                             />
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-black uppercase tracking-tighter ml-1">Confirm Password</label>
+                            <label className="text-xs font-bold text-black uppercase tracking-tighter ml-1">Confirmer le Mot de Passe</label>
                             <input
                                 type="password"
                                 required
@@ -194,11 +194,11 @@ export default function Signup() {
                             {loading ? (
                                 <>
                                     <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span>
-                                    <span>Creating Account...</span>
+                                    <span>Création du Compte...</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Create Account</span>
+                                    <span>Créer un Compte</span>
                                     <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
                                 </>
                             )}
@@ -206,9 +206,9 @@ export default function Signup() {
                     </div>
 
                     <div className="text-center text-sm">
-                        <span className="text-gray-500">Already have an account? </span>
+                        <span className="text-gray-500">Vous avez déjà un compte ? </span>
                         <Link href="/login" className="text-black font-bold hover:underline">
-                            Log In
+                            Se Connecter
                         </Link>
                     </div>
                 </form>

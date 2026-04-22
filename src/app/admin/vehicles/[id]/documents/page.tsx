@@ -71,7 +71,7 @@ export default function VehicleDocuments() {
             });
             const dData = await dRes.json();
             if (dRes.ok) setDocuments(dData.data);
-            else throw new Error(dData.message || 'Failed to fetch documents');
+            else throw new Error(dData.message || 'Échec de la récupération des documents');
 
         } catch (err: any) {
             setError(err.message);
@@ -121,10 +121,10 @@ export default function VehicleDocuments() {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Action failed');
+                throw new Error(result.message || 'L\'action a échoué');
             }
 
-            setSuccess(editingDoc ? 'Document updated successfully' : 'Document added successfully');
+            setSuccess(editingDoc ? 'Document mis à jour avec succès' : 'Document ajouté avec succès');
             setShowForm(false);
             setEditingDoc(null);
             resetForm();
@@ -137,7 +137,7 @@ export default function VehicleDocuments() {
     };
 
     const handleDelete = async (docId: number) => {
-        if (!confirm('Are you sure you want to delete this document?')) return;
+        if (!confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) return;
         
         setActionLoading(true);
         try {
@@ -154,9 +154,9 @@ export default function VehicleDocuments() {
                 credentials: 'include',
             });
 
-            if (!response.ok) throw new Error('Delete failed');
+            if (!response.ok) throw new Error('La suppression a échoué');
 
-            setSuccess('Document deleted successfully');
+            setSuccess('Document supprimé avec succès');
             fetchData();
         } catch (err: any) {
             setError(err.message);
@@ -211,7 +211,7 @@ export default function VehicleDocuments() {
                 <div className="mb-8 flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">
-                            Manage <span className="text-black">Documents</span>
+                            Gérer les <span className="text-black">Documents</span>
                         </h1>
                         {vehicle && (
                             <p className="text-gray-500 mt-2">
@@ -225,10 +225,10 @@ export default function VehicleDocuments() {
                             className="px-6 py-2.5 bg-black hover:bg-black/90 text-white rounded-lg font-bold transition-all shadow-lg shadow-md flex items-center gap-2"
                         >
                             <span className="material-symbols-outlined">{showForm ? 'close' : 'add'}</span>
-                            {showForm ? 'Cancel' : 'Add Document'}
+                            {showForm ? 'Annuler' : 'Ajouter un Document'}
                         </button>
                         <Link href="/catalog" className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm flex items-center gap-2">
-                            <span className="material-symbols-outlined">arrow_back</span> Back
+                            <span className="material-symbols-outlined">arrow_back</span> Retour
                         </Link>
                     </div>
                 </div>
@@ -251,7 +251,7 @@ export default function VehicleDocuments() {
                     <div className="mb-12 bg-white p-8 rounded-2xl border border-gray-200 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top duration-300">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                             <span className="material-symbols-outlined text-black">{editingDoc ? 'edit' : 'add_circle'}</span>
-                            {editingDoc ? 'Update Document' : 'New Administrative Document'}
+                            {editingDoc ? 'Mettre à jour le Document' : 'Nouveau Document Administratif'}
                         </h2>
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="space-y-1">
@@ -268,7 +268,7 @@ export default function VehicleDocuments() {
                                 </select>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Number / ID</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Numéro / ID</label>
                                 <input 
                                     type="text"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -277,7 +277,7 @@ export default function VehicleDocuments() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Start Date</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Date de Début</label>
                                 <input 
                                     type="date"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -287,7 +287,7 @@ export default function VehicleDocuments() {
                             </div>
                             {formData.type !== 'carte_grise' && (
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Expiry Date</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase">Date d'Expiration</label>
                                     <input 
                                         type="date"
                                         className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -308,7 +308,7 @@ export default function VehicleDocuments() {
                                 </div>
                             )}
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Amount ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Montant (TND)</label>
                                 <input 
                                     type="number"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -317,7 +317,7 @@ export default function VehicleDocuments() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Status</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Statut</label>
                                 <select 
                                     className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.statut}
@@ -328,7 +328,7 @@ export default function VehicleDocuments() {
                                 </select>
                             </div>
                             <div className="lg:col-span-4 space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Remarks</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Remarques</label>
                                 <textarea 
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none min-h-[80px]"
                                     value={formData.Remarques}
@@ -340,7 +340,7 @@ export default function VehicleDocuments() {
                                     disabled={actionLoading}
                                     className="w-full bg-black hover:bg-black/90 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                                 >
-                                    {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : (editingDoc ? 'Update' : 'Save')}
+                                    {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : (editingDoc ? 'Mettre à jour' : 'Enregistrer')}
                                 </button>
                             </div>
                         </form>
@@ -352,13 +352,13 @@ export default function VehicleDocuments() {
                         onClick={() => setActiveTab('active')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
-                        Active Documents
+                        Documents Actifs
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-gray-800 text-gray-900 shadow-lg shadow-sm' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
-                        History (Expired)
+                        Historique (Expirés)
                     </button>
                 </div>
 
@@ -367,17 +367,17 @@ export default function VehicleDocuments() {
                         <thead>
                             <tr className="bg-gray-50">
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Type</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Number</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Validity</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Status</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Amount</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Numéro</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Validité</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Statut</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Montant</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {displayDocs.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 italic">No {activeTab} documents found for this vehicle.</td>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 italic">Aucun document {activeTab === 'active' ? 'actif' : 'historique'} trouvé pour ce véhicule.</td>
                                 </tr>
                             ) : (
                                 displayDocs.map((doc) => (
@@ -388,8 +388,8 @@ export default function VehicleDocuments() {
                                         </td>
                                         <td className="px-6 py-4 text-gray-600 font-mono text-sm">{doc.numero}</td>
                                         <td className="px-6 py-4">
-                                            <p className="text-xs text-gray-600">From: {doc.date_debut ? new Date(doc.date_debut).toLocaleDateString() : 'N/A'}</p>
-                                            <p className="text-xs font-bold text-black">Until: {doc.date_expiration ? new Date(doc.date_expiration).toLocaleDateString() : 'N/A'}</p>
+                                            <p className="text-xs text-gray-600">Du : {doc.date_debut ? new Date(doc.date_debut).toLocaleDateString() : 'N/A'}</p>
+                                            <p className="text-xs font-bold text-black">Au : {doc.date_expiration ? new Date(doc.date_expiration).toLocaleDateString() : 'N/A'}</p>
                                         </td>
                                         <td className="px-6 py-4">
                                             {(() => {
@@ -397,24 +397,24 @@ export default function VehicleDocuments() {
                                                     const isExpired = doc.date_expiration ? new Date(doc.date_expiration) < new Date() : false;
                                                     return isExpired ? (
                                                         <span className="text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-red-500/20 text-red-400">
-                                                            Expired
+                                                            Expiré
                                                         </span>
                                                     ) : (
                                                         <span className="text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-green-500/20 text-green-400">
-                                                            Valid
+                                                            Valide
                                                         </span>
                                                     );
                                                 } else {
                                                     return (
                                                         <span className="text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                                                            Payed
+                                                            Payé
                                                         </span>
                                                     );
                                                 }
                                             })()}
                                         </td>
                                         <td className="px-6 py-4 text-gray-900 font-bold">
-                                            {doc.montant ? `$${doc.montant}` : '-'}
+                                            {doc.montant ? `${doc.montant} TND` : '-'}
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

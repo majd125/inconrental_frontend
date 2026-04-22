@@ -111,18 +111,18 @@ export default function AddExcursion() {
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">Add New <span className="text-black">Excursion</span></h1>
-                        <p className="text-gray-500 mt-2">Create a new extraordinary adventure</p>
+                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">Ajouter une Nouvelle <span className="text-black">Excursion</span></h1>
+                        <p className="text-gray-500 mt-2">Créez une nouvelle aventure extraordinaire</p>
                     </div>
                     <Link href="/excursions" className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm">
-                        Back to Excursions
+                        Retour aux Excursions
                     </Link>
                 </div>
 
                 {success && (
                     <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 text-green-400 rounded-xl flex items-center gap-3 animate-pulse">
                         <span className="material-symbols-outlined">check_circle</span>
-                        <p className="font-bold">Excursion added successfully! Redirecting...</p>
+                        <p className="font-bold">Excursion ajoutée avec succès ! Redirection...</p>
                     </div>
                 )}
 
@@ -139,11 +139,11 @@ export default function AddExcursion() {
                         <div className="space-y-6">
                             <h2 className="text-xl font-bold text-black flex items-center gap-2">
                                 <span className="material-symbols-outlined">map</span>
-                                Details
+                                Détails
                             </h2>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Excursion Name</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Nom de l'Excursion</label>
                                 <input
                                     type="text"
                                     required
@@ -159,7 +159,7 @@ export default function AddExcursion() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Duration</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Durée</label>
                                     <input
                                         type="text"
                                         required
@@ -173,7 +173,7 @@ export default function AddExcursion() {
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Price per Person (TND)</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Prix par Personne (TND)</label>
                                     <input
                                         type="number"
                                         required
@@ -190,7 +190,7 @@ export default function AddExcursion() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Min People</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Personnes Min</label>
                                     <input
                                         type="number"
                                         required
@@ -203,7 +203,7 @@ export default function AddExcursion() {
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Max People</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Personnes Max</label>
                                     <input
                                         type="number"
                                         required
@@ -218,7 +218,7 @@ export default function AddExcursion() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Visited Places (Comma separated)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Lieux Visités (Séparés par des virgules)</label>
                                 <textarea
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all min-h-[100px] resize-none"
                                     placeholder="Monkey Forest, Tegalalang Rice Terrace, Tirta Empul"
@@ -235,11 +235,11 @@ export default function AddExcursion() {
                         <div className="space-y-6">
                             <h2 className="text-xl font-bold text-black flex items-center gap-2">
                                 <span className="material-symbols-outlined">image</span>
-                                Presentation
+                                Présentation
                             </h2>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Excursion Image</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Image de l'Excursion</label>
                                 <div className="relative group border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:border-gray-2000 transition-all cursor-pointer bg-gray-50">
                                     <input
                                         type="file"
@@ -251,14 +251,14 @@ export default function AddExcursion() {
                                         <div className="relative aspect-video rounded-xl overflow-hidden">
                                             <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <span className="text-gray-900 font-bold">Change Image</span>
+                                                <span className="text-white font-bold">Changer l'Image</span>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="py-8">
                                             <span className="material-symbols-outlined text-4xl text-gray-500 mb-2">add_photo_alternate</span>
-                                            <p className="text-sm text-gray-500">Drag and drop or click to upload image</p>
-                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Max size 2MB</p>
+                                            <p className="text-sm text-gray-500">Glissez-déposez ou cliquez pour télécharger l'image</p>
+                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Taille max 2Mo</p>
                                         </div>
                                     )}
                                 </div>
@@ -271,7 +271,7 @@ export default function AddExcursion() {
                                 <label className="text-xs font-bold text-gray-500 uppercase ml-1">Description</label>
                                 <textarea
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all min-h-[150px] resize-none"
-                                    placeholder="Describe the excursion itinerary and experience..."
+                                    placeholder="Décrivez l'itinéraire et l'expérience de l'excursion..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 ></textarea>
@@ -288,7 +288,7 @@ export default function AddExcursion() {
                                     checked={formData.actif}
                                     onChange={(e) => setFormData({ ...formData, actif: e.target.checked })}
                                 />
-                                <label htmlFor="actif" className="text-sm font-bold text-gray-900 cursor-pointer">Active and Visible to Users</label>
+                                <label htmlFor="actif" className="text-sm font-bold text-gray-900 cursor-pointer">Active et Visible pour les Utilisateurs</label>
                             </div>
                         </div>
                     </div>
@@ -302,12 +302,12 @@ export default function AddExcursion() {
                             {loading ? (
                                 <>
                                     <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span>
-                                    <span>Creating Excursion...</span>
+                                    <span>Création de l'Excursion...</span>
                                 </>
                             ) : (
                                 <>
                                     <span className="material-symbols-outlined">publish</span>
-                                    <span>Create Excursion</span>
+                                    <span>Créer l'Excursion</span>
                                 </>
                             )}
                         </button>

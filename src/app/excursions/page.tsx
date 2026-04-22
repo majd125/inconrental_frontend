@@ -61,7 +61,7 @@ export default function Excursions() {
         if (!selectedExcursion) return;
         
         if (!user) {
-            setError('Please login to make a reservation');
+            setError('Veuillez vous connecter pour réserver');
             return;
         }
 
@@ -94,7 +94,7 @@ export default function Excursions() {
                 throw new Error(result.message || 'Failed to submit reservation');
             }
 
-            setSuccessMessage('Reservation submitted successfully!');
+            setSuccessMessage('Réservation soumise avec succès !');
             setTimeout(() => {
                 setSelectedExcursion(null);
                 setSuccessMessage(null);
@@ -113,9 +113,9 @@ export default function Excursions() {
                 <div className="relative overflow-hidden rounded-xl h-[400px] flex flex-col justify-end bg-white shadow-2xl shadow-primary/10 border border-gray-200">
                     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDrJ_cacbtidQe2mxuUAewN3mijI69fGeq7-k7G4ur9VcOzrS1DBL3nUNJZtMUWtKdDWjrNt0m0-h1GT44dpPjtts5K70KR6A9A4LFiQ9RoOrq--G8D-YSvGC0okUCbN7K_XwB-wmz230KxD59LBsPOhJVVE8ereRSQ0LoOkRmldcWnpP25Sv1LRxGRQ7uzb0kx5bLB1KD0FEMDzZ3JI9wpG19C--6ncaFBFIKfZUFAdgkryhigZK1uL6wqv_KAzr38r4DgD5A9Ki2l")' }}></div>
                     <div className="relative p-8 lg:p-12 z-10 max-w-3xl">
-                        <span className="inline-block py-1 px-3 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4">Beyond the Horizon</span>
-                        <h1 className="text-white text-5xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">Discover Your <span className="text-white italic">Next Adventure</span></h1>
-                        <p className="text-white/80 text-lg lg:text-xl font-light max-w-xl">Curated travel experiences guided by experts that unlock the world's most breathtaking secrets.</p>
+                        <span className="inline-block py-1 px-3 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4">Au-delà de l'Horizon</span>
+                        <h1 className="text-white text-5xl lg:text-7xl font-black leading-tight tracking-tighter mb-4">Découvrez Votre <span className="text-white italic">Prochaine Aventure</span></h1>
+                        <p className="text-white/80 text-lg lg:text-xl font-light max-w-xl">Des expériences de voyage soigneusement sélectionnées, guidées par des experts, qui dévoilent les secrets les plus époustouflants du monde.</p>
                     </div>
                 </div>
             </section>
@@ -128,7 +128,7 @@ export default function Excursions() {
                         className="flex h-12 items-center justify-center gap-2 rounded-xl bg-black text-white px-8 transition-all shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 whitespace-nowrap"
                     >
                         <span className="material-symbols-outlined text-xl">add_circle</span>
-                        <p className="font-extrabold tracking-tight">ADD NEW EXCURSION</p>
+                        <p className="font-extrabold tracking-tight">AJOUTER UNE EXCURSION</p>
                     </Link>
                 </div>
             )}
@@ -138,8 +138,8 @@ export default function Excursions() {
             <section className="px-6 lg:px-20 py-24">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div className="space-y-2">
-                        <h3 className="text-black font-bold text-xs uppercase tracking-[0.3em]">Curated Explorations</h3>
-                        <h2 className="text-4xl lg:text-5xl font-black tracking-tighter">Trending <span className="text-black italic">Destinations</span></h2>
+                        <h3 className="text-black font-bold text-xs uppercase tracking-[0.3em]">Explorations Soigneusement Sélectionnées</h3>
+                        <h2 className="text-4xl lg:text-5xl font-black tracking-tighter">Destinations <span className="text-black italic">Tendances</span></h2>
                     </div>
                 </div>
 
@@ -197,7 +197,7 @@ export default function Excursions() {
                                     
                                     <div className="flex items-center justify-between border-t border-white/20 pt-4">
                                         <div className="flex flex-col">
-                                            <span className="text-white/50 text-[10px] font-black uppercase tracking-widest">Starting at</span>
+                                            <span className="text-white/50 text-[10px] font-black uppercase tracking-widest">À partir de</span>
                                             {excursion.active_promotion_percent > 0 ? (
                                                 <div className="flex items-baseline gap-2">
                                                     <span className="text-white font-black text-2xl">{Math.round(excursion.prix_final)} TND</span>
@@ -219,8 +219,8 @@ export default function Excursions() {
                         {excursions.length === 0 && (
                             <div className="col-span-full text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                                 <span className="material-symbols-outlined text-6xl text-gray-400 mb-4">explore_off</span>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">No excursions available yet</h3>
-                                <p className="text-gray-500">Check back soon for new extraordinary experiences.</p>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">Aucune excursion disponible pour le moment</h3>
+                                <p className="text-gray-500">Revenez bientôt pour de nouvelles expériences extraordinaires.</p>
                             </div>
                         )}
                     </div>
@@ -231,13 +231,13 @@ export default function Excursions() {
             <section className="px-6 lg:px-20 py-24 bg-white border-y border-gray-200 mb-10 overflow-hidden relative">
                 <div className="absolute -right-20 -top-20 size-80 rounded-full bg-gray-100 blur-3xl"></div>
                 <div className="max-w-4xl mx-auto text-center relative z-10">
-                    <h2 className="text-4xl font-black tracking-tighter text-black mb-6 underline decoration-black/5 underline-offset-[12px]">Join the Inner Circle</h2>
-                    <p className="text-gray-500 mb-10 text-lg max-w-2xl mx-auto font-medium">Subscribe to receive exclusive access to hidden gems, early bird pricing, and bespoke travel inspiration delivered weekly.</p>
+                    <h2 className="text-4xl font-black tracking-tighter text-black mb-6 underline decoration-black/5 underline-offset-[12px]">Rejoignez le Cercle Privé</h2>
+                    <p className="text-gray-500 mb-10 text-lg max-w-2xl mx-auto font-medium">Abonnez-vous pour recevoir un accès exclusif à des trésors cachés, des tarifs préférentiels et des inspirations de voyage sur mesure livrées chaque semaine.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <input className="h-14 px-8 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 min-w-[350px] outline-none focus:ring-1 focus:ring-black focus:border-black transition-all font-bold placeholder:text-gray-400" placeholder="your@email.com" type="email" />
-                        <button className="h-14 px-10 bg-black text-white font-black rounded-xl hover:bg-black/90 transition-all shadow-xl shadow-black/10 active:scale-95">SUBSCRIBE NOW</button>
+                        <input className="h-14 px-8 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 min-w-[350px] outline-none focus:ring-1 focus:ring-black focus:border-black transition-all font-bold placeholder:text-gray-400" placeholder="votre@email.com" type="email" />
+                        <button className="h-14 px-10 bg-black text-white font-black rounded-xl hover:bg-black/90 transition-all shadow-xl shadow-black/10 active:scale-95">S'ABONNER MAINTENANT</button>
                     </div>
-                    <p className="mt-6 text-[10px] text-gray-400 uppercase font-black tracking-[0.2em]">We respect your privacy. Unsubscribe anytime.</p>
+                    <p className="mt-6 text-[10px] text-gray-400 uppercase font-black tracking-[0.2em]">Nous respectons votre vie privée. Désabonnez-vous à tout moment.</p>
                 </div>
             </section>
 
@@ -257,7 +257,7 @@ export default function Excursions() {
                             <div className="flex items-center justify-between mb-8">
                                 <div>
                                     <h2 className="text-2xl font-black text-gray-900 pr-4">{selectedExcursion.nom}</h2>
-                                    <p className="text-black text-sm font-bold tracking-widest uppercase mt-1">Reserve Your Spot</p>
+                                    <p className="text-black text-sm font-bold tracking-widest uppercase mt-1">Réservez Votre Place</p>
                                 </div>
                                 <button 
                                     onClick={() => setSelectedExcursion(null)}
@@ -290,7 +290,7 @@ export default function Excursions() {
                                                     <span className="material-symbols-outlined text-xl">map</span>
                                                 </div>
                                                 <div>
-                                                    <span className="text-gray-900 font-black block text-[10px] uppercase tracking-[0.2em] mb-1">Places Visited</span>
+                                                    <span className="text-gray-900 font-black block text-[10px] uppercase tracking-[0.2em] mb-1">Lieux Visités</span>
                                                     <span className="text-gray-500 text-sm leading-snug block">{selectedExcursion.lieux_visites}</span>
                                                 </div>
                                             </div>
@@ -318,7 +318,7 @@ export default function Excursions() {
                                          {/* Date */}
                                          <div className="flex flex-col gap-2">
                                              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                                                 <span className="material-symbols-outlined text-base">calendar_today</span> Starting Date
+                                                 <span className="material-symbols-outlined text-base">calendar_today</span> Date de Début
                                              </label>
                                              <input 
                                                  required
@@ -333,7 +333,7 @@ export default function Excursions() {
                                          {/* Location */}
                                          <div className="flex flex-col gap-2">
                                              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                                                 <span className="material-symbols-outlined text-base">location_on</span> Departure & Arrival
+                                                 <span className="material-symbols-outlined text-base">location_on</span> Départ & Arrivée
                                              </label>
                                              <select 
                                                  className="w-full bg-white border border-gray-200 rounded-lg py-3 px-4 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none appearance-none cursor-pointer"
@@ -341,7 +341,7 @@ export default function Excursions() {
                                                  onChange={(e) => setReservationData({ ...reservationData, location: e.target.value })}
                                                  required
                                              >
-                                                 <option value="" disabled className="bg-white text-gray-500">Select location</option>
+                                                 <option value="" disabled className="bg-white text-gray-500">Sélectionner un lieu</option>
                                                  <option value="Tunis" className="bg-white">Tunis</option>
                                                  <option value="Nabeul/Hammamet" className="bg-white">Nabeul / Hammamet</option>
                                                  <option value="Sousse/Monastir" className="bg-white">Sousse / Monastir</option>
@@ -351,7 +351,7 @@ export default function Excursions() {
                                          {/* Guests */}
                                          <div className="flex flex-col gap-3">
                                              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                                                 <span className="material-symbols-outlined text-base">group</span> Number of Guests
+                                                 <span className="material-symbols-outlined text-base">group</span> Nombre d'Invités
                                              </label>
                                              <div className="flex flex-col gap-3 bg-white p-4 rounded-xl border border-gray-200">
                                                  {/* Adultes */}
@@ -444,7 +444,7 @@ export default function Excursions() {
 
                                          <div className="mt-auto pt-8">
                                              <div className="flex justify-between items-end mb-4 px-1">
-                                                 <span className="text-gray-500 font-medium pb-1">Total Amount:</span>
+                                                 <span className="text-gray-500 font-medium pb-1">Montant Total :</span>
                                                  <div className="flex items-end gap-1">
                                                      <span className="text-4xl font-black text-gray-900 leading-none">
                                                          {Math.round(((selectedExcursion.prix_final || parseFloat(selectedExcursion.prix_par_personne)) * reservationData.adults) + 
@@ -459,7 +459,7 @@ export default function Excursions() {
                                                  className="w-full bg-black hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black h-14 rounded-xl transition-all shadow-lg shadow-md active:scale-95 flex items-center justify-center gap-2"
                                              >
                                                  <span className="material-symbols-outlined">{submitting ? 'sync' : 'lock'}</span>
-                                                 {submitting ? 'PROCESSING...' : 'CONFIRM RESERVATION'}
+                                                 {submitting ? 'TRAITEMENT EN COURS...' : 'CONFIRMER LA RÉSERVATION'}
                                              </button>
                                          </div>
                                      </form>

@@ -86,7 +86,7 @@ export default function VehicleMaintenances() {
             });
             const dData = await dRes.json();
             if (dRes.ok) setMaintenances(dData.data);
-            else throw new Error(dData.message || 'Failed to fetch maintenances');
+            else throw new Error(dData.message || 'Échec de la récupération des entretiens');
 
         } catch (err: any) {
             setError(err.message);
@@ -163,10 +163,10 @@ export default function VehicleMaintenances() {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Action failed');
+                throw new Error(result.message || 'L\'action a échoué');
             }
 
-            setSuccess(renewingMain ? 'Maintenance completed and renewed successfully' : (editingMain ? 'Maintenance updated successfully' : 'Maintenance added successfully'));
+            setSuccess(renewingMain ? 'Entretien terminé et renouvelé avec succès' : (editingMain ? 'Entretien mis à jour avec succès' : 'Entretien ajouté avec succès'));
             setShowForm(false);
             setEditingMain(null);
             setRenewingMain(null);
@@ -182,7 +182,7 @@ export default function VehicleMaintenances() {
     };
 
     const handleDelete = async (mainId: number) => {
-        if (!confirm('Are you sure you want to delete this maintenance record?')) return;
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement d\'entretien ?')) return;
         
         setActionLoading(true);
         try {
@@ -199,9 +199,9 @@ export default function VehicleMaintenances() {
                 credentials: 'include',
             });
 
-            if (!response.ok) throw new Error('Delete failed');
+            if (!response.ok) throw new Error('La suppression a échoué');
 
-            setSuccess('Maintenance deleted successfully');
+            setSuccess('Entretien supprimé avec succès');
             fetchData();
         } catch (err: any) {
             setError(err.message);
@@ -227,9 +227,9 @@ export default function VehicleMaintenances() {
                 credentials: 'include',
             });
 
-            if (!response.ok) throw new Error('Update failed');
+            if (!response.ok) throw new Error('La mise à jour a échoué');
 
-            setSuccess('Car marked as received successfully');
+            setSuccess('Voiture marquée comme reçue avec succès');
             fetchData();
         } catch (err: any) {
             setError(err.message);
@@ -322,7 +322,7 @@ export default function VehicleMaintenances() {
                 <div className="mb-8 flex items-center justify-between border-b border-gray-200 pb-6">
                     <div>
                         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">
-                            Manage <span className="text-black">Maintenance</span>
+                            Gérer l'<span className="text-black">Entretien</span>
                         </h1>
                         {vehicle && (
                             <p className="text-gray-500 mt-2 font-medium tracking-wide">
@@ -336,10 +336,10 @@ export default function VehicleMaintenances() {
                             className="px-6 py-2.5 bg-black hover:bg-black/90 text-white rounded-lg font-bold transition-all shadow-lg shadow-md flex items-center gap-2"
                         >
                             <span className="material-symbols-outlined">{showForm ? 'close' : 'add'}</span>
-                            {showForm ? 'Cancel' : 'Add Maintenance'}
+                            {showForm ? 'Annuler' : 'Ajouter un Entretien'}
                         </button>
                         <Link href="/admin/vehicles" className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm flex items-center gap-2">
-                            <span className="material-symbols-outlined">arrow_back</span> Back
+                            <span className="material-symbols-outlined">arrow_back</span> Retour
                         </Link>
                     </div>
                 </div>
@@ -362,12 +362,12 @@ export default function VehicleMaintenances() {
                     <div className="mb-12 bg-white p-8 rounded-2xl border border-gray-200 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top duration-300">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                             <span className="material-symbols-outlined text-black">{renewingMain ? 'check_circle' : (editingMain ? 'edit' : 'build')}</span>
-                            {renewingMain ? 'Complete Maintenance (Log New Values)' : (editingMain ? 'Update Maintenance' : 'New Maintenance Record')}
+                            {renewingMain ? 'Terminer l\'Entretien (Enregistrer les nouvelles valeurs)' : (editingMain ? 'Mettre à jour l\'Entretien' : 'Nouvel Enregistrement d\'Entretien')}
                         </h2>
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Task Name (e.g., Vidange, Freins)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Nom de la Tâche (ex: Vidange, Freins)</label>
                                 <input 
                                     type="text"
                                     required
@@ -377,7 +377,7 @@ export default function VehicleMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Date Started / Completed</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Date de Début / Fin</label>
                                 <input 
                                     type="date"
                                     required
@@ -387,7 +387,7 @@ export default function VehicleMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Current Mileage (KM)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Kilométrage Actuel (KM)</label>
                                 <input 
                                     type="number"
                                     required
@@ -398,7 +398,7 @@ export default function VehicleMaintenances() {
                             </div>
 
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Changed Parts (Optional)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Pièces Changées (Optionnel)</label>
                                 <input 
                                     type="text"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -408,7 +408,7 @@ export default function VehicleMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Garage / Mechanic</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Garage / Mécanicien</label>
                                 <input 
                                     type="text"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -417,20 +417,20 @@ export default function VehicleMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Status</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Statut</label>
                                 <select 
                                     className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
                                     value={formData.statut}
                                     onChange={(e) => setFormData({...formData, statut: e.target.value as any})}
                                 >
-                                    <option value="en_cours">En Cours (At Garage)</option>
-                                    <option value="terminé">Terminé (Received)</option>
+                                    <option value="en_cours">En Cours (Au Garage)</option>
+                                    <option value="terminé">Terminé (Reçue)</option>
                                 </select>
                             </div>
 
                             {/* COSTS */}
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Cost of Parts ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Coût des Pièces (TND)</label>
                                 <input 
                                     type="number"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
@@ -439,7 +439,7 @@ export default function VehicleMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Cost of Labor ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Coût de la Main d'œuvre (TND)</label>
                                 <input 
                                     type="number"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
@@ -448,9 +448,9 @@ export default function VehicleMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-black uppercase">Estimated Total Cost ($)</label>
+                                <label className="text-xs font-bold text-black uppercase">Coût Total Estimé (TND)</label>
                                 <div className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2 text-black font-bold font-mono">
-                                    ${dynamicTotal.toFixed(2)}
+                                    {dynamicTotal.toFixed(2)} TND
                                 </div>
                             </div>
 
@@ -463,14 +463,14 @@ export default function VehicleMaintenances() {
                                         checked={isReguliere}
                                         onChange={(e) => setIsReguliere(e.target.checked)}
                                     />
-                                    <span className="text-gray-900 font-bold tracking-wide">Maintenance Régulière (Require updates later)</span>
+                                    <span className="text-gray-900 font-bold tracking-wide">Entretien Régulier (Nécessite des mises à jour plus tard)</span>
                                 </label>
                             </div>
 
                             {isReguliere && (
                                 <>
                                     <div className="space-y-1 lg:col-span-2">
-                                        <label className="text-xs font-bold text-orange-400 uppercase">Next Due Mileage (KM)</label>
+                                        <label className="text-xs font-bold text-orange-400 uppercase">Kilométrage de la Prochaine Échéance (KM)</label>
                                         <input 
                                             type="number"
                                             className="w-full bg-orange-500/10 border border-orange-500/20 rounded-lg px-4 py-2 text-orange-100 focus:ring-1 focus:ring-orange-500 outline-none font-mono"
@@ -479,7 +479,7 @@ export default function VehicleMaintenances() {
                                         />
                                     </div>
                                     <div className="space-y-1 lg:col-span-2">
-                                        <label className="text-xs font-bold text-orange-400 uppercase">Next Due Date</label>
+                                        <label className="text-xs font-bold text-orange-400 uppercase">Date de la Prochaine Échéance</label>
                                         <input 
                                             type="date"
                                             className="w-full bg-orange-500/10 border border-orange-500/20 rounded-lg px-4 py-2.5 text-orange-100 focus:ring-1 focus:ring-orange-500 outline-none [&::-webkit-calendar-picker-indicator]:invert"
@@ -491,7 +491,7 @@ export default function VehicleMaintenances() {
                             )}
 
                             <div className="lg:col-span-4 space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Full Description / Remarks</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Description Complète / Remarques</label>
                                 <textarea 
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900 focus:ring-1 focus:ring-black outline-none min-h-[80px]"
                                     value={formData.description}
@@ -505,7 +505,7 @@ export default function VehicleMaintenances() {
                                     disabled={actionLoading}
                                     className="w-full bg-black hover:bg-black/90 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-md disabled:opacity-50"
                                 >
-                                    {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : (renewingMain ? 'Complete & Save' : (editingMain ? 'Update Maintenance' : 'Save Maintenance'))}
+                                    {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : (renewingMain ? 'Terminer & Enregistrer' : (editingMain ? 'Mettre à jour l\'Entretien' : 'Enregistrer l\'Entretien'))}
                                 </button>
                             </div>
                         </form>
@@ -517,20 +517,20 @@ export default function VehicleMaintenances() {
                         onClick={() => setActiveTab('active')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
-                        Active In-Garage (En Cours)
+                        En Cours au Garage
                     </button>
                     <button 
                         onClick={() => setActiveTab('upcoming')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'upcoming' ? 'bg-orange-500/20 text-orange-500 border border-orange-500/30' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         <span className="material-symbols-outlined text-[18px]">build_circle</span>
-                        Upcoming Scheduled
+                        Échéances Prochaines
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all ${activeTab === 'history' ? 'bg-gray-800 text-gray-900 shadow-lg shadow-sm' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
-                        Maintenance History (Terminé)
+                        Historique des Entretiens (Terminé)
                     </button>
                 </div>
 
@@ -538,17 +538,17 @@ export default function VehicleMaintenances() {
                     <table className="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Maintenance Task</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Tâche d'Entretien</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Date & Garage</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Mileage</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Total Cost</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Kilométrage</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Coût Total</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {displayDocs.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500 italic">No {activeTab === 'active' ? 'pending' : 'completed'} maintenance records found.</td>
+                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500 italic">Aucun enregistrement d'entretien {activeTab === 'active' ? 'en cours' : (activeTab === 'upcoming' ? 'planifié' : 'terminé')} trouvé.</td>
                                 </tr>
                             ) : (
                                 displayDocs.map((main) => {
@@ -561,10 +561,10 @@ export default function VehicleMaintenances() {
                                         const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                                         
                                         if (diff < 0) {
-                                            daysLeftStr = `${Math.abs(diff)} days OVERDUE`;
+                                            daysLeftStr = `${Math.abs(diff)} jours de RETARD`;
                                             isExpiredDue = true;
                                         } else {
-                                            daysLeftStr = `Due in ${diff} days`;
+                                            daysLeftStr = `Échéance dans ${diff} jours`;
                                         }
                                     }
 
@@ -572,11 +572,11 @@ export default function VehicleMaintenances() {
                                         <tr key={main.id} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-6 py-5">
                                             <p className="text-gray-900 font-bold">{main.nom_maintenance}</p>
-                                            {main.pieces_changees && <p className="text-xs text-gray-500 mt-1 line-clamp-1 truncate max-w-[200px]">Parts: {main.pieces_changees}</p>}
+                                            {main.pieces_changees && <p className="text-xs text-gray-500 mt-1 line-clamp-1 truncate max-w-[200px]">Pièces : {main.pieces_changees}</p>}
                                         </td>
                                         <td className="px-6 py-5">
                                             <p className="text-gray-600 font-medium">{main.date ? new Date(main.date).toLocaleDateString() : 'N/A'}</p>
-                                            <p className="text-xs font-bold text-black mt-1">{main.garage || 'Unknown Garage'}</p>
+                                            <p className="text-xs font-bold text-black mt-1">{main.garage || 'Garage Inconnu'}</p>
                                         </td>
                                         <td className="px-6 py-5">
                                             <div className="flex flex-col gap-1">
@@ -585,7 +585,7 @@ export default function VehicleMaintenances() {
                                                     <>
                                                         <div className="mt-1 flex items-center gap-1 text-[10px] uppercase font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full w-max">
                                                             <span className="material-symbols-outlined text-[12px]">schedule</span>
-                                                            Target: {main.prochaine_echeance_km ? main.prochaine_echeance_km.toLocaleString() + ' KM' : ''}
+                                                            Objectif : {main.prochaine_echeance_km ? main.prochaine_echeance_km.toLocaleString() + ' KM' : ''}
                                                             {(main.prochaine_echeance_km && main.prochaine_echeance_date) && ' | '}
                                                             {main.prochaine_echeance_date ? new Date(main.prochaine_echeance_date).toLocaleDateString() : ''}
                                                         </div>
@@ -599,20 +599,20 @@ export default function VehicleMaintenances() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <span className="text-gray-900 font-bold font-mono text-lg">${main.cout_total || '0.00'}</span>
+                                            <span className="text-gray-900 font-bold font-mono text-lg">{main.cout_total || '0.00'} TND</span>
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 {main.statut === 'en_cours' && (
                                                     <button onClick={() => handleReceived(main.id)} className="p-2 border border-blue-500/30 text-blue-500 hover:bg-blue-500 hover:text-gray-900 transition-colors bg-blue-500/10 rounded-lg flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest whitespace-nowrap shadow-lg shadow-blue-500/5">
                                                         <span className="material-symbols-outlined text-[14px]">local_shipping</span>
-                                                        Car Received
+                                                        Voiture Reçue
                                                     </button>
                                                 )}
                                                 {!main.is_archived && activeTab !== 'history' && (main.prochaine_echeance_date || main.prochaine_echeance_km) && (
                                                     <button onClick={() => startRenew(main)} className="p-2 border border-green-500/30 text-green-500 hover:bg-green-500 hover:text-gray-900 transition-colors bg-green-500/10 rounded-lg flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest whitespace-nowrap shadow-lg shadow-green-500/5">
                                                         <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                                        Mark Completed
+                                                        Marquer comme Terminé
                                                     </button>
                                                 )}
                                                 <button onClick={() => startEdit(main)} className="p-2 hover:text-black transition-colors bg-gray-50 rounded-lg">

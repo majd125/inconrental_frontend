@@ -20,7 +20,7 @@ export default function Login() {
 
     useEffect(() => {
         if (searchParams.get('signup') === 'success') {
-            setSuccess('Account created successfully! Please log in.');
+            setSuccess('Compte créé avec succès ! Veuillez vous connecter.');
         }
     }, [searchParams]);
 
@@ -35,7 +35,7 @@ export default function Login() {
             login(data.token, data.user);
             router.push('/');
         } catch (err: any) {
-            setError(err.message || 'Invalid email or password');
+            setError(err.message || 'Email ou mot de passe invalide');
         } finally {
             setLoading(false);
         }
@@ -49,8 +49,8 @@ export default function Login() {
                         <span className="material-symbols-outlined text-4xl text-black">rocket_launch</span>
                         <h1 className="text-2xl font-black tracking-[-0.05em] text-black">ICON<span className="text-gray-400">RENTAL</span></h1>
                     </Link>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Welcome Back</h2>
-                    <p className="mt-2 text-sm text-gray-500 font-medium">Access your exclusive dashboard</p>
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Bon Retour</h2>
+                    <p className="mt-2 text-sm text-gray-500 font-medium">Accédez à votre tableau de bord exclusif</p>
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -67,7 +67,7 @@ export default function Login() {
 
                     <div className="space-y-5">
                         <div className="space-y-2">
-                            <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Email Address</label>
+                            <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Adresse Email</label>
                             <input
                                 type="email"
                                 required
@@ -78,7 +78,7 @@ export default function Login() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Password</label>
+                            <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Mot de passe</label>
                             <input
                                 type="password"
                                 required
@@ -99,13 +99,13 @@ export default function Login() {
                                 className="h-4 w-4 text-black focus:ring-black border-gray-200 rounded bg-gray-50"
                             />
                             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-500">
-                                Remember me
+                                Se souvenir de moi
                             </label>
                         </div>
 
                         <div className="text-sm">
                             <a href="#" className="font-medium text-black hover:underline">
-                                Forgot password?
+                                Mot de passe oublié ?
                             </a>
                         </div>
                     </div>
@@ -120,11 +120,11 @@ export default function Login() {
                             {loading ? (
                                 <>
                                     <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span>
-                                    <span>Verifying...</span>
+                                    <span>Vérification...</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Sign In</span>
+                                    <span>Se Connecter</span>
                                     <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
                                 </>
                             )}
@@ -133,9 +133,9 @@ export default function Login() {
                     </div>
 
                     <div className="text-center text-sm">
-                        <span className="text-gray-500">Don't have an account? </span>
+                        <span className="text-gray-500">Vous n'avez pas de compte ? </span>
                         <Link href="/signup" className="text-black font-bold hover:underline">
-                            Sign Up
+                            S'inscrire
                         </Link>
                     </div>
                 </form>
