@@ -12,7 +12,7 @@ export default function Footer() {
                         <h1 className="text-lg font-bold tracking-tight text-gray-900">ICON<span className="font-black">RENTAL</span></h1>
                     </div>
                     <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
-                        Setting the standard for luxury mobility worldwide. Experience the pinnacle of automotive excellence and service.
+                        La référence en matière de mobilité de luxe dans le monde entier. Découvrez le summum de l'excellence automobile et du service.
                     </p>
                     <div className="flex gap-4">
                         <Link className="size-10 rounded-full bg-white border border-gray-200 text-gray-500 flex items-center justify-center hover:border-black hover:text-black transition-all shadow-sm" href="#"><span className="material-symbols-outlined text-sm">public</span></Link>
@@ -21,24 +21,24 @@ export default function Footer() {
                     </div>
                 </div>
                 <div>
-                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Explore</h4>
+                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Explorer</h4>
                     <ul className="space-y-4 text-gray-500 text-sm">
-                        <li><Link className="hover:text-black transition-colors" href="/catalog">Our Fleet</Link></li>
-                        <li><Link className="hover:text-black transition-colors" href="/transfers">VIP Transfers</Link></li>
-                        <li><Link className="hover:text-black transition-colors" href="/excursions">Luxury Excursions</Link></li>
+                        <li><Link className="hover:text-black transition-colors" href="/catalog">Notre Flotte</Link></li>
+                        <li><Link className="hover:text-black transition-colors" href="/transfers">Transferts VIP</Link></li>
+                        <li><Link className="hover:text-black transition-colors" href="/excursions">Excursions de Luxe</Link></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Company</h4>
+                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Entreprise</h4>
                     <ul className="space-y-4 text-gray-500 text-sm">
-                        <li><Link className="hover:text-black transition-colors" href="#">About Us</Link></li>
-                        <li><Link className="hover:text-black transition-colors" href="#">Privacy Policy</Link></li>
-                        <li><Link className="hover:text-black transition-colors" href="#">Terms of Service</Link></li>
+                        <li><Link className="hover:text-black transition-colors" href="#">À Propos</Link></li>
+                        <li><Link className="hover:text-black transition-colors" href="#">Politique de Confidentialité</Link></li>
+                        <li><Link className="hover:text-black transition-colors" href="#">Conditions d'Utilisation</Link></li>
                         <li><Link className="hover:text-black transition-colors" href="#">Contact</Link></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Location & Contact</h4>
+                    <h4 className="font-semibold text-gray-900 mb-6 tracking-tight">Emplacement & Contact</h4>
                     <div className="space-y-4">
                         <div className="flex items-start gap-3 text-sm text-gray-500">
                             <span className="material-symbols-outlined text-gray-400 text-lg">location_on</span>
@@ -52,10 +52,10 @@ export default function Footer() {
                 </div>
             </div>
             <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 text-center md:text-left">
-                <p>© 2024 ICON RENTAL. All Rights Reserved.</p>
+                <p>© 2024 ICON RENTAL. Tous droits réservés.</p>
                 <div className="flex gap-6">
-                    <Link className="hover:text-gray-900 transition-colors" href="#">Cookie Settings</Link>
-                    <Link className="hover:text-gray-900 transition-colors" href="#">Legal Notices</Link>
+                    <Link className="hover:text-gray-900 transition-colors" href="#">Paramètres des cookies</Link>
+                    <Link className="hover:text-gray-900 transition-colors" href="#">Mentions légales</Link>
                 </div>
             </div>
         </footer>

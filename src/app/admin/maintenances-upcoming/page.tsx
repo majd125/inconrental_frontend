@@ -244,9 +244,9 @@ export default function MaintenancesUpcoming() {
                 <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-6">
                     <div>
                         <h1 className="text-4xl font-black text-gray-900 tracking-tighter">
-                            Upcoming <span className="text-black">Maintenance</span>
+                            Maintenances <span className="text-black">à Venir</span>
                         </h1>
-                        <p className="text-gray-500 mt-2 text-lg">Global fleet service schedule and ongoing garage interventions.</p>
+                        <p className="text-gray-500 mt-2 text-lg">Calendrier d'entretien de la flotte et interventions de garage en cours.</p>
                     </div>
                 </div>
 
@@ -272,7 +272,7 @@ export default function MaintenancesUpcoming() {
                                 <span className="material-symbols-outlined">build</span>
                             </div>
                             <div>
-                                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Total Tasks</p>
+                                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Total des Tâches</p>
                                 <p className="text-3xl font-black text-gray-900">{allList.length}</p>
                             </div>
                         </div>
@@ -284,27 +284,26 @@ export default function MaintenancesUpcoming() {
                                 <span className="material-symbols-outlined animate-pulse">warning</span>
                             </div>
                             <div>
-                                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Urgent / Current</p>
+                                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Urgent / En Cours</p>
                                 <p className="text-3xl font-black text-red-500">{urgentList.length}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div className="flex gap-4 mb-6 border-b border-gray-200 pb-4">
+                 <div className="flex gap-4 mb-6 border-b border-gray-200 pb-4">
                     <button 
                         onClick={() => setActiveTab('urgent')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'urgent' ? 'bg-red-500/20 text-red-400 shadow-lg border border-red-500/50' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         <span className="material-symbols-outlined text-[18px]">warning</span>
-                        Urgent Actions ({urgentList.length})
+                        Actions Urgentes ({urgentList.length})
                     </button>
                     <button 
                         onClick={() => setActiveTab('all')}
                         className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all flex items-center gap-2 ${activeTab === 'all' ? 'bg-black text-white shadow-lg shadow-md' : 'bg-gray-50 text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
                     >
                         <span className="material-symbols-outlined text-[18px]">list</span>
-                        All Records ({allList.length})
+                        Tous les Dossiers ({allList.length})
                     </button>
                 </div>
 
@@ -312,11 +311,11 @@ export default function MaintenancesUpcoming() {
                     <table className="w-full text-left border-collapse min-w-[900px]">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Vehicle</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Task Info</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Next Due (Target)</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Responsible</th>
-                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Véhicule</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Infos Tâche</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Échéance (Cible)</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Responsable</th>
+                                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Statut</th>
                                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Action</th>
                             </tr>
                         </thead>
@@ -325,7 +324,7 @@ export default function MaintenancesUpcoming() {
                                 <tr>
                                     <td colSpan={5} className="px-6 py-12 text-center">
                                         <span className="material-symbols-outlined text-4xl text-gray-400 mb-2">check_circle</span>
-                                        <p className="text-gray-500 italic">No {activeTab} maintenance records found.</p>
+                                        <p className="text-gray-500 italic">Aucun dossier de maintenance {activeTab === 'urgent' ? 'urgent' : ''} trouvé.</p>
                                     </td>
                                 </tr>
                             ) : (
@@ -340,10 +339,10 @@ export default function MaintenancesUpcoming() {
                                         const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                                         
                                         if (diff < 0) {
-                                            daysLeftStr = `${Math.abs(diff)} days OVERDUE`;
+                                            daysLeftStr = `${Math.abs(diff)} jours de RETARD`;
                                             isExpiredDue = true;
                                         } else {
-                                            daysLeftStr = `Due in ${diff} days`;
+                                            daysLeftStr = `Échéance dans ${diff} jours`;
                                         }
                                     }
 
@@ -362,7 +361,7 @@ export default function MaintenancesUpcoming() {
                                             <td className="px-6 py-5">
                                                 <p className="text-gray-800 font-bold">{main.nom_maintenance}</p>
                                                 <p className="text-gray-500 text-[10px] uppercase font-bold mt-1 tracking-wider">
-                                                    Originated: {main.date ? new Date(main.date).toLocaleDateString() : 'N/A'}
+                                                    Origine : {main.date ? new Date(main.date).toLocaleDateString() : 'N/A'}
                                                 </p>
                                             </td>
                                             <td className="px-6 py-5">
@@ -381,7 +380,7 @@ export default function MaintenancesUpcoming() {
                                                             )}
                                                         </>
                                                     ) : (
-                                                        <span className="text-gray-400 font-mono text-sm">No Recurring Due</span>
+                                                        <span className="text-gray-400 font-mono text-sm">Aucune Échéance Récurrente</span>
                                                     )}
                                                 </div>
                                             </td>
@@ -393,7 +392,7 @@ export default function MaintenancesUpcoming() {
                                                         onChange={(e) => handleAssignDriver(main.id, e.target.value ? parseInt(e.target.value) : null)}
                                                         disabled={actionLoading}
                                                     >
-                                                        <option value="">No driver</option>
+                                                        <option value="">Aucun chauffeur</option>
                                                         {drivers.map(driver => (
                                                             <option key={driver.id} value={driver.id}>{driver.name}</option>
                                                         ))}
@@ -404,11 +403,11 @@ export default function MaintenancesUpcoming() {
                                                 {main.statut === 'en_cours' ? (
                                                     <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 flex items-center gap-1 w-max">
                                                         <span className="material-symbols-outlined text-[12px]">build_circle</span>
-                                                        In Garage
+                                                        Au Garage
                                                     </span>
                                                 ) : (
                                                     <span className="text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-white text-gray-500 border border-gray-200 w-max">
-                                                        Closed
+                                                        Fermé
                                                     </span>
                                                 )}
                                             </td>
@@ -421,7 +420,7 @@ export default function MaintenancesUpcoming() {
                                                             className="inline-flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500 text-blue-500 hover:text-gray-900 px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap disabled:opacity-50"
                                                         >
                                                             <span className="material-symbols-outlined text-[14px]">local_shipping</span>
-                                                            Car Received
+                                                            Voiture Reçue
                                                         </button>
                                                     )}
                                                     {!main.is_archived && activeTab === 'urgent' && (main.prochaine_echeance_date || main.prochaine_echeance_km) && (
@@ -430,14 +429,14 @@ export default function MaintenancesUpcoming() {
                                                             className="inline-flex items-center gap-2 bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-gray-900 px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap"
                                                         >
                                                             <span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                                            Mark Completed
+                                                            Marquer Terminé
                                                         </Link>
                                                     )}
                                                     <Link 
                                                         href={`/admin/vehicles/${main.vehicule_id}/maintenance`}
                                                         className="inline-flex items-center gap-2 bg-gray-100 hover:bg-black text-black hover:text-gray-900 px-4 py-2 rounded-lg font-bold text-xs transition-all tracking-wide whitespace-nowrap"
                                                     >
-                                                        Details
+                                                        Détails
                                                         <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                                                     </Link>
                                                 </div>

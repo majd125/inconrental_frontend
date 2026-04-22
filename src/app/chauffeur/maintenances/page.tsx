@@ -65,7 +65,7 @@ export default function ChauffeurMaintenances() {
                 credentials: 'include'
             });
 
-            if (!response.ok) throw new Error('Failed to fetch maintenance tasks');
+            if (!response.ok) throw new Error('Échec de la récupération des tâches d\'entretien');
             
             const data = await response.json();
             setMaintenances(data.data || []);
@@ -146,10 +146,10 @@ export default function ChauffeurMaintenances() {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Action failed');
+                throw new Error(result.message || 'L\'action a échoué');
             }
 
-            setSuccess('Maintenance updated and saved successfully!');
+            setSuccess('Entretien mis à jour et enregistré avec succès !');
             setRenewingMain(null);
             fetchMaintenances();
             
@@ -176,9 +176,9 @@ export default function ChauffeurMaintenances() {
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 text-center sm:text-left">
                     <h1 className="text-4xl font-black text-gray-900 tracking-tighter mb-2 uppercase">
-                        My <span className="text-black italic">Maintenance</span> Tasks
+                        Mes <span className="text-black italic">Tâches</span> d'Entretien
                     </h1>
-                    <p className="text-gray-500 text-lg">Vehicle interventions assigned to you.</p>
+                    <p className="text-gray-500 text-lg">Interventions sur les véhicules qui vous sont assignées.</p>
                 </div>
 
                 {error && (
@@ -202,10 +202,10 @@ export default function ChauffeurMaintenances() {
                             <div>
                                 <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
                                     <span className="material-symbols-outlined text-black">edit_document</span>
-                                    Log Service Details
+                                    Enregistrer les Détails du Service
                                 </h2>
                                 <p className="text-gray-500 text-sm mt-1">
-                                    Updating <strong className="text-gray-900">{renewingMain.nom_maintenance}</strong> for <strong className="text-gray-900">{renewingMain.vehicule.marque} {renewingMain.vehicule.modele}</strong> ({renewingMain.vehicule.immatriculation})
+                                    Mise à jour de <strong className="text-gray-900">{renewingMain.nom_maintenance}</strong> pour <strong className="text-gray-900">{renewingMain.vehicule.marque} {renewingMain.vehicule.modele}</strong> ({renewingMain.vehicule.immatriculation})
                                 </p>
                             </div>
                             <button onClick={cancelRenew} className="w-10 h-10 bg-gray-50 hover:bg-red-500/20 text-gray-500 hover:text-red-500 rounded-full flex items-center justify-center transition-all">
@@ -215,7 +215,7 @@ export default function ChauffeurMaintenances() {
 
                         <form onSubmit={handleRenewSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Task Name</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Nom de la Tâche</label>
                                 <input 
                                     type="text" required
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -224,7 +224,7 @@ export default function ChauffeurMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Date Completed</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Date de Fin</label>
                                 <input 
                                     type="date" required
                                     className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none [&::-webkit-calendar-picker-indicator]:invert"
@@ -233,7 +233,7 @@ export default function ChauffeurMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Mileage (KM)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Kilométrage (KM)</label>
                                 <input 
                                     type="number" required
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
@@ -243,7 +243,7 @@ export default function ChauffeurMaintenances() {
                             </div>
 
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Changed Parts (Optional)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Pièces Changées (Optionnel)</label>
                                 <input 
                                     type="text"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -253,7 +253,7 @@ export default function ChauffeurMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Garage / Mechanic</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Garage / Mécanicien</label>
                                 <input 
                                     type="text"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none"
@@ -263,7 +263,7 @@ export default function ChauffeurMaintenances() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Parts Cost ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Coût des Pièces (TND)</label>
                                 <input 
                                     type="number" step="0.01"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
@@ -272,7 +272,7 @@ export default function ChauffeurMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Labor Cost ($)</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase">Coût de la Main d'œuvre (TND)</label>
                                 <input 
                                     type="number" step="0.01"
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-1 focus:ring-black outline-none font-mono"
@@ -281,9 +281,9 @@ export default function ChauffeurMaintenances() {
                                 />
                             </div>
                             <div className="space-y-1 lg:col-span-2">
-                                <label className="text-xs font-bold text-black uppercase">Total Cost ($)</label>
+                                <label className="text-xs font-bold text-black uppercase">Coût Total (TND)</label>
                                 <div className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-black font-bold font-mono">
-                                    ${dynamicTotal.toFixed(2)}
+                                    {dynamicTotal.toFixed(2)} TND
                                 </div>
                             </div>
 
@@ -295,14 +295,14 @@ export default function ChauffeurMaintenances() {
                                         checked={isReguliere}
                                         onChange={(e) => setIsReguliere(e.target.checked)}
                                     />
-                                    <span className="text-gray-900 font-bold tracking-wide">Recurring Maintenance (Set next deadline)</span>
+                                    <span className="text-gray-900 font-bold tracking-wide">Entretien Récurrent (Définir la prochaine échéance)</span>
                                 </label>
                             </div>
 
                             {isReguliere && (
                                 <>
                                     <div className="space-y-1 lg:col-span-2">
-                                        <label className="text-xs font-bold text-orange-400 uppercase">Next Due Mileage (KM)</label>
+                                        <label className="text-xs font-bold text-orange-400 uppercase">Kilométrage de la Prochaine Échéance (KM)</label>
                                         <input 
                                             type="number"
                                             className="w-full bg-orange-500/10 border border-orange-500/20 rounded-lg px-4 py-2.5 text-orange-100 focus:ring-1 focus:ring-orange-500 outline-none font-mono"
@@ -311,7 +311,7 @@ export default function ChauffeurMaintenances() {
                                         />
                                     </div>
                                     <div className="space-y-1 lg:col-span-2">
-                                        <label className="text-xs font-bold text-orange-400 uppercase">Next Due Date</label>
+                                        <label className="text-xs font-bold text-orange-400 uppercase">Date de la Prochaine Échéance</label>
                                         <input 
                                             type="date"
                                             className="w-full bg-orange-500/10 border border-orange-500/20 rounded-lg px-4 py-2.5 text-orange-100 focus:ring-1 focus:ring-orange-500 outline-none [&::-webkit-calendar-picker-indicator]:invert"
@@ -328,7 +328,7 @@ export default function ChauffeurMaintenances() {
                                     type="submit"
                                     className="w-full bg-black hover:bg-black/90 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-md disabled:opacity-50 tracking-widest uppercase"
                                 >
-                                    {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : 'Save Maintenance Record'}
+                                    {actionLoading ? <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span> : 'Enregistrer l\'Entretien'}
                                 </button>
                             </div>
                         </form>
@@ -342,10 +342,10 @@ export default function ChauffeurMaintenances() {
                                 build_circle
                             </span>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                No pending maintenance
+                                Aucun entretien en attente
                             </h3>
                             <p className="text-gray-500">
-                                Great! You have no repairs or maintenance tasks assigned at the moment.
+                                Super ! Vous n'avez aucune réparation ou tâche d'entretien assignée pour le moment.
                             </p>
                         </div>
                     ) : (
@@ -357,14 +357,14 @@ export default function ChauffeurMaintenances() {
                                             <div className="flex items-center gap-3 mb-4">
                                                 <span className="bg-yellow-500/20 text-yellow-500 px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border border-yellow-500/30 flex items-center gap-1">
                                                     <span className="material-symbols-outlined text-[12px]">build</span>
-                                                    Assigned Task
+                                                    Tâche Assignée
                                                 </span>
                                                 <span className="text-[10px] text-gray-500 font-mono tracking-tighter uppercase">ID: #{main.id}</span>
                                             </div>
                                             
                                             <div className="grid sm:grid-cols-2 gap-8 mb-6">
                                                 <div>
-                                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Vehicle</p>
+                                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Véhicule</p>
                                                     <div className="flex flex-col">
                                                         <p className="text-gray-900 font-bold text-xl">{main.vehicule.marque} {main.vehicule.modele}</p>
                                                         <p className="text-gray-500 font-mono text-sm mt-1">{main.vehicule.immatriculation}</p>
@@ -375,7 +375,7 @@ export default function ChauffeurMaintenances() {
                                                     <div className="flex items-start gap-3 mb-3">
                                                         <span className="material-symbols-outlined text-black">engineering</span>
                                                         <div>
-                                                            <p className="text-[10px] font-black text-gray-500 uppercase">Task Name</p>
+                                                            <p className="text-[10px] font-black text-gray-500 uppercase">Nom de la Tâche</p>
                                                             <p className="text-gray-900 font-bold">{main.nom_maintenance}</p>
                                                         </div>
                                                     </div>
@@ -383,7 +383,7 @@ export default function ChauffeurMaintenances() {
                                                         <div className="flex items-start gap-3">
                                                             <span className="material-symbols-outlined text-black">apartment</span>
                                                             <div>
-                                                                <p className="text-[10px] font-black text-gray-500 uppercase">Garage / Location</p>
+                                                                <p className="text-[10px] font-black text-gray-500 uppercase">Garage / Emplacement</p>
                                                                 <p className="text-gray-900 font-bold">{main.garage}</p>
                                                             </div>
                                                         </div>
@@ -405,7 +405,7 @@ export default function ChauffeurMaintenances() {
                                                 className="w-full flex items-center justify-center gap-2 py-4 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-bold text-xs shadow-lg shadow-green-500/20 disabled:opacity-50 uppercase tracking-widest"
                                             >
                                                 <span className="material-symbols-outlined text-sm">edit_document</span>
-                                                Update & Save
+                                                Mettre à jour & Enregistrer
                                             </button>
                                         </div>
                                     </div>

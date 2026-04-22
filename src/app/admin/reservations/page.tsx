@@ -121,7 +121,7 @@ export default function AdminReservations() {
                     })
                 ]);
 
-                if (!vehRes.ok || !excRes.ok || !transRes.ok || !chauffeurRes.ok) throw new Error('Failed to fetch reservations');
+                if (!vehRes.ok || !excRes.ok || !transRes.ok || !chauffeurRes.ok) throw new Error('Échec de la récupération des réservations');
                 
                 const [vehData, excData, transData, chauffeurData] = await Promise.all([
                     vehRes.json(),
@@ -177,7 +177,7 @@ export default function AdminReservations() {
             setTransferReservations(prev => prev.map(res => 
                 res.id === id ? { ...res, quoted_price: price, status: 'en_attente_confirmation' } : res
             ));
-            showNotification('Price quote sent to client.', 'success');
+            showNotification('Devis envoyé au client.', 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         }
@@ -200,7 +200,7 @@ export default function AdminReservations() {
             setTransferReservations(prev => prev.map(res => 
                 res.id === reservationId ? { ...res, chauffeur_id: chauffeurId, chauffeur: data.data.chauffeur } : res
             ));
-            showNotification(chauffeurId ? 'Chauffeur assigned successfully.' : 'Chauffeur unassigned.', 'success');
+            showNotification(chauffeurId ? 'Chauffeur assigné avec succès.' : 'Chauffeur non assigné.', 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         }
@@ -246,7 +246,7 @@ export default function AdminReservations() {
                 ));
             }
 
-            showNotification(`Reservation status updated to ${newStatus}.`, 'success');
+            showNotification(`Statut de la réservation mis à jour à ${newStatus}.`, 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         }
@@ -281,12 +281,12 @@ export default function AdminReservations() {
                     <div>
                         <div className="flex flex-wrap items-center gap-4 mb-3">
                             <h1 className="text-4xl font-black text-gray-900 tracking-tighter">
-                                Agency <span className="text-black italic font-black">Dashboard</span>
+                                Tableau de Bord <span className="text-black italic font-black">de l'Agence</span>
                             </h1>
                             <div className="flex gap-2">
                                 <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-gray-200 uppercase flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[14px]">directions_car</span>
-                                    {reservations.length} Vehicles
+                                    {reservations.length} Véhicules
                                 </div>
                                 <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-gray-200 uppercase flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[14px]">explore</span>
@@ -294,11 +294,11 @@ export default function AdminReservations() {
                                 </div>
                                 <div className="bg-gray-100 text-black px-3 py-1 rounded-lg text-[10px] font-black tracking-widest border border-gray-200 uppercase flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[14px]">local_taxi</span>
-                                    {transferReservations.length} Transfers
+                                    {transferReservations.length} Transferts
                                 </div>
                             </div>
                         </div>
-                        <p className="text-gray-500 text-lg">Manage all client requests and reservation statuses.</p>
+                        <p className="text-gray-500 text-lg">Gérez toutes les demandes des clients et les statuts des réservations.</p>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4">
@@ -332,7 +332,7 @@ export default function AdminReservations() {
                                     className={`px-3 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all
                                         ${filter === f ? 'bg-gray-100 text-gray-900 border border-gray-200 shadow-lg' : 'text-gray-500 hover:text-gray-900'}`}
                                 >
-                                    {f === 'all' ? 'All Status' : f.replace('_', ' ')}
+                                    {f === 'all' ? 'Tous les Statuts' : f === 'en_attente_prix' ? 'Attente Prix' : f.replace('_', ' ').replace('en attente', 'En Attente').replace('confirme', 'Confirmé').replace('annule', 'Annulé').replace('termine', 'Terminé')}
                                 </button>
                             ))}
                         </div>
@@ -353,10 +353,10 @@ export default function AdminReservations() {
                                 <tr className="border-b border-gray-200 bg-gray-50">
                                     <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Client</th>
                                     <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">
-                                        {activeTab === 'vehicles' ? 'Vehicle' : activeTab === 'excursions' ? 'Excursion' : 'Transfer Journey'}
+                                        {activeTab === 'vehicles' ? 'Véhicule' : activeTab === 'excursions' ? 'Excursion' : 'Trajet du Transfert'}
                                     </th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Detail/Contact</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Détail/Contact</th>
+                                    <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Statut</th>
                                     {activeTab === 'transfers' && <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Chauffeur</th>}
                                     <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest">Total</th>
                                     <th className="px-6 py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest text-right">Actions</th>
@@ -365,7 +365,7 @@ export default function AdminReservations() {
                             <tbody className="divide-y divide-white/5">
                                 {activeTab === 'vehicles' ? (
                                     filteredVehicles.length === 0 ? (
-                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">No vehicle reservations found.</td></tr>
+                                    <td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">Aucune réservation de véhicule trouvée.</td>
                                     ) : (
                                         filteredVehicles.map((res) => (
                                             <tr key={res.id} className="hover:bg-gray-50 transition-colors group">
@@ -392,12 +392,12 @@ export default function AdminReservations() {
                                                             <span className="material-symbols-outlined text-gray-400 text-[14px]">location_on</span>
                                                             {res.lieu_depart}
                                                         </div>
-                                                        {res.nb_sieges_bebe > 0 && <span className="text-[10px] text-black font-black uppercase">{res.nb_sieges_bebe} Baby Seats</span>}
+                                                        {res.nb_sieges_bebe > 0 && <span className="text-[10px] text-black font-black uppercase">{res.nb_sieges_bebe} Sièges Bébé</span>}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest">
                                                     <span className={`px-3 py-1 rounded-full ${res.statut === 'en_attente' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-                                                        {res.statut === 'annule' ? (res.cancelled_by_id === res.utilisateur_id ? 'Client' : 'Admin') : res.statut.replace('_', ' ')}
+                                                        {res.statut === 'annule' ? (res.cancelled_by_id === res.utilisateur_id ? 'Client' : 'Admin') : res.statut === 'en_attente' ? 'En Attente' : res.statut === 'confirme' ? 'Confirmé' : res.statut === 'termine' ? 'Terminé' : res.statut}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-6 text-lg font-black text-black">{res.montant_total} TND</td>
@@ -409,14 +409,14 @@ export default function AdminReservations() {
                                                         </div>
                                                     ) : res.statut === 'confirme' ? (
                                                         <button onClick={() => updateStatus(res.id, 'annule', 'vehicle')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
-                                                    ) : <span className="text-[10px] text-gray-400 uppercase font-black">History</span>}
+                                                    ) : <span className="text-[10px] text-gray-400 uppercase font-black">Historique</span>}
                                                 </td>
                                             </tr>
                                         ))
                                     )
                                 ) : activeTab === 'excursions' ? (
                                     filteredExcursions.length === 0 ? (
-                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">No excursion reservations found.</td></tr>
+                                        <tr><td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">Aucune réservation d'excursion trouvée.</td></tr>
                                     ) : (
                                         filteredExcursions.map((res) => (
                                             <tr key={res.id} className="hover:bg-gray-50 transition-colors group">
@@ -449,7 +449,7 @@ export default function AdminReservations() {
                                                 </td>
                                                 <td className="px-6 py-6 text-[9px] font-black uppercase tracking-widest text-gray-900">
                                                     <span className={`px-3 py-1 rounded-full ${res.statut === 'en_attente' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-                                                        {res.statut.replace('_', ' ')}
+                                                        {res.statut === 'en_attente' ? 'En Attente' : res.statut === 'confirme' ? 'Confirmé' : res.statut === 'annule' ? 'Annulé' : res.statut === 'termine' ? 'Terminé' : res.statut}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-6 text-lg font-black text-black">{res.montant_total} TND</td>
@@ -461,14 +461,14 @@ export default function AdminReservations() {
                                                         </div>
                                                     ) : res.statut === 'confirme' ? (
                                                         <button onClick={() => updateStatus(res.id, 'annule', 'excursion')} className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-gray-900 rounded-lg transition-all"><span className="material-symbols-outlined">cancel</span></button>
-                                                    ) : <span className="text-[10px] text-gray-400 uppercase font-black">History</span>}
+                                                    ) : <span className="text-[10px] text-gray-400 uppercase font-black">Historique</span>}
                                                 </td>
                                             </tr>
                                         ))
                                     )
                                 ) : (
                                     filteredTransfers.length === 0 ? (
-                                        <tr><td colSpan={7} className="px-6 py-20 text-center text-gray-500 font-medium italic">No transfer requests found.</td></tr>
+                                        <tr><td colSpan={7} className="px-6 py-20 text-center text-gray-500 font-medium italic">Aucune demande de transfert trouvée.</td></tr>
                                     ) : (
                                         filteredTransfers.map((res) => (
                                             <tr key={res.id} className="hover:bg-gray-50 transition-colors group">
@@ -482,7 +482,7 @@ export default function AdminReservations() {
                                                 <td className="px-6 py-6 font-medium">
                                                     <div className="flex flex-col">
                                                         <span className="text-gray-900 font-bold">{res.lieu_depart}</span>
-                                                        <span className="text-black text-[10px]">TO</span>
+                                                        <span className="text-black text-[10px]">VERS</span>
                                                         <span className="text-gray-900 font-bold">{res.lieu_destination}</span>
                                                     </div>
                                                 </td>
@@ -504,7 +504,10 @@ export default function AdminReservations() {
                                                         res.statut === 'confirme' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 
                                                         res.statut === 'termine' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
                                                         'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-                                                        {res.statut.replace('_', ' ')}
+                                                        {res.statut === 'en_attente_prix' ? 'En Attente de Prix' : 
+                                                        res.statut === 'confirme' ? 'Confirmé' : 
+                                                        res.statut === 'termine' ? 'Terminé' :
+                                                        res.statut === 'annule' ? 'Annulé' : res.statut}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-6">
@@ -522,17 +525,17 @@ export default function AdminReservations() {
                                                                 assignChauffeur(res.id, val ? parseInt(val) : null);
                                                             }}
                                                         >
-                                                            <option value="" className="bg-white text-gray-900">No Driver</option>
+                                                            <option value="" className="bg-white text-gray-900">Aucun Chauffeur</option>
                                                             {(chauffeursAvailability[res.id] || chauffeurs).map(c => (
                                                                 <option key={c.id} value={c.id} className="bg-white text-gray-900">
-                                                                    {c.name} {c.is_busy ? '(Busy)' : ''}
+                                                                    {c.name} {c.is_busy ? '(Occupé)' : ''}
                                                                 </option>
                                                             ))}
                                                         </select>
                                                     ) : (
                                                         <div className="flex items-center gap-1.5 text-blue-400 font-bold text-[11px]">
                                                             <span className="material-symbols-outlined text-sm">person</span>
-                                                            {res.chauffeur?.name || (res.statut === 'termine' ? 'Driver Assigned' : '-')}
+                                                            {res.chauffeur?.name || (res.statut === 'termine' ? 'Chauffeur Assigné' : '-')}
                                                         </div>
                                                     )}
                                                 </td>
@@ -541,7 +544,7 @@ export default function AdminReservations() {
                                                         <div className="flex flex-col gap-2">
                                                             <input 
                                                                 type="number" 
-                                                                placeholder="Price" 
+                                                                placeholder="Prix" 
                                                                 className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-black w-24"
                                                                 onKeyDown={(e) => {
                                                                     if (e.key === 'Enter') {
@@ -549,7 +552,7 @@ export default function AdminReservations() {
                                                                     }
                                                                 }}
                                                             />
-                                                            <span className="text-[8px] text-gray-500">Press Enter</span>
+                                                            <span className="text-[8px] text-gray-500">Appuyer sur Entrée</span>
                                                         </div>
                                                     ) : (
                                                         <span className="text-lg font-black text-black">{res.montant_total ? `${res.montant_total} TND` : '-'}</span>
@@ -562,7 +565,7 @@ export default function AdminReservations() {
                                                                 onClick={(e) => {
                                                                     const input = (e.currentTarget.parentElement?.parentElement?.previousElementSibling?.querySelector('input') as HTMLInputElement);
                                                                     if (input.value) setTransferPrice(res.id, input.value);
-                                                                    else showNotification('Please enter a price first.', 'error');
+                                                                    else showNotification('Veuillez d\'abord saisir un prix.', 'error');
                                                                 }} 
                                                                 className="p-2 bg-gray-100 text-black hover:bg-black hover:text-gray-900 rounded-lg transition-all"
                                                             >

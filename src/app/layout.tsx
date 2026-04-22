@@ -4,8 +4,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "IconRental | Luxury Car Catalog",
-  description: "Uncompromising performance meets absolute luxury.",
+  title: "IconRental | Location de Voitures de Luxe",
+  description: "La performance sans compromis rencontre le luxe absolu.",
 };
 
 import { AuthProvider } from "@/context/AuthContext";
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" />

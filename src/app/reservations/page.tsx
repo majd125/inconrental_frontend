@@ -135,7 +135,7 @@ export default function MyReservations() {
     };
 
     const handleCancel = async (id: number) => {
-        if (!confirm('Are you sure you want to cancel this reservation?')) return;
+        if (!confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) return;
 
         try {
             const response = await fetch(`${API_URL}/reservations/${id}/status`, {
@@ -156,7 +156,7 @@ export default function MyReservations() {
             setReservations(prev => prev.map(res => 
                 res.id === id ? { ...res, statut: 'annule', cancelled_by_id: res.utilisateur_id } : res
             ));
-            showNotification('Reservation cancelled successfully.', 'success');
+            showNotification('Réservation annulée avec succès.', 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         }
@@ -173,8 +173,8 @@ export default function MyReservations() {
     if (!user) {
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in to see your bookings</h2>
-                <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl font-bold hover:scale-105 transition-all">Login</Link>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Veuillez vous connecter pour voir vos réservations</h2>
+                <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl font-bold hover:scale-105 transition-all">Se connecter</Link>
             </div>
         );
     }
@@ -185,9 +185,9 @@ export default function MyReservations() {
                 <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
                         <h1 className="text-4xl font-black text-gray-900 tracking-tighter mb-2">
-                            My <span className="text-black italic">Bookings</span>
+                            Mes <span className="text-black italic">Réservations</span>
                         </h1>
-                        <p className="text-gray-500 text-lg font-medium">Manage and track your active luxury reservations.</p>
+                        <p className="text-gray-500 text-lg font-medium">Gérez et suivez vos réservations de luxe actives.</p>
                     </div>
                 </div>
 
@@ -205,7 +205,7 @@ export default function MyReservations() {
                         className={`flex items-center gap-2 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${activeTab === 'vehicles' ? 'bg-black text-white shadow-lg shadow-md' : 'text-gray-500 hover:text-gray-600'}`}
                     >
                         <span className="material-symbols-outlined text-sm">directions_car</span>
-                        Vehicles
+                        Véhicules
                         <span className={`ml-2 px-1.5 py-0.5 rounded-md text-[9px] ${activeTab === 'vehicles' ? 'bg-white/20 text-gray-900' : 'bg-gray-50 text-gray-400'}`}>
                             {reservations.length}
                         </span>
@@ -225,7 +225,7 @@ export default function MyReservations() {
                         className={`flex items-center gap-2 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${activeTab === 'transfers' ? 'bg-black text-white shadow-lg shadow-md' : 'text-gray-500 hover:text-gray-600'}`}
                     >
                         <span className="material-symbols-outlined text-sm">local_taxi</span>
-                        Transfers
+                        Transferts
                         <span className={`ml-2 px-1.5 py-0.5 rounded-md text-[9px] ${activeTab === 'transfers' ? 'bg-white/20 text-gray-900' : 'bg-gray-50 text-gray-400'}`}>
                             {transferReservations.length}
                         </span>
@@ -238,9 +238,9 @@ export default function MyReservations() {
                             {reservations.length === 0 ? (
                                 <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
                                     <span className="material-symbols-outlined text-6xl text-gray-400 mb-4">calendar_today</span>
-                                    <p className="text-gray-500 text-xl font-medium mb-6">No vehicle reservations yet.</p>
+                                    <p className="text-gray-500 text-xl font-medium mb-6">Aucune réservation de véhicule pour le moment.</p>
                                     <Link href="/catalog" className="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-xl font-bold hover:scale-105 transition-all">
-                                        Browse Fleet <span className="material-symbols-outlined">arrow_forward</span>
+                                        Parcourir la Flotte <span className="material-symbols-outlined">arrow_forward</span>
                                     </Link>
                                 </div>
                             ) : (
@@ -251,7 +251,7 @@ export default function MyReservations() {
                                         </div>
                                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                                             <div className="space-y-1">
-                                                <p className="text-[10px] text-black font-black uppercase tracking-[0.2em]">Vehicle</p>
+                                                <p className="text-[10px] text-black font-black uppercase tracking-[0.2em]">Véhicule</p>
                                                 <h3 className="text-xl font-bold text-gray-900">{res.vehicule.marque} {res.vehicule.modele}</h3>
                                                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mt-2
                                                     ${res.statut === 'en_attente' ? 'bg-yellow-500/20 text-yellow-500' : 
@@ -268,23 +268,23 @@ export default function MyReservations() {
                                                 </div>
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Rental Period</p>
+                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Période de Location</p>
                                                 <p className="text-sm font-semibold text-gray-900">
                                                     {new Date(res.date_debut).toLocaleDateString()} → {new Date(res.date_fin).toLocaleDateString()}
                                                 </p>
                                                 <div className="flex flex-col gap-1 mt-2">
-                                                    <p className="text-xs text-gray-500">Location: {res.lieu_depart}</p>
+                                                    <p className="text-xs text-gray-500">Lieu : {res.lieu_depart}</p>
                                                 </div>
                                             </div>
                                             <div className="space-y-1 sm:text-right">
-                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Total Price</p>
+                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Prix Total</p>
                                                 <p className="text-2xl font-black text-black">{res.montant_total} TND</p>
                                                 {(res.statut === 'en_attente' || (res.statut === 'confirme' && new Date(res.date_debut) > new Date())) && (
                                                     <button 
                                                         onClick={() => handleCancel(res.id)}
                                                         className="mt-2 text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-gray-900 transition-colors flex items-center gap-1 sm:justify-end"
                                                     >
-                                                        <span className="material-symbols-outlined text-sm">cancel</span> Cancel
+                                                        <span className="material-symbols-outlined text-sm">cancel</span> Annuler
                                                     </button>
                                                 )}
                                             </div>
@@ -298,9 +298,9 @@ export default function MyReservations() {
                             {excursionReservations.length === 0 ? (
                                 <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
                                     <span className="material-symbols-outlined text-6xl text-gray-400 mb-4">explore</span>
-                                    <p className="text-gray-500 text-xl font-medium mb-6">No excursion reservations yet.</p>
+                                    <p className="text-gray-500 text-xl font-medium mb-6">Aucune réservation d'excursion pour le moment.</p>
                                     <Link href="/excursions" className="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-xl font-bold hover:scale-105 transition-all">
-                                        Explore Excursions <span className="material-symbols-outlined">arrow_forward</span>
+                                        Explorer les Excursions <span className="material-symbols-outlined">arrow_forward</span>
                                     </Link>
                                 </div>
                             ) : (
@@ -326,12 +326,12 @@ export default function MyReservations() {
                                                 </div>
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Reservation Date</p>
+                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Date de Réservation</p>
                                                 <p className="text-sm font-semibold text-gray-900">
                                                     {new Date(res.date_reservation).toLocaleDateString()}
                                                 </p>
                                                 <div className="flex flex-col gap-1 mt-2">
-                                                    <p className="text-xs text-gray-500">Departure: {res.lieu_depart}</p>
+                                                    <p className="text-xs text-gray-500">Départ : {res.lieu_depart}</p>
                                                     <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mt-1">
                                                         <span className="material-symbols-outlined text-[14px]">group</span>
                                                         {res.nb_adultes}A, {res.nb_enfants}E, {res.nb_bebes}B
@@ -339,7 +339,7 @@ export default function MyReservations() {
                                                 </div>
                                             </div>
                                             <div className="space-y-1 sm:text-right">
-                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Total Price</p>
+                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Prix Total</p>
                                                 <p className="text-2xl font-black text-black">{res.montant_total} TND</p>
                                                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-2">{res.excursion.duree}</p>
                                             </div>
@@ -353,9 +353,9 @@ export default function MyReservations() {
                             {transferReservations.length === 0 ? (
                                 <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
                                     <span className="material-symbols-outlined text-6xl text-gray-400 mb-4">local_taxi</span>
-                                    <p className="text-gray-500 text-xl font-medium mb-6">No transfer reservations yet.</p>
+                                    <p className="text-gray-500 text-xl font-medium mb-6">Aucune réservation de transfert pour le moment.</p>
                                     <Link href="/transfers" className="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-xl font-bold hover:scale-105 transition-all">
-                                        Book a Transfer <span className="material-symbols-outlined">arrow_forward</span>
+                                        Réserver un Transfert <span className="material-symbols-outlined">arrow_forward</span>
                                     </Link>
                                 </div>
                             ) : (
@@ -366,7 +366,7 @@ export default function MyReservations() {
                                         </div>
                                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                                             <div className="space-y-1">
-                                                <p className="text-[10px] text-black font-black uppercase tracking-[0.2em]">Transfer Journey</p>
+                                                <p className="text-[10px] text-black font-black uppercase tracking-[0.2em]">Trajet de Transfert</p>
                                                 <h3 className="text-lg font-bold text-gray-900 mb-2">{res.lieu_depart} → {res.lieu_destination}</h3>
                                                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest
                                                     ${res.statut === 'en_attente_prix' ? 'bg-orange-500/20 text-orange-500' : 
@@ -374,18 +374,18 @@ export default function MyReservations() {
                                                       res.statut === 'confirme' ? 'bg-green-500/20 text-green-500' : 
                                                       'bg-red-500/20 text-red-500'}`}
                                                 >
-                                                    {res.statut === 'en_attente_prix' ? 'Reviewing' : res.statut.replace('_', ' ')}
+                                                    {res.statut === 'en_attente_prix' ? 'En cours d\'examen' : res.statut.replace('_', ' ')}
                                                 </div>
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Schedule & Passengers</p>
+                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Horaires & Passagers</p>
                                                 <p className="text-sm font-semibold text-gray-900">
                                                     {new Date(res.date_heure_depart).toLocaleString()}
                                                 </p>
-                                                <p className="text-xs text-gray-500">{res.type_trajet.replace('_', ' ')} • {res.nb_adultes}A, {res.nb_enfants}C, {res.nb_bebes}B</p>
+                                                <p className="text-xs text-gray-500">{res.type_trajet.replace('_', ' ')} • {res.nb_adultes}A, {res.nb_enfants}E, {res.nb_bebes}B</p>
                                             </div>
                                             <div className="space-y-1 sm:text-right">
-                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Price Quote</p>
+                                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Devis</p>
                                                 {res.montant_total ? (
                                                     <>
                                                         <p className="text-2xl font-black text-black">{res.montant_total} TND</p>
@@ -394,12 +394,12 @@ export default function MyReservations() {
                                                                 onClick={() => confirmTransfer(res.id)}
                                                                 className="mt-3 px-6 py-2 bg-green-500 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-green-500/20"
                                                             >
-                                                                Confirm
+                                                                Confirmer
                                                             </button>
                                                         )}
                                                     </>
                                                 ) : (
-                                                    <p className="text-sm italic text-gray-500">Waiting for admin quote</p>
+                                                    <p className="text-sm italic text-gray-500">En attente du devis de l'administrateur</p>
                                                 )}
                                             </div>
                                         </div>

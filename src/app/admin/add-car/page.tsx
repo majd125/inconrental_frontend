@@ -169,24 +169,24 @@ export default function AddCar() {
                 <div className="mb-8 flex items-center justify-between">
                     <div>
                         <div className="flex items-center gap-3">
-                            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">Add New <span className="text-black">Vehicle</span></h1>
+                            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tighter">Ajouter un Nouveau <span className="text-black">Véhicule</span></h1>
                             {templateId && (
                                 <span className="bg-gray-100 text-black border border-gray-200 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">
-                                    Template Pre-filled
+                                    Modèle Pré-rempli
                                 </span>
                             )}
                         </div>
-                        <p className="text-gray-500 mt-2">Expand the elite collection</p>
+                        <p className="text-gray-500 mt-2">Agrandir la collection d'élite</p>
                     </div>
                     <Link href="/admin/vehicles" className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-100 transition-all font-bold text-sm">
-                        Back to Fleet
+                        Retour à la Flotte
                     </Link>
                 </div>
 
                 {success && (
                     <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 text-green-400 rounded-xl flex items-center gap-3 animate-pulse">
                         <span className="material-symbols-outlined">check_circle</span>
-                        <p className="font-bold">Vehicle added successfully! Redirecting...</p>
+                        <p className="font-bold">Véhicule ajouté avec succès ! Redirection...</p>
                     </div>
                 )}
 
@@ -203,12 +203,12 @@ export default function AddCar() {
                         <div className="space-y-6">
                             <h2 className="text-xl font-bold text-black flex items-center gap-2">
                                 <span className="material-symbols-outlined">directions_car</span>
-                                Specifications
+                                Spécifications
                             </h2>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Brand</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Marque</label>
                                     <input
                                         type="text"
                                         required
@@ -219,7 +219,7 @@ export default function AddCar() {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Model</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Modèle</label>
                                     <input
                                         type="text"
                                         required
@@ -244,7 +244,7 @@ export default function AddCar() {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Year</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Année</label>
                                     <input
                                         type="number"
                                         required
@@ -257,7 +257,7 @@ export default function AddCar() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Category</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase ml-1">Catégorie</label>
                                     <select
                                         className="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all"
                                         value={formData.categorie}
@@ -272,7 +272,7 @@ export default function AddCar() {
                                     </select>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Price per Day (TND)</label>
+                                    <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">Prix par Jour (TND)</label>
                                     <input
                                         type="number"
                                         required
@@ -316,11 +316,11 @@ export default function AddCar() {
                         <div className="space-y-6">
                             <h2 className="text-xl font-bold text-black flex items-center gap-2">
                                 <span className="material-symbols-outlined">image</span>
-                                Presentation
+                                Présentation
                             </h2>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Vehicle Media</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Média du Véhicule</label>
                                 <div className="relative group border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center hover:border-gray-2000 transition-all cursor-pointer bg-gray-50">
                                     <input
                                         type="file"
@@ -332,24 +332,24 @@ export default function AddCar() {
                                         <div className="relative aspect-video rounded-xl overflow-hidden">
                                             <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <span className="text-gray-900 font-bold">Change Image</span>
+                                                <span className="text-white font-bold">Changer l'Image</span>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="py-8">
                                             <span className="material-symbols-outlined text-4xl text-gray-500 mb-2">add_photo_alternate</span>
-                                            <p className="text-sm text-gray-500">Drag and drop or click to upload vehicle image</p>
-                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Max size 2MB (JPG, PNG)</p>
+                                            <p className="text-sm text-gray-500">Glissez-déposez ou cliquez pour télécharger l'image du véhicule</p>
+                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Taille max 2Mo (JPG, PNG)</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Full Description</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase ml-1">Description Complète</label>
                                 <textarea
                                     className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all min-h-[120px] resize-none"
-                                    placeholder="Describe the performance, luxury features, and driving experience..."
+                                    placeholder="Décrivez les performances, les caractéristiques de luxe et l'expérience de conduite..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 ></textarea>
@@ -366,12 +366,12 @@ export default function AddCar() {
                             {loading ? (
                                 <>
                                     <span className="animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></span>
-                                    <span>Syncing with Database...</span>
+                                    <span>Synchronisation avec la base de données...</span>
                                 </>
                             ) : (
                                 <>
                                     <span className="material-symbols-outlined">publish</span>
-                                    <span>Add to Fleet catalogue</span>
+                                    <span>Ajouter au catalogue de la flotte</span>
                                 </>
                             )}
                         </button>

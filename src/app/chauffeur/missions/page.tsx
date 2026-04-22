@@ -45,7 +45,7 @@ export default function ChauffeurMissions() {
                     headers: { 'Authorization': `Bearer ${authService.getToken()}` }
                 });
 
-                if (!response.ok) throw new Error('Failed to fetch missions');
+                if (!response.ok) throw new Error('Échec de la récupération des missions');
                 
                 const data = await response.json();
                 setMissions(data.data || []);
@@ -61,7 +61,7 @@ export default function ChauffeurMissions() {
     }, [user, authLoading, router, showNotification]);
 
     const markAsDone = async (id: number) => {
-        if (!confirm('Are you sure you have completed this transfer?')) return;
+        if (!confirm('Êtes-vous sûr d\'avoir terminé ce transfert ?')) return;
         setActionLoading(true);
         try {
             const response = await fetch(`${API_URL}/transfer-reservations/${id}/status`, {
@@ -73,10 +73,10 @@ export default function ChauffeurMissions() {
                 body: JSON.stringify({ statut: 'termine' })
             });
 
-            if (!response.ok) throw new Error('Failed to update transfer status');
+            if (!response.ok) throw new Error('Échec de la mise à jour du statut du transfert');
             
             setMissions(prev => prev.map(m => m.id === id ? { ...m, statut: 'termine' } : m));
-            showNotification('Transfer marked as completed!', 'success');
+            showNotification('Transfert marqué comme terminé !', 'success');
         } catch (err: any) {
             showNotification(err.message, 'error');
         } finally {
@@ -102,9 +102,9 @@ export default function ChauffeurMissions() {
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 text-center sm:text-left">
                     <h1 className="text-4xl font-black text-gray-900 tracking-tighter mb-2">
-                        My <span className="text-black italic">Missions</span>
+                        Mes <span className="text-black italic">Missions</span>
                     </h1>
-                    <p className="text-gray-500 text-lg">Manage your upcoming transfer assignments.</p>
+                    <p className="text-gray-500 text-lg">Gérez vos missions de transfert à venir.</p>
                 </div>
 
                 {error && (
@@ -119,13 +119,13 @@ export default function ChauffeurMissions() {
                         onClick={() => setActiveTab('active')}
                         className={`px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'active' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-600'}`}
                     >
-                        Active ({activeMissions.length})
+                        Actif ({activeMissions.length})
                     </button>
                     <button 
                         onClick={() => setActiveTab('history')}
                         className={`px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-black text-white shadow-lg' : 'text-gray-500 hover:text-gray-600'}`}
                     >
-                        History ({historyMissions.length})
+                        Historique ({historyMissions.length})
                     </button>
                 </div>
 
@@ -135,12 +135,12 @@ export default function ChauffeurMissions() {
                             {activeTab === 'active' ? 'event_busy' : 'history'}
                         </span>
                         <h3 className="text-xl font-bold text-gray-900 mb-2">
-                            {activeTab === 'active' ? 'No active missions' : 'No mission history'}
+                            {activeTab === 'active' ? 'Aucune mission active' : 'Aucun historique de mission'}
                         </h3>
                         <p className="text-gray-500">
                             {activeTab === 'active' 
-                                ? 'When an administrator assigns you a task, it will appear here.'
-                                : 'Completed tasks will be stored in this section.'}
+                                ? 'Lorsqu\'un administrateur vous assigne une tâche, elle apparaîtra ici.'
+                                : 'Les tâches terminées seront stockées dans cette section.'}
                         </p>
                     </div>
                 ) : (
@@ -151,7 +151,7 @@ export default function ChauffeurMissions() {
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="bg-gray-100 text-black px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border border-gray-200">
-                                                Active Transfer
+                                                Transfert Actif
                                             </span>
                                             <span className="text-[10px] text-gray-500 font-mono tracking-tighter uppercase">ID: #{mission.id}</span>
                                         </div>
@@ -161,7 +161,7 @@ export default function ChauffeurMissions() {
                                                 <div className="flex items-start gap-3">
                                                     <div className="mt-1 w-2 h-2 rounded-full bg-black ring-4 ring-black/20"></div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Pickup Location</p>
+                                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Lieu de Prise en Charge</p>
                                                         <p className="text-gray-900 font-bold text-lg">{mission.lieu_depart}</p>
                                                     </div>
                                                 </div>
@@ -178,7 +178,7 @@ export default function ChauffeurMissions() {
                                                 <div className="flex items-center gap-3 mb-3">
                                                     <span className="material-symbols-outlined text-black">schedule</span>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-gray-500 uppercase">Departure Time</p>
+                                                        <p className="text-[10px] font-black text-gray-500 uppercase">Heure de Départ</p>
                                                         <p className="text-gray-900 font-bold">{new Date(mission.date_heure_depart).toLocaleString()}</p>
                                                     </div>
                                                 </div>
@@ -196,11 +196,11 @@ export default function ChauffeurMissions() {
                                         <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-200">
                                             <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase">
                                                 <span className="material-symbols-outlined text-[16px]">groups</span>
-                                                {mission.nb_adultes} Adults, {mission.nb_enfants} Children, {mission.nb_bebes} Babies
+                                                {mission.nb_adultes} Adultes, {mission.nb_enfants} Enfants, {mission.nb_bebes} Bébés
                                             </div>
                                             <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase">
                                                 <span className="material-symbols-outlined text-[16px]">point_of_sale</span>
-                                                Quoted: <span className="text-gray-900">${mission.montant_total}</span>
+                                                Prix : <span className="text-gray-900">{mission.montant_total} TND</span>
                                             </div>
                                         </div>
                                     </div>
@@ -211,7 +211,7 @@ export default function ChauffeurMissions() {
                                             className="w-full flex items-center justify-center gap-2 py-4 bg-gray-100 text-black rounded-xl hover:bg-gray-100 transition-all font-bold text-xs border border-gray-200"
                                         >
                                             <span className="material-symbols-outlined text-sm">call</span>
-                                            Call Client
+                                            Appeler le Client
                                         </a>
                                         {mission.statut !== 'termine' && (
                                             <button 
@@ -219,12 +219,12 @@ export default function ChauffeurMissions() {
                                                 className="w-full flex items-center justify-center gap-2 py-4 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all font-bold text-xs shadow-lg shadow-green-500/20"
                                             >
                                                 <span className="material-symbols-outlined text-sm">check_circle</span>
-                                                Mark as Done
+                                                Marquer comme Terminé
                                             </button>
                                         )}
                                         {mission.statut === 'termine' && (
                                             <div className="w-full py-4 text-center border border-dashed border-green-500/30 rounded-xl">
-                                                <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">Completed</span>
+                                                <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">Terminé</span>
                                             </div>
                                         )}
                                     </div>
