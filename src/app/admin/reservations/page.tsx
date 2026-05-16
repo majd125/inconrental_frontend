@@ -325,7 +325,7 @@ export default function AdminReservations() {
                         </div>
 
                         <div className="flex gap-1 bg-white p-1 rounded-xl border border-gray-200">
-                            {(['all', 'en_attente', 'confirme', 'annule', 'termine'] as const).map((f) => (
+                            {(['all', 'en_attente', 'en_attente_prix', 'confirme', 'annule', 'termine'] as const).map((f) => (
                                 <button
                                     key={f}
                                     onClick={() => setFilter(f)}
@@ -365,7 +365,7 @@ export default function AdminReservations() {
                             <tbody className="divide-y divide-white/5">
                                 {activeTab === 'vehicles' ? (
                                     filteredVehicles.length === 0 ? (
-                                    <td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">Aucune réservation de véhicule trouvée.</td>
+                                    <tr><td colSpan={6} className="px-6 py-20 text-center text-gray-500 font-medium italic">Aucune réservation de véhicule trouvée.</td></tr>
                                     ) : (
                                         filteredVehicles.map((res) => (
                                             <tr key={res.id} className="hover:bg-gray-50 transition-colors group">

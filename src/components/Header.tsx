@@ -23,36 +23,42 @@ export default function Header() {
                         <Link className="text-sm font-medium text-gray-600 hover:text-black transition-colors" href="/transfers">Transferts</Link>
                         <Link className="text-sm font-medium text-gray-600 hover:text-black transition-colors" href="/excursions">Excursions</Link>
                         {user?.is_admin && (
-                            <div className="flex gap-6 border-l border-gray-200 pl-6 items-center">
-                                {/* Fleet Management Dropdown */}
-                                <div className="relative group py-2">
-                                    <button className="text-sm font-semibold text-gray-600 group-hover:text-black transition-colors flex items-center gap-1.5 focus:outline-none">
-                                        <span className="material-symbols-outlined text-[18px]">commute</span> 
-                                        Gestion de la Flotte
-                                        <span className="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span>
-                                    </button>
-                                    
-                                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 w-56">
-                                        <div className="bg-white border border-gray-200 rounded-xl shadow-xl flex flex-col overflow-hidden">
-                                            <Link className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-black transition-colors flex items-center gap-2 border-b border-gray-100" href="/admin/vehicles">
-                                                <span className="material-symbols-outlined text-[18px]">directions_car</span> Gérer la Flotte
-                                            </Link>
-                                            <Link className="px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors flex items-center gap-2 border-b border-gray-100" href="/admin/documents-expiry">
-                                                <span className="material-symbols-outlined text-[18px]">warning</span> Documents Expirants
-                                            </Link>
-                                            <Link className="px-4 py-3 text-sm font-medium text-orange-600 hover:bg-orange-50 hover:text-orange-700 transition-colors flex items-center gap-2" href="/admin/maintenances-upcoming">
-                                                <span className="material-symbols-outlined text-[18px]">handyman</span> Maintenances à Venir
-                                            </Link>
-                                        </div>
+                            <div className="relative group py-2 ml-4">
+                                <button className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-all shadow-sm">
+                                    <span className="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                                    Administration
+                                    <span className="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span>
+                                </button>
+                                
+                                <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 w-64 z-50">
+                                    <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden p-2 gap-1">
+                                        <Link className="px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-black rounded-xl transition-all flex items-center gap-3" href="/admin">
+                                            <div className="size-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-[18px]">dashboard</span>
+                                            </div>
+                                            Tableau de Bord
+                                        </Link>
+                                        <Link className="px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-black rounded-xl transition-all flex items-center gap-3" href="/admin/reservations">
+                                            <div className="size-8 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-[18px]">list_alt</span>
+                                            </div>
+                                            Toutes les Réservations
+                                        </Link>
+                                        <div className="h-[1px] bg-gray-100 my-1 mx-2"></div>
+                                        <Link className="px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-black rounded-xl transition-all flex items-center gap-3" href="/admin/vehicles">
+                                            <div className="size-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-[18px]">directions_car</span>
+                                            </div>
+                                            Gestion de la Flotte
+                                        </Link>
+                                        <Link className="px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-black rounded-xl transition-all flex items-center gap-3" href="/admin/promotions">
+                                            <div className="size-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-[18px]">sell</span>
+                                            </div>
+                                            Promotions & Offres
+                                        </Link>
                                     </div>
                                 </div>
-
-                                <Link className="text-sm font-semibold text-gray-600 hover:text-black transition-colors flex items-center gap-1.5" href="/admin/reservations">
-                                    <span className="material-symbols-outlined text-[18px]">list_alt</span> Réservations
-                                </Link>
-                                <Link className="text-sm font-semibold text-gray-600 hover:text-black transition-colors flex items-center gap-1.5" href="/admin/promotions">
-                                    <span className="material-symbols-outlined text-[18px]">sell</span> Promotions
-                                </Link>
                             </div>
                         )}
                         {user && !user.is_admin && user.is_driver && (
