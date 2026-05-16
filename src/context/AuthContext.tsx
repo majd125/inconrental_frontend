@@ -7,6 +7,11 @@ interface User {
     id: number;
     name: string;
     email: string;
+    telephone?: string;
+    adresse?: string;
+    ville?: string;
+    numero_permis?: string;
+    date_naissance?: string;
     is_admin: boolean;
     is_driver: boolean;
 }

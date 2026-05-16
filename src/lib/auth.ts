@@ -108,5 +108,29 @@ export const authService = {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('auth_token');
         }
+    },
+
+    async updateProfile(data: any) {
+        await this.getCsrfCookie();
+        const csrfToken = this.getCookie('XSRF-TOKEN');
+
+        const response = await fetch(`${API_URL}/user/profile`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${this.getToken()}`,
+                ...(csrfToken ? { 'X-XSRF-TOKEN': csrfToken } : {}),
+            },
+            credentials: 'include',
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to update profile');
+        }
+
+        return response.json();
     }
 };
