@@ -30,6 +30,14 @@ interface DashboardStats {
         net_profit: number;
         monthly_net_profit: number;
     };
+    documents: {
+        total: number;
+        urgent: number;
+    };
+    maintenances: {
+        total: number;
+        urgent: number;
+    };
     recent_activity: Array<{
         type: string;
         id: number;
@@ -207,7 +215,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Secondary Stats Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                     {/* Vehicles Card */}
                     <Link href="/admin/vehicles" className="bg-white p-6 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group">
                         <div className="flex justify-between items-start mb-4">
@@ -255,6 +263,40 @@ export default function AdminDashboard() {
                             <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md">{stats.users.chauffeurs} chauffeurs</span>
                         </div>
                     </div>
+
+                    {/* Maintenances Card */}
+                    <Link href="/admin/maintenances-upcoming" className="bg-white p-6 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="p-3 bg-orange-50 text-orange-600 rounded-xl group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                                <span className="material-symbols-outlined text-2xl">build</span>
+                            </div>
+                            <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Maintenances</span>
+                        </div>
+                        <h3 className="text-3xl font-black text-gray-900 mb-1">{stats.maintenances.total}</h3>
+                        <p className="text-sm text-gray-500 font-medium">Tâches gérées</p>
+                        <div className="mt-4 flex gap-2">
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md ${stats.maintenances.urgent > 0 ? 'text-red-600 bg-red-50' : 'text-gray-500 bg-gray-50'}`}>
+                                {stats.maintenances.urgent} urgentes/en cours
+                            </span>
+                        </div>
+                    </Link>
+
+                    {/* Documents Card */}
+                    <Link href="/admin/documents-expiry" className="bg-white p-6 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="p-3 bg-teal-50 text-teal-600 rounded-xl group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                                <span className="material-symbols-outlined text-2xl">description</span>
+                            </div>
+                            <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Documents</span>
+                        </div>
+                        <h3 className="text-3xl font-black text-gray-900 mb-1">{stats.documents.total}</h3>
+                        <p className="text-sm text-gray-500 font-medium">Documents administratifs</p>
+                        <div className="mt-4 flex gap-2">
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md ${stats.documents.urgent > 0 ? 'text-red-600 bg-red-50' : 'text-gray-500 bg-gray-50'}`}>
+                                {stats.documents.urgent} expirant bientôt
+                            </span>
+                        </div>
+                    </Link>
 
                     {/* Pending Action Card */}
                     <div className="bg-white p-6 rounded-3xl border-2 border-dashed border-gray-200 hover:border-black transition-all duration-300 flex flex-col justify-between group">
