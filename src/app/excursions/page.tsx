@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { API_URL } from '@/lib/auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Excursion {
     id: number;
@@ -22,6 +23,7 @@ interface Excursion {
 
 export default function Excursions() {
     const { user } = useAuth();
+    const router = useRouter();
     const [excursions, setExcursions] = useState<Excursion[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -33,7 +35,11 @@ export default function Excursions() {
         location: '',
         adults: 1,
         children: 0,
-        babies: 0
+        babies: 0,
+        name: '',
+        email: '',
+        telephone: '',
+        cin: ''
     });
 
     const [submitting, setSubmitting] = useState(false);
@@ -59,11 +65,6 @@ export default function Excursions() {
     const handleReservationSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedExcursion) return;
-        
-        if (!user) {
-            setError('Veuillez vous connecter pour réserver');
-            return;
-        }
 
         setSubmitting(true);
         setError(null);
@@ -84,13 +85,22 @@ export default function Excursions() {
                     lieu_depart: reservationData.location,
                     nb_adultes: reservationData.adults,
                     nb_enfants: reservationData.children,
-                    nb_bebes: reservationData.babies
+                    nb_bebes: reservationData.babies,
+                    ...(!user ? {
+                        name: reservationData.name,
+                        email: reservationData.email,
+                        telephone: reservationData.telephone,
+                        cin: reservationData.cin,
+                    } : {})
                 })
             });
 
             const result = await response.json();
 
             if (!response.ok) {
+                if (result.errors) {
+                    throw new Error(Object.values(result.errors).flat().join(', '));
+                }
                 throw new Error(result.message || 'Failed to submit reservation');
             }
 
@@ -98,6 +108,11 @@ export default function Excursions() {
             setTimeout(() => {
                 setSelectedExcursion(null);
                 setSuccessMessage(null);
+                if (user) {
+                    router.push('/reservations');
+                } else {
+                    router.push('/');
+                }
             }, 3000);
         } catch (err: any) {
             setError(err.message);
@@ -166,7 +181,11 @@ export default function Excursions() {
                                         location: '',
                                         adults: excursion.nombre_personnes_min,
                                         children: 0,
-                                        babies: 0
+                                        babies: 0,
+                                        name: '',
+                                        email: '',
+                                        telephone: '',
+                                        cin: ''
                                     });
                                 }}
                                 className="group relative overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-md border border-gray-200 hover:border-gray-200"
@@ -441,6 +460,20 @@ export default function Excursions() {
                                                  </div>
                                              </div>
                                          </div>
+
+                                         {!user && (
+                                             <div className="flex flex-col gap-3">
+                                                 <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                     <span className="material-symbols-outlined text-base">person</span> Informations Visiteur
+                                                 </label>
+                                                 <div className="grid grid-cols-2 gap-3 bg-white p-4 rounded-xl border border-gray-200">
+                                                     <input type="text" placeholder="Nom Complet" required value={reservationData.name} onChange={(e) => setReservationData({...reservationData, name: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black outline-none" />
+                                                     <input type="email" placeholder="Adresse Email" required value={reservationData.email} onChange={(e) => setReservationData({...reservationData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black outline-none" />
+                                                     <input type="tel" placeholder="Numéro de Téléphone" required value={reservationData.telephone} onChange={(e) => setReservationData({...reservationData, telephone: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black outline-none" />
+                                                     <input type="text" placeholder="CIN" required value={reservationData.cin} onChange={(e) => setReservationData({...reservationData, cin: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black outline-none" />
+                                                 </div>
+                                             </div>
+                                         )}
 
                                          <div className="mt-auto pt-8">
                                              <div className="flex justify-between items-end mb-4 px-1">
