@@ -17,6 +17,7 @@ export default function ProfilePage() {
         ville: '',
         numero_permis: '',
         date_naissance: '',
+        cin: '',
         current_password: '',
         new_password: '',
         new_password_confirmation: ''
@@ -38,6 +39,7 @@ export default function ProfilePage() {
                 adresse: user.adresse || '',
                 ville: user.ville || '',
                 numero_permis: user.numero_permis || '',
+                cin: user.cin || '',
                 date_naissance: user.date_naissance ? new Date(user.date_naissance).toISOString().split('T')[0] : ''
             }));
         }
@@ -56,6 +58,7 @@ export default function ProfilePage() {
                 adresse: formData.adresse,
                 ville: formData.ville,
                 numero_permis: formData.numero_permis,
+                cin: formData.cin,
                 date_naissance: formData.date_naissance,
                 current_password: formData.current_password || undefined,
                 new_password: formData.new_password || undefined,
@@ -161,6 +164,17 @@ export default function ProfilePage() {
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-black focus:ring-0 transition-all outline-none"
                                             placeholder="votre@email.com"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-gray-700">CIN (Numéro d'identité)</label>
+                                        <input
+                                            type="text"
+                                            value={formData.cin}
+                                            onChange={(e) => setFormData({ ...formData, cin: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-black focus:ring-0 transition-all outline-none"
+                                            placeholder="AB123456"
                                             required
                                         />
                                     </div>

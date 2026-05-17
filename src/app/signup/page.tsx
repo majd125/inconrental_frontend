@@ -12,6 +12,7 @@ export default function Signup() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        cin: '',
         telephone: '',
         adresse: '',
         ville: '',
@@ -21,7 +22,7 @@ export default function Signup() {
         password_confirmation: ''
     });
     const [hasLicense, setHasLicense] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<{message: string, info?: string, action?: string} | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -39,7 +40,11 @@ export default function Signup() {
             login(data.token, data.user);
             router.push('/');
         } catch (err: any) {
-            setError(err.message || "Une erreur s'est produite lors de l'inscription");
+            setError({
+                message: err.message || "Une erreur s'est produite lors de l'inscription",
+                info: err.info,
+                action: err.action
+            });
         } finally {
             setLoading(false);
         }
@@ -59,8 +64,21 @@ export default function Signup() {
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm">
-                            {error}
+                        <div className="bg-red-500/10 border border-red-500/20 text-red-600 p-4 rounded-xl flex flex-col gap-2">
+                            <div className="flex items-center gap-2 font-bold text-sm">
+                                <span className="material-symbols-outlined text-base">error</span>
+                                {error.message}
+                            </div>
+                            {error.info && (
+                                <p className="text-xs text-red-500 font-medium pl-6 leading-relaxed">
+                                    {error.info}
+                                </p>
+                            )}
+                            {error.action === 'login' && (
+                                <Link href="/login" className="mt-2 ml-6 text-xs font-black uppercase tracking-widest text-black underline underline-offset-4 decoration-red-500/30 hover:decoration-red-500 transition-all">
+                                    Aller à la connexion
+                                </Link>
+                            )}
                         </div>
                     )}
 
@@ -86,6 +104,17 @@ export default function Signup() {
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[11px] font-black text-gray-900 uppercase tracking-widest ml-1">CIN (Numéro d'identité)</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="w-full bg-white border border-gray-300 rounded-xl px-4 h-12 text-gray-900 font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all placeholder:text-gray-400 shadow-sm"
+                                    placeholder="AB123456"
+                                    value={formData.cin}
+                                    onChange={(e) => setFormData({ ...formData, cin: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">

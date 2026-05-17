@@ -144,16 +144,16 @@ export default function Catalog() {
         lieu_arrivee_autre: '',
         date_debut: start || '',
         date_fin: end || '',
-        nb_sieges_bebe: babySeats || 0
+        nb_sieges_bebe: babySeats || 0,
+        name: '',
+        email: '',
+        telephone: '',
+        cin: ''
     });
 
-    const isMissingDetails = !localSearchData.date_debut || !localSearchData.date_fin || !localSearchData.lieu_depart;
+    const isMissingDetails = !localSearchData.date_debut || !localSearchData.date_fin || !localSearchData.lieu_depart || (!user && (!localSearchData.name || !localSearchData.email || !localSearchData.telephone || !localSearchData.cin));
 
     const handleActionClick = () => {
-        if (!user) {
-            router.push('/login');
-            return;
-        }
         
         if (isMissingDetails) {
             setModalStep('form');
@@ -163,11 +163,6 @@ export default function Catalog() {
     };
 
     const handleReservation = async () => {
-        if (!user) {
-            router.push('/login');
-            return;
-        }
-
         const finalPickup = localSearchData.lieu_depart === "Autre emplacement" 
             ? localSearchData.lieu_depart_autre 
             : localSearchData.lieu_depart;
@@ -187,34 +182,54 @@ export default function Catalog() {
         setReservationError(null);
 
         try {
+            const headers: any = {
+                'Content-Type': 'application/json'
+            };
+            if (user && authService.getToken()) {
+                headers['Authorization'] = `Bearer ${authService.getToken()}`;
+            }
+
+            const payload: any = {
+                vehicule_id: selectedVehicle.id,
+                date_debut: localSearchData.date_debut,
+                date_fin: localSearchData.date_fin,
+                lieu_depart: finalPickup,
+                lieu_arrivee: finalReturn || finalPickup,
+                nb_participants: 1,
+                option_chauffeur: false,
+                nb_sieges_bebe: localSearchData.nb_sieges_bebe
+            };
+
+            if (!user) {
+                payload.name = localSearchData.name;
+                payload.email = localSearchData.email;
+                payload.telephone = localSearchData.telephone;
+                payload.cin = localSearchData.cin;
+            }
+
             const response = await fetch(`${API_URL}/reservations`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authService.getToken()}`
-                },
-                body: JSON.stringify({
-                    vehicule_id: selectedVehicle.id,
-                    date_debut: localSearchData.date_debut,
-                    date_fin: localSearchData.date_fin,
-                    lieu_depart: finalPickup,
-                    lieu_arrivee: finalReturn || finalPickup,
-                    nb_participants: 1,
-                    option_chauffeur: false,
-                    nb_sieges_bebe: localSearchData.nb_sieges_bebe
-                })
+                headers,
+                body: JSON.stringify(payload)
             });
 
             const result = await response.json();
 
             if (!response.ok) {
+                if (result.errors) {
+                    throw new Error(Object.values(result.errors).flat().join(', '));
+                }
                 throw new Error(result.message || 'Failed to create reservation');
             }
 
             setReservationSuccess(true);
             showNotification('Réservation soumise avec succès !', 'success');
             setTimeout(() => {
-                router.push('/reservations');
+                if (user) {
+                    router.push('/reservations');
+                } else {
+                    router.push('/');
+                }
             }, 2000);
 
         } catch (err: any) {
@@ -598,6 +613,20 @@ export default function Catalog() {
                                             </select>
                                         </div>
                                     </div>
+                                    
+                                    {!user && (
+                                        <div className="space-y-4 p-4 bg-gray-50 border border-gray-200 rounded-2xl">
+                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Informations Personnelles (Visiteur)</p>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <input type="text" placeholder="Nom Complet" required value={localSearchData.name} onChange={(e) => setLocalSearchData({...localSearchData, name: e.target.value})} className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" />
+                                                <input type="email" placeholder="Adresse Email" required value={localSearchData.email} onChange={(e) => setLocalSearchData({...localSearchData, email: e.target.value})} className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <input type="tel" placeholder="Numéro de Téléphone" required value={localSearchData.telephone} onChange={(e) => setLocalSearchData({...localSearchData, telephone: e.target.value})} className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" />
+                                                <input type="text" placeholder="CIN" required value={localSearchData.cin} onChange={(e) => setLocalSearchData({...localSearchData, cin: e.target.value})} className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm font-medium outline-none focus:border-black" />
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {(localSearchData.lieu_depart === "Autre emplacement" || localSearchData.lieu_arrivee === "Autre emplacement") && (
                                         <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 animate-in slide-in-from-top-2">
@@ -682,7 +711,14 @@ export default function Catalog() {
                                         <p>Réservation Confirmée. Merci !</p>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <>
+                                        {reservationError && (
+                                            <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-xs flex items-center gap-3 animate-in fade-in slide-in-from-top-2 mb-4">
+                                                <span className="material-symbols-outlined text-sm">error</span>
+                                                {reservationError}
+                                            </div>
+                                        )}
+                                        <div className="grid grid-cols-2 gap-4">
                                         <button onClick={() => setModalStep('form')} className="py-4 bg-gray-50 hover:bg-gray-100 text-gray-500 font-bold rounded-2xl transition-all">Retour</button>
                                         <button 
                                             onClick={handleReservation}
@@ -692,6 +728,7 @@ export default function Catalog() {
                                             {reservationLoading ? "Traitement..." : "Confirmer et Payer"}
                                         </button>
                                     </div>
+                                    </>
                                 )}
                             </div>
                         ) : null}
